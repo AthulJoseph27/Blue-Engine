@@ -14,7 +14,7 @@ public:
 
     void AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout);
     void Bind() const;
-    void UnBind() const;
+    void Unbind() const;
 };
 
 VertexArray::VertexArray()
@@ -33,7 +33,7 @@ void VertexArray::Bind() const
     glBindVertexArray(m_RenedererID);
 }
 
-void VertexArray::UnBind() const
+void VertexArray::Unbind() const
 {
     glBindVertexArray(0);
 }
