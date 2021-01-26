@@ -24,11 +24,11 @@ public:
         glDeleteBuffers(1, &m_RendererID);
     }
 
-    void Bind()
+    void Bind() const
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
     }
-    void Unbind()
+    void Unbind() const
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }

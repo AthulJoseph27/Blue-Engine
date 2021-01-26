@@ -19,6 +19,7 @@ struct VertexBufferElement
         case GL_UNSIGNED_BYTE:
             return 1;
         }
+        // std::cout << type << std::endl;
         assert(false);
         return 0;
     }
@@ -37,7 +38,7 @@ public:
     template <typename T>
     void Push(unsigned int count)
     {
-        static_assert(false);
+        static_assert(true, "Assertion Failed");
     }
 
     inline const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
@@ -47,20 +48,20 @@ public:
 template <>
 void VertexBufferLayout::Push<float>(unsigned int count)
 {
-    m_Elements.push_back({count, GL_FLOAT, GL_FALSE});
+    m_Elements.push_back({GL_FLOAT, count, GL_FALSE});
     m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
 }
 
 template <>
 void VertexBufferLayout::Push<unsigned int>(unsigned int count)
 {
-    m_Elements.push_back({count, GL_UNSIGNED_INT, GL_FALSE});
+    m_Elements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
     m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT);
 }
 
 template <>
 void VertexBufferLayout::Push<unsigned char>(unsigned int count)
 {
-    m_Elements.push_back({count, GL_UNSIGNED_BYTE, GL_TRUE});
+    m_Elements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
     m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_BYTE);
 }

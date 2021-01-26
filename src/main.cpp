@@ -2,44 +2,15 @@
 #include <string.h>
 #include <fstream>
 #include <sstream>
-
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
-// #include "VertexArray.h"
+#include "VertexArray.h"
+#include "Shader.h"
+#include "Texture.h"
 
-struct ShaderProgramSource
-{
-    std::string VertexSource;
-    std::string FragmentSource;
-};
-static struct ShaderProgramSource ParseShader(std::string filePath)
-{
-    enum class ShaderType
-    {
-        NONE = -1,
-        VERTEX = 0,
-        FRAGMENT = 1
-    };
-    std::ifstream stream(filePath);
-    std::string line;
-    std::stringstream ss[2];
-    ShaderType type = ShaderType::NONE;
-
-    while (getline(stream, line))
-    {
-        if (line.find("#shader") != std::string::npos)
-        {
-            if (line.find("vertex") != std::string::npos)
-                type = ShaderType::VERTEX;
-            else if (line.find("fragment") != std::string::npos)
-                type = ShaderType::FRAGMENT;
-        }
-        else
-            ss[(int)type] << line << "\n";
-    }
-    return {ss[0].str(), ss[1].str()};
-}
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 static void GLClearError()
 {
@@ -53,44 +24,6 @@ static void GLCheckError()
     {
         std::cout << "[OpenGL ERROR] (" << error << ")" << std::endl;
     }
-}
-
-static unsigned int CompileShader(unsigned int type, const std::string &source)
-{
-    unsigned int id = glCreateShader(type);
-    const char *src = source.c_str();
-    glShaderSource(id, 1, &src, NULL);
-    glCompileShader(id);
-
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (result == GL_FALSE)
-    {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char message[length];
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader" << std::endl;
-        std::cout << message << std::endl;
-        glDeleteShader(id);
-        return 0;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string vertexShader, const std::string fragmentShader)
-{
-    unsigned int program = glCreateProgram();
-
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    glAttachShader(program, fs);
-    glAttachShader(program, vs);
-    glLinkProgram(program);
-
-    return program;
 }
 
 int main()
@@ -126,11 +59,11 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float points[12] = {
-        -0.5f, -0.5f, 0.0f, // 0
-        -0.5f, 0.5f, 0.0f,  // 1
-        0.5f, 0.5f, 0.0f,   // 2
-        0.5f, -0.5f, 0.0f   // 3
+    float points[] = {
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // 0
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // 1
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // 2
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f   // 3
     };
 
     unsigned int indices[6] = {
@@ -141,38 +74,43 @@ int main()
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    // VertexArray va;
-    VertexBuffer vb(points, 12 * sizeof(float));
-    // VertexBufferLayout layout;
-    // layout.Push<float>(3);
-    // va.AddBuffer(vb, layout);
+    VertexArray va;
+    VertexBuffer vb(points, 20 * sizeof(float));
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    layout.Push<float>(2);
+    va.AddBuffer(vb, layout);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    // glEnableVertexAttribArray(0);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     IndexBuffer ib(indices, 6);
 
-    struct ShaderProgramSource shaderSource = ParseShader("Basic.shader");
-    unsigned int shader = CreateShader(shaderSource.VertexSource, shaderSource.FragmentSource);
+    Shader shader("Basic.shader");
+    shader.Bind();
 
-    int location = glGetUniformLocation(shader, "u_Color");
-    if (location == -1)
-        std::cout << "Location not found" << std::endl;
-    glUniform4f(location, 0.0f, 0.7f, 0.5f, 1.0f);
+    // shader.SetUniform4f("u_Color", 0.0f, 0.7f, 0.5f, 1.0f);
+
+    Texture texture("../res/textures/sample.jpg");
+    texture.Bind();
+    shader.SetUniform1i("u_Texture", 0);
+
+    va.Unbind();
     vb.Unbind();
-    glUseProgram(0);
-    glBindVertexArray(0);
+    ib.Unbind();
+    shader.Unbind();
+
+    Renderer renderer;
     float r = 0.0f, increment = 0.05f;
 
     while (!glfwWindowShouldClose(window))
     {
         // wipe the drawing surface clear
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        renderer.Clear();
 
-        glUseProgram(shader);
-        glUniform4f(location, r, 0.7f, 0.5f, 1.0f);
-        glBindVertexArray(vao);
-        // va.Bind();
-        ib.Bind();
+        shader.Bind();
+        // shader.SetUniform4f("u_Color", r, 0.7f, 0.5f, 1.0f);
+
+        renderer.Draw(va, ib, shader);
         if (r > 1.0f)
             increment = -0.05;
         else if (r < 0.0f)
@@ -180,8 +118,6 @@ int main()
 
         r += increment;
 
-        // draw points 0-3 from the currently bound VAO with current in-use shader
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         // update other events like input handling
         glfwPollEvents();
         // put the stuff we've been drawing onto the display

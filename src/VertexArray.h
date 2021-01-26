@@ -14,7 +14,7 @@ public:
 
     void AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout);
     void Bind() const;
-    void UnBind() const;
+    void Unbind() const;
 };
 
 VertexArray::VertexArray()
@@ -33,7 +33,7 @@ void VertexArray::Bind() const
     glBindVertexArray(m_RenedererID);
 }
 
-void VertexArray::UnBind() const
+void VertexArray::Unbind() const
 {
     glBindVertexArray(0);
 }
@@ -48,7 +48,7 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &la
     {
         const auto &element = elements[i];
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, element.count, element.type, element.normalize, layout.GetStride(), (const void *)offSet);
+        glVertexAttribPointer(i, element.count, element.type, element.normalize, layout.GetStride(), 0);
         offSet += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
 }
