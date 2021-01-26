@@ -2,12 +2,15 @@
 #include <string.h>
 #include <fstream>
 #include <sstream>
-
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 static void GLClearError()
 {
@@ -56,11 +59,11 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float points[12] = {
-        -0.5f, -0.5f, 0.0f, // 0
-        -0.5f, 0.5f, 0.0f,  // 1
-        0.5f, 0.5f, 0.0f,   // 2
-        0.5f, -0.5f, 0.0f   // 3
+    float points[] = {
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // 0
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // 1
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // 2
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f   // 3
     };
 
     unsigned int indices[6] = {
@@ -72,9 +75,10 @@ int main()
     glBindVertexArray(vao);
 
     VertexArray va;
-    VertexBuffer vb(points, 12 * sizeof(float));
+    VertexBuffer vb(points, 20 * sizeof(float));
     VertexBufferLayout layout;
     layout.Push<float>(3);
+    layout.Push<float>(2);
     va.AddBuffer(vb, layout);
 
     // glEnableVertexAttribArray(0);
@@ -84,7 +88,11 @@ int main()
     Shader shader("Basic.shader");
     shader.Bind();
 
-    shader.SetUniform4f("u_Color", 0.0f, 0.7f, 0.5f, 1.0f);
+    // shader.SetUniform4f("u_Color", 0.0f, 0.7f, 0.5f, 1.0f);
+
+    Texture texture("../res/textures/sample.jpg");
+    texture.Bind();
+    shader.SetUniform1i("u_Texture", 0);
 
     va.Unbind();
     vb.Unbind();
@@ -100,7 +108,7 @@ int main()
         renderer.Clear();
 
         shader.Bind();
-        shader.SetUniform4f("u_Color", r, 0.7f, 0.5f, 1.0f);
+        // shader.SetUniform4f("u_Color", r, 0.7f, 0.5f, 1.0f);
 
         renderer.Draw(va, ib, shader);
         if (r > 1.0f)

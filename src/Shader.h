@@ -28,6 +28,8 @@ public:
     void Bind() const;
     void Unbind() const;
 
+    void SetUniform1i(const std::string &name, int value);
+    void SetUniform1f(const std::string &name, float value);
     void SetUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
 
 private:
@@ -140,4 +142,14 @@ int Shader::GetUniformLocation(const std::string &name)
     else
         m_UniformLocationCache[name] = location;
     return location;
+}
+
+void Shader::SetUniform1i(const std::string &name, int value)
+{
+    glUniform1i(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniform1f(const std::string &name, float value)
+{
+    glUniform1f(GetUniformLocation(name), value);
 }
