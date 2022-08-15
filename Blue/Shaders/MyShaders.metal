@@ -29,6 +29,15 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     return rd;
 }
 
+vertex RasterizerData instanced_vertex_shader(const VertexIn vertexIn[[ stage_in ]], constant SceneConstants &sceneConstants [[ buffer(1) ]], constant ModelConstants *modelContants [[ buffer(2) ]], uint instanceId [[ instance_id ]]){
+    
+    RasterizerData rd;
+    rd.position = sceneConstants.projectionMatrix * sceneConstants.viewMatrix * modelContants[instanceId].modelMatrix * float4(vertexIn.position, 1);
+    rd.color = vertexIn.color;
+    
+    return rd;
+}
+
 fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]]){
     float4 color = rd.color;
     

@@ -8,9 +8,15 @@ class SandboxScene: Scene {
     override func buildScene() {
         addCamera(debugCamera)
          
-        debugCamera.position.z = 5
+        debugCamera.position.z = 100
         
-        addChild(cube)
+        addCubes()
+    }
+    
+    func addCubes() {
+        let cubeCollection = CubeCollection(cubesWide: 20, cubesHigh: 20, cubesBack: 20)
+        addChild(cubeCollection)
+        
     }
     
     override func update(deltaTime: Float) {

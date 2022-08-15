@@ -19,7 +19,7 @@ class MeshLibrary {
         meshes.updateValue(CubeMesh(), forKey: .Cube)
     }
     
-    public static func Mesh(_ meshTypes: MeshTypes)->Mesh{
+    public static func mesh(_ meshTypes: MeshTypes)->Mesh{
         return meshes[meshTypes]!
     }
 }

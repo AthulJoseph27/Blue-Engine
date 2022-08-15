@@ -5,7 +5,7 @@ class GameObject: Node {
     var modelContants = ModelConstants()
     
     init(meshTypes: MeshTypes) {
-        mesh = MeshLibrary.Mesh(meshTypes)
+        mesh = MeshLibrary.mesh(meshTypes)
     }
     
     override func update(deltaTime: Float) {
