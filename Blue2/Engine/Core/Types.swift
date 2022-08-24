@@ -65,7 +65,12 @@ struct Uniforms: sizeable
     var width: uint
     var height: uint
     var triangleCount: uint
-    var frameIndex: uint
+    var skyBoxSize: SIMD2<Int32>
+    var isSkyBoxSet: Bool
     var cameraPositionDelta: SIMD3<Float>
     var cameraRotation: SIMD3<Float>
+}
+
+struct RotationMatrix: sizeable {
+    var rotationMatrix: matrix_float4x4
 }

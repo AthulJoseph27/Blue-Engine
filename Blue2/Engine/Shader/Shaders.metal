@@ -1,4 +1,7 @@
 #include <metal_stdlib>
+
+#define PI 3.14159265359
+
 using namespace metal;
 
 struct VertexIn {
@@ -37,19 +40,54 @@ struct Intersection {
     float3 coordinates;
 };
 
+struct Skybox {
+    int width;
+    int height;
+    bool isSet;
+    texture2d<float, access::read> texture;
+};
+
 struct Uniforms
 {
     unsigned int width [[ attribute(0) ]];
     unsigned int height [[ attribute(1) ]];
     unsigned int triangleCount [[ attribute(2) ]];
-    unsigned int frameIndex [[ attribute(3) ]];
-    float3 cameraPositionDelta [[ attribute(4) ]];
-    float3 cameraRotation [[ attribute(5) ]];
+    int2 skyBoxSize [[ attribute(3) ]];
+    bool isSkyboxSet [[ attribute(4) ]];
+    float3 cameraPositionDelta [[ attribute(5) ]];
+    float3 cameraRotation [[ attribute(6) ]];
+};
+
+struct CameraRotation {
+    float4x4 rotationMatrix;
 };
 
 float get_dist(float3 a, float3 b) {
     return sqrt(pow((a.x-b.x),2) + pow((a.y-b.y),2) + pow((a.z - b.z),2));
 }
+
+float4 getSkyBoxColor(float3 u, Skybox skyBox) {
+    if (!skyBox.isSet) {
+        return float4(0, 0, 0, 1);
+    }
+
+    normalize(u);
+
+    float w = max(skyBox.width, skyBox.height);
+    float h = min(skyBox.width, skyBox.height);
+
+    float _u = 0.5 + atan2(u.z, u.x) / (2.0 * PI);
+    float _v = 0.5 - asin(u.y) / PI;
+
+    _u *= w - 1;
+    _v *= h - 1;
+
+    if (skyBox.width < skyBox.height) {
+        return float4(skyBox.texture.read(uint2((int)_v, (int)_u)));
+    }
+
+        return float4(skyBox.texture.read(uint2((int)_u, (int)_v)));
+    }
 
 Intersection get_intersection(Ray ray, device TriangleIn *triangles, int index){
     // Möller–Trumbore intersection algorithm
@@ -100,7 +138,7 @@ Intersection get_intersection(Ray ray, device TriangleIn *triangles, int index){
     return intersection;
 }
 
-float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount) {
+float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount, Skybox skybox) {
     float dist = FLT_MAX;
     int index = -1;
     
@@ -117,7 +155,7 @@ float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount) {
     }
     
     if(index == -1){
-        return float4(0,0,0,1);
+        return getSkyBoxColor(ray.direction, skybox);
     }
     
     return triangles[index].color;
@@ -126,25 +164,36 @@ float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount) {
 kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
                                device TriangleIn *triangles,
                                constant Uniforms &uniforms [[ buffer(1) ]],
-                               texture2d<float, access::write> destTexture){
+                               constant CameraRotation &camRotation [[ buffer(2) ]],
+                               texture2d<float, access::write> destTexture,
+                               texture2d<float, access::read> skyBoxTexture){
     
     Camera camera = Camera();
     
     float2 screenCenter = float2(uniforms.width/2.0, uniforms.height/2.0);
     float3 delta = uniforms.cameraPositionDelta;
     
-    camera.position = float3(screenCenter.x + delta.x , screenCenter.y + delta.y , -100 + delta.z);
-//    camera.position = float3(0, 0, -1000);
-    // assume screen is at z = 0
+    camera.position = float3(screenCenter.x + delta.x , screenCenter.y + delta.y , -650 + delta.z);
     
+    // assume screen is at z = 0
     float3 pixel_position = float3(tid.x, tid.y, 0);
     
     Ray ray = Ray();
     ray.orgin = camera.position;
+    
     ray.direction =  normalize(pixel_position - camera.position);
+    float4 direction = camRotation.rotationMatrix * float4(ray.direction, 1);
+    ray.direction = float3(direction.x, direction.y, direction.z);
+    
     ray.color = float3(1.0, 1.0, 1.0);
     
-    float4 color = trace_ray(ray, triangles, uniforms.triangleCount);
+    Skybox skybox = Skybox();
+    skybox.width = uniforms.skyBoxSize.x;
+    skybox.height = uniforms.skyBoxSize.y;
+    skybox.isSet = uniforms.isSkyboxSet;
+    skybox.texture = skyBoxTexture;
+    
+    float4 color = trace_ray(ray, triangles, uniforms.triangleCount, skybox);
     
     uint2 pixelIndex = uint2(tid.x, uniforms.height - tid.y);
     

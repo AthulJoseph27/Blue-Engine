@@ -5,7 +5,7 @@ class Sandbox: Scene {
     
     override func buildScene() {
         addCamera(camera)
-        addSolid(meshType: .Triangle)
+        addSolid(meshType: .Quad)
     }
     
     public func addSolid(meshType: MeshTypes) {

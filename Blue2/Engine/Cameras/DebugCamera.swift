@@ -24,6 +24,15 @@ class DebugCamera: Camera {
         if(Keyboard.isKeyPressed(.upArrow)) {
             self.position.y  += dt
         }
+        
+        if(Keyboard.isKeyPressed(.a)) {
+            self.rotation.y -= deltaTime;
+        }
+        
+        if(Keyboard.isKeyPressed(.d)) {
+            self.rotation.y += deltaTime;
+        }
+        
     }
     
     

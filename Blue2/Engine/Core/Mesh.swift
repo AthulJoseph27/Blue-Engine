@@ -36,7 +36,6 @@ class CustomMesh: Mesh {
     internal var color: SIMD4<Float>
     internal var triangles: [Triangle]
     private var _vertexBuffer: MTLBuffer!
-//    private var _trianglesBuffer: MTLBuffer!
     
     init() {
         self.vertices = []
@@ -51,7 +50,6 @@ class CustomMesh: Mesh {
     
     func createBuffers() {
         _vertexBuffer = Engine.device.makeBuffer(bytes:vertices, length: Vertex.stride(vertices.count), options: [])
-//        _trianglesBuffer = Engine.device.makeBuffer(bytes:triangles, length: Triangle.stride(triangles.count), options: [])
     }
     
     func addTriangle(vertices: [SIMD3<Float>], color: SIMD4<Float> = SIMD4<Float>(0.2, 0.4, 0.8, 1.0)) {
@@ -69,11 +67,6 @@ class CustomMesh: Mesh {
         
     func drawPrimitives(_ renderCommandEncoder: MTLRenderCommandEncoder) {
         renderCommandEncoder.setVertexBuffer(_vertexBuffer, offset: 0,index: 0)
-        
-//        renderCommandEncoder.drawPrimitives(type: .triangle,
-//                                            vertexStart: 0,
-//                                            vertexCount: vertices.count,
-//                                            instanceCount: 1)
     }
 }
 
@@ -92,12 +85,12 @@ class TriangleMesh : CustomMesh {
 class QuadMesh : CustomMesh {
     override func createVertices() {
         let vertices = [
-            SIMD3<Float>( 1, 1, 0),
-            SIMD3<Float>(-1, 1, 0),
-            SIMD3<Float>(-1,-1, 0),
-            SIMD3<Float>( 1, 1, 0),
-            SIMD3<Float>(-1,-1, 0),
-            SIMD3<Float>( 1,-1, 0),
+            SIMD3<Float>( 2160, 2160, 100),
+            SIMD3<Float>(1080, 2160, 100),
+            SIMD3<Float>(1080, 1080, 100),
+            SIMD3<Float>( 2160, 2160, 100),
+            SIMD3<Float>(1080, 1080, 100),
+            SIMD3<Float>( 2160, 1080, 100),
         ]
         addTriangle(vertices: [vertices[0],vertices[1],vertices[2]])
         addTriangle(vertices: [vertices[3],vertices[4],vertices[5]])
