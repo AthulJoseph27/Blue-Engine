@@ -19,6 +19,7 @@ extension sizeable {
     }
 }
 
+extension Float: sizeable {}
 extension SIMD3: sizeable {}
 extension SIMD4: sizeable {}
 
@@ -27,22 +28,40 @@ struct Vertex: sizeable{
     var color: SIMD4<Float>
 }
 
+struct VertexOut: sizeable{
+    var index: uint
+    var position: SIMD3<Float>
+}
+
 struct ModelConstants: sizeable {
     var modelMatrix = matrix_identity_float4x4
 }
 
 struct SceneConstants: sizeable {
-    var viewMatrix = matrix_identity_float4x4
     var projectionMatrix = matrix_identity_float4x4
     
 }
 
 struct TriangleOut: sizeable {
-    var A: SIMD3<Float>
-    var B: SIMD3<Float>
-    var C: SIMD3<Float>
-    var normals: SIMD3<Float>
+    // triangle to sent out to GPU
+    var A: uint
+    var B: uint
+    var C: uint
+    var normal: SIMD3<Float>
     var color: SIMD4<Float>
+}
+
+struct TriangleIn: sizeable {
+    // triangle when reading from 3D files
+    var vertices: [SIMD3<Float>]
+    var normal: SIMD3<Float>
+    var color: SIMD4<Float>
+    var uvCoordinates: [SIMD2<Float>]
+}
+
+struct ModelData: sizeable {
+    var textureFile: String
+    var triangles: [TriangleIn]
 }
 
 struct Focus {
@@ -65,7 +84,13 @@ struct Uniforms: sizeable
     var width: uint
     var height: uint
     var triangleCount: uint
-    var frameIndex: uint
+    var verticesCount: uint
+    var skyBoxSize: SIMD2<Int32>
+    var isSkyBoxSet: Bool
     var cameraPositionDelta: SIMD3<Float>
     var cameraRotation: SIMD3<Float>
+}
+
+struct RotationMatrix: sizeable {
+    var rotationMatrix: matrix_float4x4
 }
