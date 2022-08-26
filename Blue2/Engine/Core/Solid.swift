@@ -9,7 +9,6 @@ class Solid: Node {
     }
     
     override func update(deltaTime: Float) {
-//        self.rotation.z = -atan2(Mouse.getMouseViewportPosition().x - position.x, Mouse.getMouseViewportPosition().y - position.y)
         updateModelContants()
     }
     

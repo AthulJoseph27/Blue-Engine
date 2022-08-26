@@ -3,12 +3,13 @@ import simd
 
 enum SkyboxTypes {
     case Sky
-    case SunSet
+    case WhiteMarble
     case Beach
     case City
     case NightCity
     case Pond
     case Jungle
+    case Sunset
 }
 
 class Skyboxibrary {
@@ -25,6 +26,8 @@ class Skyboxibrary {
         skyboxes.updateValue(loadTextureFromBundle(textureName: "NightCity", ext: "jpg"), forKey: .NightCity)
         skyboxes.updateValue(loadTextureFromBundle(textureName: "Pond", ext: "jpg"), forKey: .Pond)
         skyboxes.updateValue(loadTextureFromBundle(textureName: "Sky", ext: "jpg"), forKey: .Sky)
+        skyboxes.updateValue(loadTextureFromBundle(textureName: "Sunset", ext: "jpg"), forKey: .Sunset)
+        skyboxes.updateValue(loadTextureFromBundle(textureName: "WhiteMarble", ext: "jpg"), forKey: .WhiteMarble)
     }
     
     private static func loadTextureFromBundle(textureName: String, ext: String)->MTLTexture {

@@ -14,6 +14,7 @@ class Engine {
         
         ComputePipelineDescriptorLibrary.initialize()
         ComputePipelineStateLibrary.initialize()
+        VertexDescriptorLibrary.initialize()
         MeshLibrary.initialize()
         Skyboxibrary.initialize()
     }

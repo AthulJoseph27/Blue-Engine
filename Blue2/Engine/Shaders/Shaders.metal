@@ -5,16 +5,24 @@
 using namespace metal;
 
 struct VertexIn {
-    float3 position [[ attribute(0) ]];
-    float4 color [[ attribute(1) ]];
+    unsigned int solidId [[ attribute(0) ]];
+    float3 position    [[ attribute(1) ]];
 };
 
 struct TriangleIn {
-    float3 A [[ attribute(0) ]];
-    float3 B [[ attribute(1) ]];
-    float3 C [[ attribute(2) ]];
-    float3 normal [[ attribute(3) ]];
-    float4 color [[ attribute(4) ]];
+    unsigned int A     [[ attribute(0) ]];
+    unsigned int B     [[ attribute(1) ]];
+    unsigned int C     [[ attribute(2) ]];
+    float3 normal      [[ attribute(3) ]];
+    float4 color       [[ attribute(4) ]];
+};
+
+struct ModelConstants {
+    float4x4 modelMatrix;
+};
+
+struct SceneConstants {
+    float4x4 projectionMatrix;
 };
 
 struct Camera {
@@ -49,13 +57,14 @@ struct Skybox {
 
 struct Uniforms
 {
-    unsigned int width [[ attribute(0) ]];
-    unsigned int height [[ attribute(1) ]];
+    unsigned int width         [[ attribute(0) ]];
+    unsigned int height        [[ attribute(1) ]];
     unsigned int triangleCount [[ attribute(2) ]];
-    int2 skyBoxSize [[ attribute(3) ]];
-    bool isSkyboxSet [[ attribute(4) ]];
-    float3 cameraPositionDelta [[ attribute(5) ]];
-    float3 cameraRotation [[ attribute(6) ]];
+    unsigned int verticesCount [[ attribute(3) ]];
+    int2 skyBoxSize            [[ attribute(4) ]];
+    bool isSkyboxSet           [[ attribute(5) ]];
+    float3 cameraPositionDelta [[ attribute(6) ]];
+    float3 cameraRotation      [[ attribute(7) ]];
 };
 
 struct CameraRotation {
@@ -89,7 +98,7 @@ float4 getSkyBoxColor(float3 u, Skybox skyBox) {
         return float4(skyBox.texture.read(uint2((int)_u, (int)_v)));
     }
 
-Intersection get_intersection(Ray ray, device TriangleIn *triangles, int index){
+Intersection get_intersection(Ray ray, device VertexIn *vertices, device TriangleIn *triangles, int index){
     // Möller–Trumbore intersection algorithm
     
     Intersection intersection = Intersection();
@@ -97,9 +106,9 @@ Intersection get_intersection(Ray ray, device TriangleIn *triangles, int index){
     
     const float EPSILON = 0.0000001;
     
-    float3 vertex0 = triangles[index].A;
-    float3 vertex1 = triangles[index].B;
-    float3 vertex2 = triangles[index].C;
+    float3 vertex0 = vertices[triangles[index].A].position;
+    float3 vertex1 = vertices[triangles[index].B].position;
+    float3 vertex2 = vertices[triangles[index].C].position;
     
     float3 edge1, edge2, h, s, q;
     float a,f,u,v;
@@ -138,12 +147,12 @@ Intersection get_intersection(Ray ray, device TriangleIn *triangles, int index){
     return intersection;
 }
 
-float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount, Skybox skybox) {
+float4 trace_ray(Ray ray, device VertexIn *vertices, device TriangleIn *triangles, int trianglesCount, Skybox skybox) {
     float dist = FLT_MAX;
     int index = -1;
     
     for(int i=0;i<trianglesCount;i++){
-        Intersection intersection = get_intersection(ray, triangles, i);
+        Intersection intersection = get_intersection(ray, vertices, triangles, i);
         if(intersection.dist == -1){
             continue;
         }
@@ -162,9 +171,10 @@ float4 trace_ray(Ray ray, device TriangleIn *triangles, int trianglesCount, Skyb
 }
 
 kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
-                               device TriangleIn *triangles,
-                               constant Uniforms &uniforms [[ buffer(1) ]],
-                               constant CameraRotation &camRotation [[ buffer(2) ]],
+                               device VertexIn *verticesOut [[ buffer(1) ]],
+                               device TriangleIn *triangles [[ buffer(2) ]],
+                               constant Uniforms &uniforms [[ buffer(3) ]],
+                               constant CameraRotation &camRotation [[ buffer(6) ]],
                                texture2d<float, access::write> destTexture,
                                texture2d<float, access::read> skyBoxTexture){
     
@@ -173,7 +183,9 @@ kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
     float2 screenCenter = float2(uniforms.width/2.0, uniforms.height/2.0);
     float3 delta = uniforms.cameraPositionDelta;
     
-    camera.position = float3(screenCenter.x + delta.x , screenCenter.y + delta.y , -650 + delta.z);
+    camera.position = float3(screenCenter.x + delta.x , screenCenter.y + delta.y , -1200 + delta.z);
+    
+//    camera.position = float3(delta.x + 1000000, delta.y + 1000000 , -10000 + delta.z);
     
     // assume screen is at z = 0
     float3 pixel_position = float3(tid.x, tid.y, 0);
@@ -193,9 +205,22 @@ kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
     skybox.isSet = uniforms.isSkyboxSet;
     skybox.texture = skyBoxTexture;
     
-    float4 color = trace_ray(ray, triangles, uniforms.triangleCount, skybox);
+    float4 color = trace_ray(ray, verticesOut, triangles, uniforms.triangleCount, skybox);
+    
+//    float4 color = float4(verticesOut[triangles[0].C].position.x/(10 * 255), verticesOut[triangles[0].C].position.y/(10 * 255), verticesOut[triangles[0].C].position.z/(255), 1.0);
     
     uint2 pixelIndex = uint2(tid.x, uniforms.height - tid.y);
     
     destTexture.write(color, pixelIndex);
+}
+
+kernel void transform_tracing_kernel(uint index [[ thread_position_in_grid ]], device VertexIn *verticesIn [[ buffer(0) ]], device VertexIn *verticesOut [[ buffer(1) ]], device ModelConstants *modelConstants [[ buffer(4) ]], constant Uniforms &uniforms [[ buffer(3) ]], constant SceneConstants &sceneConstants [[ buffer(5) ]]) {
+    
+    if(index >= uniforms.verticesCount) {
+        return;
+    }
+    
+    float4 result =  modelConstants[verticesIn[index].solidId].modelMatrix *  float4(verticesIn[index].position, 1);
+    
+    verticesOut[index].position = float3(result.x, result.y, result.z);
 }

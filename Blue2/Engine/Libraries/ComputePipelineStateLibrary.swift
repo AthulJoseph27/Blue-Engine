@@ -1,7 +1,8 @@
 import MetalKit
 
 enum ComputePipelineStateTypes {
-    case Basic
+    case TraceRay
+    case Transform
 }
 
 class ComputePipelineStateLibrary {
@@ -12,7 +13,8 @@ class ComputePipelineStateLibrary {
     }
 
     public static func createComputePipelineState() {
-        computePipelineStates.updateValue(ComputePipelineState(), forKey: .Basic)
+        computePipelineStates.updateValue(TraceRay_ComputePipelineState(), forKey: .TraceRay)
+        computePipelineStates.updateValue(Transform_ComputePipelineState(), forKey: .Transform)
     }
 
     public static func pipelineState(_ computePipelineStateTypes: ComputePipelineStateTypes)->ComputePipelineState {
@@ -20,47 +22,39 @@ class ComputePipelineStateLibrary {
     }
 }
 
+protocol ComputePipelineState {
+    var name: String { get }
+    var computePipelineState: MTLComputePipelineState! { get }
+}
 
-public struct ComputePipelineState {
-    var name: String = "Baisc Compute Pipeline State"
-    var rayPipelineState: MTLComputePipelineState!
-//    var shadePipelineState: MTLComputePipelineState!
-//    var shadowPipelineState: MTLComputePipelineState!
-//    var accumulatePipelineState: MTLComputePipelineState!
+
+public struct TraceRay_ComputePipelineState: ComputePipelineState {
+    var name: String = "Ray Tracing Compute Pipeline State"
+    var computePipelineState: MTLComputePipelineState!
     
     init() {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.Basic).computeFunction = Engine.defaultLibrary.makeFunction(name: "ray_tracing_kernel")
-            rayPipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
             return;
         }
-        
-//        do{
-//            ComputePipelineDescriptorLibrary.descriptor(.Basic).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadeKernel")
-//            shadePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
-//        }catch let error as NSError{
-//            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
-//            return;
-//        }
-//
-//        do{
-//            ComputePipelineDescriptorLibrary.descriptor(.Basic).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadowKernel")
-//            shadowPipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
-//        }catch let error as NSError{
-//            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
-//            return;
-//        }
-//
-//        do{
-//            ComputePipelineDescriptorLibrary.descriptor(.Basic).computeFunction = Engine.defaultLibrary.makeFunction(name: "accumulateKernel")
-//            accumulatePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
-//        }catch let error as NSError{
-//            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
-//            return;
-//        }
-        
+    }
+}
+
+public struct Transform_ComputePipelineState: ComputePipelineState {
+    var name: String = "Object Tranform Compute Pipeline State"
+    var computePipelineState: MTLComputePipelineState!
+    
+    init() {
+        do{
+            ComputePipelineDescriptorLibrary.descriptor(.Basic).computeFunction = Engine.defaultLibrary.makeFunction(name: "transform_tracing_kernel")
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Basic), options: [], reflection: nil)
+        }catch let error as NSError{
+            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
+            return;
+        }
     }
 }
 
