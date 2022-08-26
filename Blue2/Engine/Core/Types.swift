@@ -37,10 +37,11 @@ struct ModelConstants: sizeable {
     var modelMatrix = matrix_identity_float4x4
 }
 
-struct SceneConstants: sizeable {
-    var projectionMatrix = matrix_identity_float4x4
-    
-}
+//struct SceneConstants: sizeable {
+//    var viewMatrix = matrix_identity_float4x4
+////    var projectionMatrix = matrix_identity_float4x4
+//
+//}
 
 struct TriangleOut: sizeable {
     // triangle to sent out to GPU

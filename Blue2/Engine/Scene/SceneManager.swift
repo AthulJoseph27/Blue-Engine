@@ -22,7 +22,6 @@ class SceneManager {
     public static func tickScene(renderCommandEncoder: MTLComputeCommandEncoder, deltaTime: Float)->Int {
         _currentScene.updateCameras(deltaTime: deltaTime)
         _currentScene.updateObjects(deltaTime: deltaTime)
-        _currentScene.update()
         _currentScene.updateBuffers(renderCommandEncoder: renderCommandEncoder)
         return _currentScene.vertices.count
     }

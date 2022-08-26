@@ -3,7 +3,6 @@ import MetalKit
 class Scene {
     
     private var cameraManager = CameraManager()
-//    private var sceneConstants = SceneConstants()
     private var modelConstants: [ModelConstants] = []
     
     internal var uniform: Uniforms!
@@ -50,15 +49,6 @@ class Scene {
         }
     }
     
-    func updateSceneConstants() {
-//        sceneConstants.projectionMatrix = cameraManager.currentCamera.projectionMatrix
-    }
-    
-    func update() {
-        updateSceneConstants()
-        updateModelConstants()
-    }
-    
     func updateCameras(deltaTime: Float) {
         cameraManager.update(deltaTime: deltaTime)
     }
@@ -69,7 +59,7 @@ class Scene {
         
         let _triangleBuffer = Engine.device.makeBuffer(bytes: triangles, length: TriangleOut.stride(triangles.count), options: [])
         
-        uniform.cameraPositionDelta = cameraManager.currentCamera.position
+        uniform.cameraPositionDelta = cameraManager.currentCamera.deltaPosition
         uniform.cameraRotation = cameraManager.currentCamera.rotation
         
         if(skyBox != nil){
@@ -79,9 +69,8 @@ class Scene {
             
         let _uniformBuffer = Engine.device.makeBuffer(bytes: &uniform, length: Uniforms.stride, options: [])
         
-        
+        updateModelConstants()
         let _modelConstantsBuffer = Engine.device.makeBuffer(bytes: &modelConstants, length: ModelConstants.stride(modelConstants.count), options: [])
-//        let _sceneConstantsBuffer = Engine.device.makeBuffer(bytes: &sceneConstants, length: SceneConstants.stride, options: [])
         
         
         renderCommandEncoder.setBuffer(_verticesBufferIn, offset: 0, index: 0)
@@ -89,10 +78,9 @@ class Scene {
         renderCommandEncoder.setBuffer(_triangleBuffer, offset: 0, index: 2)
         renderCommandEncoder.setBuffer(_uniformBuffer, offset: 0, index: 3)
         renderCommandEncoder.setBuffer(_modelConstantsBuffer, offset: 0, index: 4)
-//        renderCommandEncoder.setBuffer(_sceneConstantsBuffer, offset: 0, index: 5)
         
         var rotationMatrix = cameraManager.currentCamera.rotationMatrix
-        renderCommandEncoder.setBytes(&rotationMatrix, length: RotationMatrix.stride, index: 6)
+        renderCommandEncoder.setBytes(&rotationMatrix, length: RotationMatrix.stride, index: 5)
         
 
     }

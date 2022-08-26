@@ -5,6 +5,7 @@ class Solid: Node {
     var modelContants = ModelConstants()
     
     init(_ meshType: MeshTypes) {
+        super.init()
         mesh = MeshLibrary.mesh(meshType)
     }
     

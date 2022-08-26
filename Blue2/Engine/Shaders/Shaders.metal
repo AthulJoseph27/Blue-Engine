@@ -22,7 +22,7 @@ struct ModelConstants {
 };
 
 struct SceneConstants {
-    float4x4 projectionMatrix;
+    float4x4 viewMatrix;
 };
 
 struct Camera {
@@ -174,7 +174,7 @@ kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
                                device VertexIn *verticesOut [[ buffer(1) ]],
                                device TriangleIn *triangles [[ buffer(2) ]],
                                constant Uniforms &uniforms [[ buffer(3) ]],
-                               constant CameraRotation &camRotation [[ buffer(6) ]],
+                               constant CameraRotation &camRotation [[ buffer(5) ]],
                                texture2d<float, access::write> destTexture,
                                texture2d<float, access::read> skyBoxTexture){
     
@@ -214,13 +214,13 @@ kernel void ray_tracing_kernel(uint2 tid [[ thread_position_in_grid ]],
     destTexture.write(color, pixelIndex);
 }
 
-kernel void transform_tracing_kernel(uint index [[ thread_position_in_grid ]], device VertexIn *verticesIn [[ buffer(0) ]], device VertexIn *verticesOut [[ buffer(1) ]], device ModelConstants *modelConstants [[ buffer(4) ]], constant Uniforms &uniforms [[ buffer(3) ]], constant SceneConstants &sceneConstants [[ buffer(5) ]]) {
+kernel void transform_tracing_kernel(uint index [[ thread_position_in_grid ]], device VertexIn *verticesIn [[ buffer(0) ]], device VertexIn *verticesOut [[ buffer(1) ]], device ModelConstants *modelConstants [[ buffer(4) ]], constant Uniforms &uniforms [[ buffer(3) ]]) {
     
     if(index >= uniforms.verticesCount) {
         return;
     }
     
-    float4 result =  modelConstants[verticesIn[index].solidId].modelMatrix *  float4(verticesIn[index].position, 1);
+    float4 result = modelConstants[verticesIn[index].solidId].modelMatrix *  float4(verticesIn[index].position, 1);
     
     verticesOut[index].position = float3(result.x, result.y, result.z);
 }

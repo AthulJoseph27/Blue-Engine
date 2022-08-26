@@ -33,7 +33,6 @@ class Triangle: Mesh, sizeable {
 }
 
 class CustomMesh: Mesh {
-//    var vertices: [Vertex]
     internal var vertices: [SIMD3<Float>]
     internal var normals: [SIMD3<Float>]
     internal var color: SIMD4<Float>
@@ -104,15 +103,15 @@ class QuadMesh : CustomMesh {
 class CubeMesh : CustomMesh {
     override func createVertices() {
         self.vertices = [
-            SIMD3<Float>( 1080, 880, 1080), // 0 0 0; 0
-            SIMD3<Float>( 2160, 880, 1080), // 1 0 0; 1
-            SIMD3<Float>( 2160, 880, 2160), // 1 0 1; 2
-            SIMD3<Float>( 1080, 880, 2160), // 0 0 1; 3
+            SIMD3<Float>(-540,-540,-540), // 0 0 0; 0
+            SIMD3<Float>( 540,-540,-540), // 1 0 0; 1
+            SIMD3<Float>( 540,-540, 540), // 1 0 1; 2
+            SIMD3<Float>(-540,-540, 540), // 0 0 1; 3
             
-            SIMD3<Float>( 1080, 1960, 1080), // 0 1 0; 4
-            SIMD3<Float>( 2160, 1960, 1080), // 1 1 0; 5
-            SIMD3<Float>( 2160, 1960, 2160), // 1 1 1; 6
-            SIMD3<Float>( 1080, 1960, 2160), // 0 1 1; 7
+            SIMD3<Float>(-540, 540,-540), // 0 1 0; 4
+            SIMD3<Float>( 540, 540,-540), // 1 1 0; 5
+            SIMD3<Float>( 540, 540, 540), // 1 1 1; 6
+            SIMD3<Float>(-540, 540, 540), // 0 1 1; 7
         ]
         
         //Bottom Face
@@ -136,8 +135,8 @@ class CubeMesh : CustomMesh {
         addTriangle(vertices: [0, 7, 3], color: SIMD4<Float>(1, 0, 0, 1))
         
         //Right Face
-        addTriangle(vertices: [1, 6, 2], color: SIMD4<Float>(0, 1, 0, 1))
-        addTriangle(vertices: [1, 2, 5], color: SIMD4<Float>(0, 0, 1, 1))
+        addTriangle(vertices: [1, 6, 5], color: SIMD4<Float>(0, 1, 0, 1))
+        addTriangle(vertices: [1, 2, 6], color: SIMD4<Float>(0, 0, 1, 1))
         
     }
 }
