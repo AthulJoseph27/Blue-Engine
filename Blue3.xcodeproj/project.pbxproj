@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C061F5F28CC404500EA61E1 /* Jungle.jpg */; };
 		3C6EB33D28C9B3FF00556C13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB33C28C9B3FF00556C13 /* AppDelegate.swift */; };
 		3C6EB33F28C9B3FF00556C13 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB33E28C9B3FF00556C13 /* ViewController.swift */; };
 		3C6EB34228C9B3FF00556C13 /* Blue3.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB34028C9B3FF00556C13 /* Blue3.xcdatamodeld */; };
@@ -15,6 +16,36 @@
 		3C6EB35228C9B40000556C13 /* Blue3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB35128C9B40000556C13 /* Blue3Tests.swift */; };
 		3C6EB35C28C9B40000556C13 /* Blue3UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB35B28C9B40000556C13 /* Blue3UITests.swift */; };
 		3C6EB35E28C9B40000556C13 /* Blue3UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB35D28C9B40000556C13 /* Blue3UITestsLaunchTests.swift */; };
+		3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB36B28C9B45A00556C13 /* GameView.swift */; };
+		3C6EB36E28C9B47500556C13 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB36D28C9B47500556C13 /* Renderer.swift */; };
+		3C6EB37128C9B4A700556C13 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37028C9B4A700556C13 /* Engine.swift */; };
+		3C6EB37428C9B4C000556C13 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37328C9B4C000556C13 /* Preferences.swift */; };
+		3C6EB37728C9B4ED00556C13 /* KeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37628C9B4ED00556C13 /* KeyCodes.swift */; };
+		3C6EB37928C9B4FE00556C13 /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37828C9B4FE00556C13 /* Keyboard.swift */; };
+		3C6EB37B28C9B50D00556C13 /* Mouse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37A28C9B50D00556C13 /* Mouse.swift */; };
+		3C6EB37D28C9BCEE00556C13 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37C28C9BCEE00556C13 /* Types.swift */; };
+		3C6EB38028C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB37F28C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift */; };
+		3C6EB38228C9C44A00556C13 /* ComputePipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38128C9C44A00556C13 /* ComputePipelineStateLibrary.swift */; };
+		3C6EB38428C9C56600556C13 /* RenderPipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38328C9C56600556C13 /* RenderPipelineStateLibrary.swift */; };
+		3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38528C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift */; };
+		3C6EB38A28C9E54300556C13 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38928C9E54300556C13 /* SceneManager.swift */; };
+		3C6EB38C28C9E55A00556C13 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38B28C9E55A00556C13 /* Scene.swift */; };
+		3C6EB38E28C9E56D00556C13 /* Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38D28C9E56D00556C13 /* Sandbox.swift */; };
+		3C6EB39028C9E5B200556C13 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB38F28C9E5B200556C13 /* Math.swift */; };
+		3C6EB39228C9E5D900556C13 /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39128C9E5D900556C13 /* Mesh.swift */; };
+		3C6EB39428C9E5E700556C13 /* Solid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39328C9E5E700556C13 /* Solid.swift */; };
+		3C6EB39628C9E5F300556C13 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39528C9E5F300556C13 /* Node.swift */; };
+		3C6EB39828C9EFF300556C13 /* MeshLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */; };
+		3C6EB39B28C9F09200556C13 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39A28C9F09200556C13 /* Shader.metal */; };
+		3C6EB3A028CA0DB800556C13 /* Cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C6EB39E28CA0DB800556C13 /* Cube.mtl */; };
+		3C6EB3A128CA0DB800556C13 /* Cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C6EB39F28CA0DB800556C13 /* Cube.obj */; };
+		3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2528CAE820003DFC0D /* CameraManager.swift */; };
+		3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2728CAE84E003DFC0D /* Camera.swift */; };
+		3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2928CAE863003DFC0D /* DebugCamera.swift */; };
+		3C95AA3328CB1A15003DFC0D /* TempScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA3228CB1A15003DFC0D /* TempScene.swift */; };
+		3CFAC09F28CDBA5500C6FB6C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */; };
+		3CFAC0A128CDBA6C00C6FB6C /* MatrixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */; };
+		3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +66,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C061F5F28CC404500EA61E1 /* Jungle.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jungle.jpg; sourceTree = "<group>"; };
 		3C6EB33928C9B3FF00556C13 /* Blue3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blue3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C6EB33C28C9B3FF00556C13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C6EB33E28C9B3FF00556C13 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +79,38 @@
 		3C6EB35728C9B40000556C13 /* Blue3UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blue3UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C6EB35B28C9B40000556C13 /* Blue3UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue3UITests.swift; sourceTree = "<group>"; };
 		3C6EB35D28C9B40000556C13 /* Blue3UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue3UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3C6EB36B28C9B45A00556C13 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		3C6EB36D28C9B47500556C13 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		3C6EB37028C9B4A700556C13 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		3C6EB37328C9B4C000556C13 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		3C6EB37628C9B4ED00556C13 /* KeyCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCodes.swift; sourceTree = "<group>"; };
+		3C6EB37828C9B4FE00556C13 /* Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
+		3C6EB37A28C9B50D00556C13 /* Mouse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mouse.swift; sourceTree = "<group>"; };
+		3C6EB37C28C9BCEE00556C13 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		3C6EB37F28C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputePipelineDescriptorLibrary.swift; sourceTree = "<group>"; };
+		3C6EB38128C9C44A00556C13 /* ComputePipelineStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputePipelineStateLibrary.swift; sourceTree = "<group>"; };
+		3C6EB38328C9C56600556C13 /* RenderPipelineStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipelineStateLibrary.swift; sourceTree = "<group>"; };
+		3C6EB38528C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipelineDescriptorLibrary.swift; sourceTree = "<group>"; };
+		3C6EB38928C9E54300556C13 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		3C6EB38B28C9E55A00556C13 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		3C6EB38D28C9E56D00556C13 /* Sandbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sandbox.swift; sourceTree = "<group>"; };
+		3C6EB38F28C9E5B200556C13 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		3C6EB39128C9E5D900556C13 /* Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
+		3C6EB39328C9E5E700556C13 /* Solid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solid.swift; sourceTree = "<group>"; };
+		3C6EB39528C9E5F300556C13 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshLibrary.swift; sourceTree = "<group>"; };
+		3C6EB39A28C9F09200556C13 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
+		3C6EB39E28CA0DB800556C13 /* Cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.mtl; sourceTree = "<group>"; };
+		3C6EB39F28CA0DB800556C13 /* Cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.obj; sourceTree = "<group>"; };
+		3C95AA2528CAE820003DFC0D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		3C95AA2728CAE84E003DFC0D /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		3C95AA2928CAE863003DFC0D /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
+		3C95AA2B28CB0DA6003DFC0D /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		3C95AA3228CB1A15003DFC0D /* TempScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempScene.swift; sourceTree = "<group>"; };
+		3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMath.swift; sourceTree = "<group>"; };
+		3CFAC0A228CDBC4E00C6FB6C /* Blue3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue3-Bridging-Header.h"; sourceTree = "<group>"; };
+		3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +161,17 @@
 		3C6EB33B28C9B3FF00556C13 /* Blue3 */ = {
 			isa = PBXGroup;
 			children = (
+				3C95AA2F28CB19EF003DFC0D /* Temp */,
+				3C95AA2428CAE80F003DFC0D /* Camera */,
+				3C6EB39C28CA0D8A00556C13 /* res */,
+				3C6EB39928C9F08600556C13 /* Shaders */,
+				3C6EB38728C9E53100556C13 /* Scene */,
+				3C6EB37E28C9C41200556C13 /* Libraries */,
+				3C6EB37528C9B4E000556C13 /* Input */,
+				3C6EB36F28C9B49300556C13 /* Core */,
+				3C6EB36A28C9B44C00556C13 /* Display */,
 				3C6EB33C28C9B3FF00556C13 /* AppDelegate.swift */,
+				3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */,
 				3C6EB33E28C9B3FF00556C13 /* ViewController.swift */,
 				3C6EB34328C9B40000556C13 /* Assets.xcassets */,
 				3C6EB34528C9B40000556C13 /* Main.storyboard */,
@@ -122,6 +196,109 @@
 				3C6EB35D28C9B40000556C13 /* Blue3UITestsLaunchTests.swift */,
 			);
 			path = Blue3UITests;
+			sourceTree = "<group>";
+		};
+		3C6EB36A28C9B44C00556C13 /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB36B28C9B45A00556C13 /* GameView.swift */,
+				3C6EB36D28C9B47500556C13 /* Renderer.swift */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		3C6EB36F28C9B49300556C13 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB37028C9B4A700556C13 /* Engine.swift */,
+				3C6EB37328C9B4C000556C13 /* Preferences.swift */,
+				3C6EB37C28C9BCEE00556C13 /* Types.swift */,
+				3C6EB38F28C9E5B200556C13 /* Math.swift */,
+				3C6EB39128C9E5D900556C13 /* Mesh.swift */,
+				3C6EB39328C9E5E700556C13 /* Solid.swift */,
+				3C6EB39528C9E5F300556C13 /* Node.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		3C6EB37528C9B4E000556C13 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB37628C9B4ED00556C13 /* KeyCodes.swift */,
+				3C6EB37828C9B4FE00556C13 /* Keyboard.swift */,
+				3C6EB37A28C9B50D00556C13 /* Mouse.swift */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		3C6EB37E28C9C41200556C13 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB37F28C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift */,
+				3C6EB38128C9C44A00556C13 /* ComputePipelineStateLibrary.swift */,
+				3C6EB38328C9C56600556C13 /* RenderPipelineStateLibrary.swift */,
+				3C6EB38528C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift */,
+				3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		3C6EB38728C9E53100556C13 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB38928C9E54300556C13 /* SceneManager.swift */,
+				3C6EB38B28C9E55A00556C13 /* Scene.swift */,
+				3C6EB38D28C9E56D00556C13 /* Sandbox.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		3C6EB39928C9F08600556C13 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB39A28C9F09200556C13 /* Shader.metal */,
+				3C95AA2B28CB0DA6003DFC0D /* ShaderTypes.h */,
+				3CFAC0A228CDBC4E00C6FB6C /* Blue3-Bridging-Header.h */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		3C6EB39C28CA0D8A00556C13 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				3C061F5F28CC404500EA61E1 /* Jungle.jpg */,
+				3C6EB39D28CA0D9000556C13 /* Cube */,
+			);
+			path = res;
+			sourceTree = "<group>";
+		};
+		3C6EB39D28CA0D9000556C13 /* Cube */ = {
+			isa = PBXGroup;
+			children = (
+				3C6EB39E28CA0DB800556C13 /* Cube.mtl */,
+				3C6EB39F28CA0DB800556C13 /* Cube.obj */,
+			);
+			path = Cube;
+			sourceTree = "<group>";
+		};
+		3C95AA2428CAE80F003DFC0D /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				3C95AA2528CAE820003DFC0D /* CameraManager.swift */,
+				3C95AA2728CAE84E003DFC0D /* Camera.swift */,
+				3C95AA2928CAE863003DFC0D /* DebugCamera.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		3C95AA2F28CB19EF003DFC0D /* Temp */ = {
+			isa = PBXGroup;
+			children = (
+				3C95AA3228CB1A15003DFC0D /* TempScene.swift */,
+				3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */,
+				3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */,
+			);
+			path = Temp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +369,7 @@
 				TargetAttributes = {
 					3C6EB33828C9B3FF00556C13 = {
 						CreatedOnToolsVersion = 13.4;
+						LastSwiftMigration = 1340;
 					};
 					3C6EB34C28C9B40000556C13 = {
 						CreatedOnToolsVersion = 13.4;
@@ -228,8 +406,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C6EB3A128CA0DB800556C13 /* Cube.obj in Resources */,
 				3C6EB34428C9B40000556C13 /* Assets.xcassets in Resources */,
+				3C6EB3A028CA0DB800556C13 /* Cube.mtl in Resources */,
 				3C6EB34728C9B40000556C13 /* Main.storyboard in Resources */,
+				3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,9 +435,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C6EB37728C9B4ED00556C13 /* KeyCodes.swift in Sources */,
+				3C6EB38228C9C44A00556C13 /* ComputePipelineStateLibrary.swift in Sources */,
+				3C6EB37B28C9B50D00556C13 /* Mouse.swift in Sources */,
+				3C6EB39628C9E5F300556C13 /* Node.swift in Sources */,
+				3CFAC09F28CDBA5500C6FB6C /* Geometry.swift in Sources */,
+				3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */,
+				3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */,
 				3C6EB33F28C9B3FF00556C13 /* ViewController.swift in Sources */,
+				3C6EB37428C9B4C000556C13 /* Preferences.swift in Sources */,
+				3C6EB38028C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift in Sources */,
+				3C6EB38A28C9E54300556C13 /* SceneManager.swift in Sources */,
+				3C6EB37128C9B4A700556C13 /* Engine.swift in Sources */,
+				3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */,
+				3C6EB37928C9B4FE00556C13 /* Keyboard.swift in Sources */,
 				3C6EB33D28C9B3FF00556C13 /* AppDelegate.swift in Sources */,
+				3C6EB38C28C9E55A00556C13 /* Scene.swift in Sources */,
+				3C6EB39B28C9F09200556C13 /* Shader.metal in Sources */,
+				3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */,
+				3CFAC0A128CDBA6C00C6FB6C /* MatrixMath.swift in Sources */,
+				3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */,
+				3C6EB38E28C9E56D00556C13 /* Sandbox.swift in Sources */,
+				3C6EB39228C9E5D900556C13 /* Mesh.swift in Sources */,
+				3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */,
+				3C6EB39028C9E5B200556C13 /* Math.swift in Sources */,
+				3C6EB38428C9C56600556C13 /* RenderPipelineStateLibrary.swift in Sources */,
+				3C95AA3328CB1A15003DFC0D /* TempScene.swift in Sources */,
+				3C6EB36E28C9B47500556C13 /* Renderer.swift in Sources */,
+				3C6EB37D28C9BCEE00556C13 /* Types.swift in Sources */,
 				3C6EB34228C9B3FF00556C13 /* Blue3.xcdatamodeld in Sources */,
+				3C6EB39828C9EFF300556C13 /* MeshLibrary.swift in Sources */,
+				3C6EB39428C9E5E700556C13 /* Solid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,11 +631,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue3/Blue3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -438,6 +649,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Blue3/Shaders/Blue3-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -447,11 +660,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue3/Blue3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -463,6 +678,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Blue3/Shaders/Blue3-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
