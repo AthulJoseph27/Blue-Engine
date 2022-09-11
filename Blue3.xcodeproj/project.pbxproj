@@ -43,8 +43,6 @@
 		3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2728CAE84E003DFC0D /* Camera.swift */; };
 		3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2928CAE863003DFC0D /* DebugCamera.swift */; };
 		3C95AA3328CB1A15003DFC0D /* TempScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA3228CB1A15003DFC0D /* TempScene.swift */; };
-		3CFAC09F28CDBA5500C6FB6C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */; };
-		3CFAC0A128CDBA6C00C6FB6C /* MatrixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */; };
 		3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -107,8 +105,6 @@
 		3C95AA2928CAE863003DFC0D /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
 		3C95AA2B28CB0DA6003DFC0D /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3C95AA3228CB1A15003DFC0D /* TempScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempScene.swift; sourceTree = "<group>"; };
-		3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
-		3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMath.swift; sourceTree = "<group>"; };
 		3CFAC0A228CDBC4E00C6FB6C /* Blue3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue3-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -295,8 +291,6 @@
 			isa = PBXGroup;
 			children = (
 				3C95AA3228CB1A15003DFC0D /* TempScene.swift */,
-				3CFAC09E28CDBA5500C6FB6C /* Geometry.swift */,
-				3CFAC0A028CDBA6C00C6FB6C /* MatrixMath.swift */,
 			);
 			path = Temp;
 			sourceTree = "<group>";
@@ -439,7 +433,6 @@
 				3C6EB38228C9C44A00556C13 /* ComputePipelineStateLibrary.swift in Sources */,
 				3C6EB37B28C9B50D00556C13 /* Mouse.swift in Sources */,
 				3C6EB39628C9E5F300556C13 /* Node.swift in Sources */,
-				3CFAC09F28CDBA5500C6FB6C /* Geometry.swift in Sources */,
 				3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */,
 				3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */,
 				3C6EB33F28C9B3FF00556C13 /* ViewController.swift in Sources */,
@@ -453,7 +446,6 @@
 				3C6EB38C28C9E55A00556C13 /* Scene.swift in Sources */,
 				3C6EB39B28C9F09200556C13 /* Shader.metal in Sources */,
 				3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */,
-				3CFAC0A128CDBA6C00C6FB6C /* MatrixMath.swift in Sources */,
 				3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */,
 				3C6EB38E28C9E56D00556C13 /* Sandbox.swift in Sources */,
 				3C6EB39228C9E5D900556C13 /* Mesh.swift in Sources */,
