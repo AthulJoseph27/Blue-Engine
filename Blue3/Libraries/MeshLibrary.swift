@@ -6,6 +6,7 @@ enum MeshTypes {
     case Quad
     case Cube
     case Sphere
+    case Monkey
 }
 
 class MeshLibrary {
@@ -20,6 +21,7 @@ class MeshLibrary {
         meshes.updateValue(QuadMesh(), forKey: .Quad)
 //        meshes.updateValue(CubeMesh(), forKey: .Cube)
         meshes.updateValue(ModelMesh(modelName: "Cube"), forKey: .Cube)
+        meshes.updateValue(ModelMesh(modelName: "Monkey"), forKey: .Monkey)
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->CustomMesh{

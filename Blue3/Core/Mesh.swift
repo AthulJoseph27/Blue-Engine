@@ -1,10 +1,11 @@
 import MetalKit
 
 protocol Mesh {
-    var vertices: [SIMD3<Float>] { get set }
-    var normals:  [SIMD3<Float>] { get }
-    var colors:   [SIMD3<Float>] { get }
-    var masks:    [uint]         { get }
+    var vertices:       [SIMD3<Float>] { get set }
+    var normals:        [SIMD3<Float>] { get }
+    var colors:         [SIMD3<Float>] { get }
+    var masks:          [uint]         { get }
+    var reflectivities:   [Float]        { get set }
 }
 
 class CustomMesh: Mesh {
@@ -12,11 +13,14 @@ class CustomMesh: Mesh {
     internal var normals:  [SIMD3<Float>]
     internal var colors:   [SIMD3<Float>]
     internal var masks:    [uint]
+    internal var reflectivities: [Float]
+    
     init() {
         self.vertices = []
         self.normals = []
         self.colors = []
         self.masks = []
+        self.reflectivities = []
         createMesh()
     }
     
@@ -29,7 +33,7 @@ class CustomMesh: Mesh {
         return normalize(cross(AB, AC))
     }
     
-    func addTriangle(vertices: [SIMD3<Float>], color: SIMD3<Float> = SIMD3<Float>(0.2, 0.4, 0.8), normal: SIMD3<Float>? = nil, mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY) {
+    func addTriangle(vertices: [SIMD3<Float>], color: SIMD3<Float> = SIMD3<Float>(0, 1, 0), normal: SIMD3<Float>? = nil, mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil) {
         
         self.vertices.append(contentsOf: vertices)
         
@@ -44,7 +48,14 @@ class CustomMesh: Mesh {
             colors.append(color)
         }
         
+        var rf = reflectivity
+        
+        if rf == nil {
+            rf = Float.random(in: 0..<1)
+        }
+        
         masks.append(mask)
+        reflectivities.append(rf!)
     }
 }
 
@@ -202,13 +213,5 @@ class ModelMesh: CustomMesh {
     
     override func createMesh() {
         loadModel()
-        var transform = matrix_identity_float4x4
-        transform.scale(axis: SIMD3<Float>(repeating: 500))
-        for i in 0..<vertices.count {
-            let transformedVertex = transform * SIMD4<Float>(vertices[i], 1)
-//            let transformedNormal = transform * SIMD4<Float>(normals[i], 1)
-            vertices[i] = SIMD3<Float>(transformedVertex.x, transformedVertex.y, transformedVertex.z)
-            normals[i] *= -1
-        }
     }
 }

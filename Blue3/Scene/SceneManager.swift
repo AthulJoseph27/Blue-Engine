@@ -1,6 +1,7 @@
 import MetalKit
 
 enum SceneTypes {
+    case BasicScene
     case Sandbox
 }
 
@@ -20,6 +21,8 @@ class SceneManager {
     
     public static func setScene(_ sceneType: SceneTypes, _ drawableSize: CGSize){
         switch sceneType {
+        case .BasicScene:
+            _currentScene = BasicScene(drawableSize: drawableSize)
         case .Sandbox:
             _currentScene = Sandbox(drawableSize: drawableSize)
         }

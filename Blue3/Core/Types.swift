@@ -62,13 +62,6 @@ struct AreaLight: sizeable {
     var color: SIMD3<Float>
 }
 
-//struct Uniforms: sizeable
-//{
-//    var width: uint
-//    var height: uint
-//    var frameIndex: uint
-//}
-
 struct RotationMatrix: sizeable {
     var rotationMatrix: matrix_float4x4
 }

@@ -17,7 +17,7 @@ class Engine {
         RenderPipelineDescriptorLibrary.initialize()
         RenderPipelineStateLibrary.initialize()
         MeshLibrary.initialize()
-//        Skyboxibrary.initialize()
+        Skyboxibrary.initialize()
     }
 }
 

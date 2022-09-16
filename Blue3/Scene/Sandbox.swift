@@ -6,8 +6,18 @@ class Sandbox: Scene {
     
     override func buildScene() {
         addCamera(camera)
-        addObject(solid: Solid(.Cube))
-//        addLight(solid: Solid(.Cube))
+//        addObject(solid: Solid(.Cube))
+        var transform = matrix_identity_float4x4
+//        transform.translate(direction: SIMD3<Float>(1080, 720, -1210))
+////        transform.rotate(angle: Float(90).toRadian, axis: SIMD3<Float>(0, 1, 0))
+//        addObject(solid: Solid(.Monkey), reflectivity: 0, transform: transform)
+        
+        transform = matrix_identity_float4x4
+        transform.translate(direction: SIMD3<Float>(1080, 720, -1210))
+        addLight(solid: Solid(.Cube), transform: transform)
+        
+        
+//        addLight(solid: Solid(.Monkey), transform: transform)
     }
     
     override func updateObjects(deltaTime: Float) {

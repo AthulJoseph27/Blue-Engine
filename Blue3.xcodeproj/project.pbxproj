@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C061F5F28CC404500EA61E1 /* Jungle.jpg */; };
+		3C462F2F28D06C150088CFBE /* SkyboxLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C462F2E28D06C150088CFBE /* SkyboxLibrary.swift */; };
+		3C462F3428D06C6C0088CFBE /* Beach.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 3C462F3028D06C6C0088CFBE /* Beach.jpeg */; };
+		3C462F3528D06C6C0088CFBE /* Sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C462F3128D06C6C0088CFBE /* Sky.jpg */; };
+		3C462F3628D06C6C0088CFBE /* NightCity.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C462F3228D06C6C0088CFBE /* NightCity.jpg */; };
+		3C462F3F28D071F80088CFBE /* Monkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C462F3D28D071F80088CFBE /* Monkey.obj */; };
+		3C462F4028D071F80088CFBE /* Monkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C462F3E28D071F80088CFBE /* Monkey.mtl */; };
 		3C6EB33D28C9B3FF00556C13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB33C28C9B3FF00556C13 /* AppDelegate.swift */; };
 		3C6EB33F28C9B3FF00556C13 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB33E28C9B3FF00556C13 /* ViewController.swift */; };
 		3C6EB34228C9B3FF00556C13 /* Blue3.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB34028C9B3FF00556C13 /* Blue3.xcdatamodeld */; };
@@ -42,7 +48,7 @@
 		3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2528CAE820003DFC0D /* CameraManager.swift */; };
 		3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2728CAE84E003DFC0D /* Camera.swift */; };
 		3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2928CAE863003DFC0D /* DebugCamera.swift */; };
-		3C95AA3328CB1A15003DFC0D /* TempScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA3228CB1A15003DFC0D /* TempScene.swift */; };
+		3CC60E6628CE020D002BB0D0 /* BasicScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC60E6528CE020D002BB0D0 /* BasicScene.swift */; };
 		3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +71,12 @@
 
 /* Begin PBXFileReference section */
 		3C061F5F28CC404500EA61E1 /* Jungle.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jungle.jpg; sourceTree = "<group>"; };
+		3C462F2E28D06C150088CFBE /* SkyboxLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyboxLibrary.swift; sourceTree = "<group>"; };
+		3C462F3028D06C6C0088CFBE /* Beach.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Beach.jpeg; sourceTree = "<group>"; };
+		3C462F3128D06C6C0088CFBE /* Sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sky.jpg; sourceTree = "<group>"; };
+		3C462F3228D06C6C0088CFBE /* NightCity.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = NightCity.jpg; sourceTree = "<group>"; };
+		3C462F3D28D071F80088CFBE /* Monkey.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.obj; sourceTree = "<group>"; };
+		3C462F3E28D071F80088CFBE /* Monkey.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.mtl; sourceTree = "<group>"; };
 		3C6EB33928C9B3FF00556C13 /* Blue3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blue3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C6EB33C28C9B3FF00556C13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C6EB33E28C9B3FF00556C13 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,7 +116,7 @@
 		3C95AA2728CAE84E003DFC0D /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		3C95AA2928CAE863003DFC0D /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
 		3C95AA2B28CB0DA6003DFC0D /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
-		3C95AA3228CB1A15003DFC0D /* TempScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempScene.swift; sourceTree = "<group>"; };
+		3CC60E6528CE020D002BB0D0 /* BasicScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicScene.swift; sourceTree = "<group>"; };
 		3CFAC0A228CDBC4E00C6FB6C /* Blue3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue3-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,6 +146,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C462F3828D0711B0088CFBE /* Monkey */ = {
+			isa = PBXGroup;
+			children = (
+				3C462F3E28D071F80088CFBE /* Monkey.mtl */,
+				3C462F3D28D071F80088CFBE /* Monkey.obj */,
+			);
+			path = Monkey;
+			sourceTree = "<group>";
+		};
 		3C6EB33028C9B3FF00556C13 = {
 			isa = PBXGroup;
 			children = (
@@ -157,7 +178,6 @@
 		3C6EB33B28C9B3FF00556C13 /* Blue3 */ = {
 			isa = PBXGroup;
 			children = (
-				3C95AA2F28CB19EF003DFC0D /* Temp */,
 				3C95AA2428CAE80F003DFC0D /* Camera */,
 				3C6EB39C28CA0D8A00556C13 /* res */,
 				3C6EB39928C9F08600556C13 /* Shaders */,
@@ -235,6 +255,7 @@
 				3C6EB38328C9C56600556C13 /* RenderPipelineStateLibrary.swift */,
 				3C6EB38528C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift */,
 				3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */,
+				3C462F2E28D06C150088CFBE /* SkyboxLibrary.swift */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -245,6 +266,7 @@
 				3C6EB38928C9E54300556C13 /* SceneManager.swift */,
 				3C6EB38B28C9E55A00556C13 /* Scene.swift */,
 				3C6EB38D28C9E56D00556C13 /* Sandbox.swift */,
+				3CC60E6528CE020D002BB0D0 /* BasicScene.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -263,6 +285,10 @@
 			isa = PBXGroup;
 			children = (
 				3C061F5F28CC404500EA61E1 /* Jungle.jpg */,
+				3C462F3028D06C6C0088CFBE /* Beach.jpeg */,
+				3C462F3228D06C6C0088CFBE /* NightCity.jpg */,
+				3C462F3128D06C6C0088CFBE /* Sky.jpg */,
+				3C462F3828D0711B0088CFBE /* Monkey */,
 				3C6EB39D28CA0D9000556C13 /* Cube */,
 			);
 			path = res;
@@ -285,14 +311,6 @@
 				3C95AA2928CAE863003DFC0D /* DebugCamera.swift */,
 			);
 			path = Camera;
-			sourceTree = "<group>";
-		};
-		3C95AA2F28CB19EF003DFC0D /* Temp */ = {
-			isa = PBXGroup;
-			children = (
-				3C95AA3228CB1A15003DFC0D /* TempScene.swift */,
-			);
-			path = Temp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,11 +418,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C462F4028D071F80088CFBE /* Monkey.mtl in Resources */,
+				3C462F3528D06C6C0088CFBE /* Sky.jpg in Resources */,
 				3C6EB3A128CA0DB800556C13 /* Cube.obj in Resources */,
+				3C462F3428D06C6C0088CFBE /* Beach.jpeg in Resources */,
 				3C6EB34428C9B40000556C13 /* Assets.xcassets in Resources */,
 				3C6EB3A028CA0DB800556C13 /* Cube.mtl in Resources */,
 				3C6EB34728C9B40000556C13 /* Main.storyboard in Resources */,
 				3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */,
+				3C462F3F28D071F80088CFBE /* Monkey.obj in Resources */,
+				3C462F3628D06C6C0088CFBE /* NightCity.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +455,7 @@
 				3C6EB37728C9B4ED00556C13 /* KeyCodes.swift in Sources */,
 				3C6EB38228C9C44A00556C13 /* ComputePipelineStateLibrary.swift in Sources */,
 				3C6EB37B28C9B50D00556C13 /* Mouse.swift in Sources */,
+				3C462F2F28D06C150088CFBE /* SkyboxLibrary.swift in Sources */,
 				3C6EB39628C9E5F300556C13 /* Node.swift in Sources */,
 				3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */,
 				3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */,
@@ -444,6 +468,7 @@
 				3C6EB37928C9B4FE00556C13 /* Keyboard.swift in Sources */,
 				3C6EB33D28C9B3FF00556C13 /* AppDelegate.swift in Sources */,
 				3C6EB38C28C9E55A00556C13 /* Scene.swift in Sources */,
+				3CC60E6628CE020D002BB0D0 /* BasicScene.swift in Sources */,
 				3C6EB39B28C9F09200556C13 /* Shader.metal in Sources */,
 				3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */,
 				3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */,
@@ -452,7 +477,6 @@
 				3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */,
 				3C6EB39028C9E5B200556C13 /* Math.swift in Sources */,
 				3C6EB38428C9C56600556C13 /* RenderPipelineStateLibrary.swift in Sources */,
-				3C95AA3328CB1A15003DFC0D /* TempScene.swift in Sources */,
 				3C6EB36E28C9B47500556C13 /* Renderer.swift in Sources */,
 				3C6EB37D28C9BCEE00556C13 /* Types.swift in Sources */,
 				3C6EB34228C9B3FF00556C13 /* Blue3.xcdatamodeld in Sources */,

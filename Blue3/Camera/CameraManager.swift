@@ -1,8 +1,8 @@
 class CameraManager {
-    private var _cameras: [CameraTypes : Camera] = [:]
-    public var currentCamera: Camera!
+    private var _cameras: [CameraTypes : SceneCamera] = [:]
+    public var currentCamera: SceneCamera!
     
-    public func registerCamera(camera: Camera) {
+    public func registerCamera(camera: SceneCamera) {
         self._cameras.updateValue(camera, forKey: camera.cameraType)
     }
     
