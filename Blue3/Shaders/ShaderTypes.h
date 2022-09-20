@@ -9,6 +9,7 @@
 #define RAY_MASK_PRIMARY   3
 #define RAY_MASK_SHADOW    1
 #define RAY_MASK_SECONDARY 1
+//#define RAY_MASK_INSIDE_OBJ 25
 
 struct Camera {
     vector_float3 position;

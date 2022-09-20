@@ -9,6 +9,7 @@ class Scene {
     internal var normals: [SIMD3<Float>] = []
     internal var masks: [uint] = []
     internal var reflectivities: [Float] = []
+    internal var refractiveIndices: [Float] = []
     internal var skyBox: MTLTexture!
 
     init(drawableSize: CGSize) {
@@ -27,7 +28,7 @@ class Scene {
         return cross(e1, e2);
     }
     
-    private func addSolid(solid: Solid, reflectivity: Float = -1, transform: matrix_float4x4) {
+    private func addSolid(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4) {
         let n = solid.mesh.vertices.count
         
         for i in 0..<n {
@@ -50,12 +51,16 @@ class Scene {
             reflectivities.append(contentsOf: solid.mesh.reflectivities)
         }
         
+        for _ in 0..<(n/3) {
+            refractiveIndices.append(refractiveIndex)
+        }
+        
         colors.append(contentsOf: solid.mesh.colors)
         masks.append(contentsOf: solid.mesh.masks)
     }
     
-    func addObject(solid: Solid, reflectivity: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {
-        addSolid(solid: solid, reflectivity: reflectivity, transform: transform)
+    func addObject(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {
+        addSolid(solid: solid, reflectivity: reflectivity, refractiveIndex: refractiveIndex, transform: transform)
     }
     
     func addLight(solid: Solid, color: SIMD3<Float> = SIMD3<Float>(repeating: 1), transform: matrix_float4x4 = matrix_identity_float4x4) {

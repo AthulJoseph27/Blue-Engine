@@ -3,7 +3,7 @@ import MetalPerformanceShaders
 import simd
 import os
 
-let maxBounce = 2
+let maxBounce = 3
 
 let maxFramesInFlight = 3
 let alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
@@ -36,9 +36,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var shadowRayBuffer: MTLBuffer!
     var intersectionBuffer: MTLBuffer!
     var uniformBuffer: MTLBuffer!
-    var randomBuffer: MTLBuffer!
     var triangleMaskBuffer: MTLBuffer!
     var reflectivityBuffer: MTLBuffer!
+    var refractiveIndexBuffer: MTLBuffer!
 
     var rayPipeline: MTLComputePipelineState!
     var shadePipeline: MTLComputePipelineState!
@@ -48,10 +48,10 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var renderTarget: MTLTexture!
     var accumulationTarget: MTLTexture!
+    var randomTexture: MTLTexture!
 
     var semaphore: DispatchSemaphore!
     var size: CGSize!
-    var randomBufferOffset: Int!
     var uniformBufferOffset: Int!
     var uniformBufferIndex: Int = 0
 
@@ -94,7 +94,7 @@ class Renderer: NSObject, MTKViewDelegate {
     private func createScene(_ mtkView: MTKView) {
         SceneManager.setScene(.BasicScene, mtkView.drawableSize)
         scene = SceneManager.currentScene
-        scene.skyBox = Skyboxibrary.skybox(.Sky)
+        scene.skyBox = Skyboxibrary.skybox(.Jungle)
     }
     
     private func createBuffers() {
@@ -103,6 +103,7 @@ class Renderer: NSObject, MTKViewDelegate {
         var colors = scene.colors
         var masks = scene.masks
         var reflectivities = scene.reflectivities
+        var refractiveIndices = scene.refractiveIndices
         
         let uniformBufferSize = alignedUniformsSize * maxFramesInFlight
 
@@ -116,7 +117,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
 
         self.uniformBuffer = device.makeBuffer(length: uniformBufferSize, options: storageOptions)
-        self.randomBuffer = device.makeBuffer(length: 256 * maxFramesInFlight * SIMD2<Float>.stride, options: storageOptions)
 
         let float3Size = SIMD3<Float>.stride
         self.vertexPositionBuffer = device.makeBuffer(bytes: &vertices, length: vertices.count * float3Size, options: storageOptions)
@@ -124,6 +124,7 @@ class Renderer: NSObject, MTKViewDelegate {
         self.vertexNormalBuffer = device.makeBuffer(bytes: &normals, length: normals.count * float3Size, options: storageOptions)
         self.triangleMaskBuffer = device.makeBuffer(bytes: &masks, length: masks.count * uint.stride, options: storageOptions)
         self.reflectivityBuffer = device.makeBuffer(bytes: &reflectivities, length: reflectivities.count * Float.stride, options: storageOptions)
+        self.refractiveIndexBuffer = device.makeBuffer(bytes: &refractiveIndices, length: refractiveIndices.count * Float.stride, options: storageOptions)
         // When using managed buffers, we need to indicate that we modified the buffer so that the GPU
         // copy can be updated
         #if arch(x86_64)
@@ -133,6 +134,7 @@ class Renderer: NSObject, MTKViewDelegate {
             vertexNormalBuffer.didModifyRange(0..<vertexNormalBuffer.length)
             triangleMaskBuffer.didModifyRange(0..<triangleMaskBuffer.length)
             reflectivityBuffer.didModifyRange(0..<reflectivityBuffer.length)
+            refractiveIndexBuffer.didModifyRange(0..<refractiveIndexBuffer.length)
         }
         #endif
     }
@@ -210,18 +212,18 @@ class Renderer: NSObject, MTKViewDelegate {
         uniformBuffer.didModifyRange(uniformBufferOffset..<uniformBufferOffset + alignedUniformsSize)
         #endif
 
-        randomBufferOffset = 256 * MemoryLayout<SIMD2<Float>>.stride * uniformBufferIndex
-        let float2Pointer = randomBuffer.contents().advanced(by: randomBufferOffset)
-        var randoms = float2Pointer.bindMemory(to: SIMD2<Float>.self, capacity: 1)
-        for _ in 0..<256 {
-            randoms.pointee = SIMD2<Float>(Float.random(in: 0..<1), Float.random(in: 0..<1))
-            randoms = randoms.advanced(by: 1)
-        }
+//        randomBufferOffset = 256 * MemoryLayout<SIMD2<Float>>.stride * uniformBufferIndex
+//        let float2Pointer = randomBuffer.contents().advanced(by: randomBufferOffset)
+//        var randoms = float2Pointer.bindMemory(to: SIMD2<Float>.self, capacity: 1)
+//        for _ in 0..<256 {
+//            randoms.pointee = SIMD2<Float>(Float.random(in: 0..<1), Float.random(in: 0..<1))
+//            randoms = randoms.advanced(by: 1)
+//        }
 
         // For managed storage mode
-        #if arch(x86_64)
-        randomBuffer.didModifyRange(randomBufferOffset..<randomBufferOffset + 256 * MemoryLayout<SIMD2<Float>>.stride)
-        #endif
+//        #if arch(x86_64)
+//        randomBuffer.didModifyRange(randomBufferOffset..<randomBufferOffset + 256 * MemoryLayout<SIMD2<Float>>.stride)
+//        #endif
 
         uniformBufferIndex = (uniformBufferIndex + 1) % maxFramesInFlight
     }
@@ -250,7 +252,24 @@ class Renderer: NSObject, MTKViewDelegate {
         
         renderTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
         accumulationTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
-
+        
+        let randomTextureDescriptor = MTLTextureDescriptor()
+        randomTextureDescriptor.pixelFormat = .r32Uint
+        randomTextureDescriptor.textureType = .type2D
+        randomTextureDescriptor.width = Int(size.width)
+        randomTextureDescriptor.height = Int(size.height)
+        randomTextureDescriptor.usage = .shaderRead
+        
+        randomTexture = device.makeTexture(descriptor: randomTextureDescriptor)!
+        
+        var randomValues: [__uint32_t] = []
+        
+        for _ in 0..<(Int(size.width) * Int(size.height)) {
+            randomValues.append(arc4random() % (1024 * 1024))
+        }
+        
+        randomTexture.replace(region: MTLRegionMake2D(0, 0, Int(size.width), Int(size.height)), mipmapLevel: 0, withBytes: randomValues, bytesPerRow: MemoryLayout<__uint32_t>.size * Int(size.width))
+        
         frameIndex = 0
     }
 
@@ -291,9 +310,9 @@ class Renderer: NSObject, MTKViewDelegate {
 
         computeEncoder.setBuffer(uniformBuffer, offset: uniformBufferOffset, index: 0)
         computeEncoder.setBuffer(rayBuffer, offset: 0, index: 1)
-        computeEncoder.setBuffer(randomBuffer, offset: randomBufferOffset, index: 2)
 
-        computeEncoder.setTexture(renderTarget, index: 0)
+        computeEncoder.setTexture(randomTexture, index: 0)
+        computeEncoder.setTexture(renderTarget, index: 1)
 
         computeEncoder.setComputePipelineState(rayPipeline)
 
@@ -314,12 +333,13 @@ class Renderer: NSObject, MTKViewDelegate {
             guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
 
             let buffers = [uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer,
-                           vertexColorBuffer, vertexNormalBuffer, randomBuffer, triangleMaskBuffer, reflectivityBuffer]
-            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, randomBufferOffset, 0, 0]
-            shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<9)
-
-            shadeEncoder.setTexture(renderTarget, index: 0)
-            shadeEncoder.setTexture(scene.skyBox, index: 1)
+                           vertexColorBuffer, vertexNormalBuffer, triangleMaskBuffer, reflectivityBuffer, refractiveIndexBuffer]
+            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0]
+            shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
+            
+            shadeEncoder.setTexture(randomTexture, index: 0)
+            shadeEncoder.setTexture(renderTarget, index: 1)
+            shadeEncoder.setTexture(scene.skyBox, index: 2)
             shadeEncoder.setComputePipelineState(shadePipeline)
             shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             shadeEncoder.endEncoding()

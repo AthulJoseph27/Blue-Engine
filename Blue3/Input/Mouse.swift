@@ -30,7 +30,7 @@ class Mouse {
         self.overallMousePosition = position
     }
 
-    ///Sets the delta distance the mouse had moved
+    //Sets the delta distance the mouse had moved
         public static func setMousePositionChange(overallPosition: SIMD2<Float>, deltaPosition: SIMD2<Float>){
         self.overallMousePosition = overallPosition
         self.mousePositionDelta += deltaPosition
@@ -46,7 +46,7 @@ class Mouse {
         return overallMousePosition
     }
 
-    ///Returns the movement of the wheel since last time getDWheel() was called
+    //Returns the movement of the wheel since last time getDWheel() was called
     public static func getDWheel()->Float{
         let position = scrollWheelChange
         scrollWheelChange = 0

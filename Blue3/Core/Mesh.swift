@@ -1,11 +1,12 @@
 import MetalKit
 
 protocol Mesh {
-    var vertices:       [SIMD3<Float>] { get set }
-    var normals:        [SIMD3<Float>] { get }
-    var colors:         [SIMD3<Float>] { get }
-    var masks:          [uint]         { get }
-    var reflectivities:   [Float]        { get set }
+    var vertices:          [SIMD3<Float>] { get set }
+    var normals:           [SIMD3<Float>] { get }
+    var colors:            [SIMD3<Float>] { get }
+    var masks:             [uint]         { get }
+    var reflectivities:    [Float]        { get set }
+    var refractiveIndices: [Float]        { get set }
 }
 
 class CustomMesh: Mesh {
@@ -14,6 +15,7 @@ class CustomMesh: Mesh {
     internal var colors:   [SIMD3<Float>]
     internal var masks:    [uint]
     internal var reflectivities: [Float]
+    internal var refractiveIndices: [Float]
     
     init() {
         self.vertices = []
@@ -21,6 +23,7 @@ class CustomMesh: Mesh {
         self.colors = []
         self.masks = []
         self.reflectivities = []
+        self.refractiveIndices = []
         createMesh()
     }
     
@@ -33,7 +36,7 @@ class CustomMesh: Mesh {
         return normalize(cross(AB, AC))
     }
     
-    func addTriangle(vertices: [SIMD3<Float>], color: SIMD3<Float> = SIMD3<Float>(0, 1, 0), normal: SIMD3<Float>? = nil, mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil) {
+    func addTriangle(vertices: [SIMD3<Float>], color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil, refractiveIndex: Float = -1) {
         
         self.vertices.append(contentsOf: vertices)
         
@@ -56,6 +59,7 @@ class CustomMesh: Mesh {
         
         masks.append(mask)
         reflectivities.append(rf!)
+        refractiveIndices.append(refractiveIndex)
     }
 }
 

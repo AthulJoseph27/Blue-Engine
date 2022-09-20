@@ -3,13 +3,10 @@ import simd
 
 enum SkyboxTypes {
     case Sky
-    case WhiteMarble
     case Beach
     case City
     case NightCity
-    case Pond
     case Jungle
-    case Sunset
 }
 
 class Skyboxibrary {

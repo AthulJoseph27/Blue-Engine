@@ -21,18 +21,50 @@ struct Intersection {
     float2 coordinates;
 };
 
+constant unsigned int primes[] = {
+    2,   3,  5,  7,
+    11, 13, 17, 19,
+    23, 29, 31, 37,
+    41, 43, 47, 53,
+};
+
+// Returns the i'th element of the Halton sequence using the d'th prime number as a
+// base. The Halton sequence is a "low discrepency" sequence: the values appear
+// random but are more evenly distributed then a purely random sequence. Each random
+// value used to render the image should use a different independent dimension 'd',
+// and each sample (frame) should use a different index 'i'. To decorrelate each
+// pixel, a random offset can be applied to 'i'.
+float halton(unsigned int i, unsigned int d) {
+    unsigned int b = primes[d];
+    
+    float f = 1.0f;
+    float invB = 1.0f / b;
+    
+    float r = 0;
+    
+    while (i > 0) {
+        f = f * invB;
+        r = r + f * (i % b);
+        i = i / b;
+    }
+    
+    return r;
+}
+
 kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
                       constant Uniforms & uniforms  [[buffer(0)]],
                       device Ray *rays              [[buffer(1)]],
-                      device float2 *random,
-                      texture2d<float, access::write> dstTex [[texture(0)]])
+                      texture2d<unsigned int> randomTex      [[texture(0)]],
+                      texture2d<float, access::write> dstTex [[texture(1)]])
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
 
         device Ray & ray = rays[rayIdx];
         
-        float2 r = random[(tid.y % 16) * 16 + (tid.x % 16)];
+        unsigned int offset = randomTex.read(tid).x;
+        float2 r = float2(halton(offset + uniforms.frameIndex, 0),
+                          halton(offset + uniforms.frameIndex, 1));
         
         float2 pixel = (float2)tid;
         pixel+=r; // Adding a small offset to pixel for anti-aliasing
@@ -72,18 +104,6 @@ inline T interpolateVertexAttribute(device T *attributes, Intersection intersect
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
 
-inline float3 sampleCosineWeightedHemisphere(float2 u) {
-    float phi = 2.0f * M_PI_F * u.x;
-    
-    float cos_phi;
-    float sin_phi = sincos(phi, cos_phi);
-    
-    float cos_theta = sqrt(u.y);
-    float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
-    
-    return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
-}
-
 inline void sampleAreaLight(constant AreaLight & light,
                             float2 u,
                             float3 position,
@@ -109,15 +129,7 @@ inline void sampleAreaLight(constant AreaLight & light,
     lightColor *= saturate(dot(-lightDirection, light.forward));
 }
 
-inline float3 alignHemisphereWithNormal(float3 sample, float3 normal) {
-    float3 up = normal;
-    float3 right = normalize(cross(normal, float3(0.0072f, 1.0f, 0.0034f)));
-    float3 forward = cross(right, up);
-    return sample.x * right + sample.y * up + sample.z * forward;
-}
-
-float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
-//    return float3(0);
+inline float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
     normalize(u);
 
     float w = max(skyBox.get_width(), skyBox.get_height());
@@ -136,7 +148,7 @@ float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
         return float3(skyBox.read(uint2((int)_u, (int)_v)));
 }
 
-float3 getTrueReflectionDirection(Ray ray, float3 normal) {
+inline float3 getTrueReflectionDirection(Ray ray, float3 normal) {
     float3 n = normalize(normal);
     float3 d = normalize(ray.direction);
 
@@ -149,7 +161,7 @@ float3 getTrueReflectionDirection(Ray ray, float3 normal) {
     return normalize(d);
 }
 
-float3 reflectRay(Ray ray, float3 intersectionPoint, float3 normal, float reflectivity, float rX, float rY) {
+inline float3 reflectRay(Ray ray, float3 intersectionPoint, float3 normal, float reflectivity, float rX, float rY) {
     /*
         base angle = alpha
         h = 1 unit
@@ -160,15 +172,17 @@ float3 reflectRay(Ray ray, float3 intersectionPoint, float3 normal, float reflec
         r = tan (alpha/2)
         
         random -> 0..1
-        random * 2 - 1 -> -1 .. 1
+     
+        random -> -1 .. 1, values spread using cosine function; so rays are more likely to be deviated close to the center of the cone.
+        
         choose a random point in the circle
      */
         
     float coneAngle = PI * (1.0 - reflectivity);
     float alpha = coneAngle / 2.0;
-    
-    rX = 2 * rX - 1;
-    rY = 2 * rY - 1;
+
+    rX = cos(rX * PI);
+    rY = cos(rY * PI);
     
     float r;
     
@@ -186,6 +200,30 @@ float3 reflectRay(Ray ray, float3 intersectionPoint, float3 normal, float reflec
     return point - intersectionPoint;
 }
 
+inline float3 refractRay(Ray ray, float3 intersectionPoint, float3 normal, float refractiveIndex) {
+    bool inside = (dot(normal , ray.direction) >= 0);
+    
+    if(inside){
+        // Invert normal
+        normal *= -1;
+        refractiveIndex = 1.0 / (refractiveIndex + 1e-3f);
+    }
+    
+    float3 x = normalize(normal);
+    float3 z = normalize(cross(ray.direction, x));
+    float3 y = cross(x, z);
+
+    float angleI = acos(dot(-1 * x, ray.direction));
+    float sinR = sin(angleI) / refractiveIndex;
+    float cosR = sqrt(1.0 - sinR * sinR);
+
+    float2 relativeRefractedRay = float2(-cosR, sinR);
+
+    float3 refractedRay = relativeRefractedRay.x * x +  relativeRefractedRay.y * y;
+
+    return refractedRay;
+}
+
 kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         constant Uniforms & uniforms,
                         device Ray *rays,
@@ -193,9 +231,10 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         device Intersection *intersections,
                         device float3 *vertexColors,
                         device float3 *vertexNormals,
-                        device float2 *random,
                         device uint *triangleMasks,
                         device float *reflectivities,
+                        device float *refractiveIndices,
+                        texture2d<unsigned int> randomTex,
                         texture2d<float, access::write> dstTex,
                         texture2d<float, access::read> skyBox)
 {
@@ -216,7 +255,9 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    float3 surfaceNormal = interpolateVertexAttribute(vertexNormals, intersection);
                    surfaceNormal = normalize(surfaceNormal);
 
-                   float2 r = random[(tid.y % 16) * 16 + (tid.x % 16)];
+                   unsigned int offset = randomTex.read(tid).x;
+                   float2 r = float2(halton(offset + uniforms.frameIndex, 0),
+                                     halton(offset + uniforms.frameIndex, 1));
 
                    float3 lightDirection;
                    float3 lightColor;
@@ -235,14 +276,24 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    shadowRay.color = lightColor * color;
                    
-                   float reflectivity = reflectivities[intersection.primitiveIndex];
-                   
-                   float3 sampleDirection = reflectRay(ray, intersectionPoint, surfaceNormal, reflectivity, r.x, r.y);
-                   ray.direction = sampleDirection;
-                   ray.color = color;
+                   if(refractiveIndices[intersection.primitiveIndex] >= 1.0){
+                        // Refract ray
+                       float3 sampleDirection = refractRay(ray, intersectionPoint, surfaceNormal, refractiveIndices[intersection.primitiveIndex]);
+                       ray.direction = sampleDirection;
+                       ray.color = color;
+                       ray.origin = intersectionPoint + surfaceNormal * 1e-3f;
+                       ray.mask = RAY_MASK_SECONDARY;
 
-                   ray.origin = intersectionPoint + surfaceNormal * 1e-3f;
-                   ray.mask = RAY_MASK_SECONDARY;
+                   }else{
+                       // Reflect ray
+                       float reflectivity = reflectivities[intersection.primitiveIndex];
+                       
+                       float3 sampleDirection = reflectRay(ray, intersectionPoint, surfaceNormal, reflectivity, r.x, r.y);
+                       ray.direction = sampleDirection;
+                       ray.color = color;
+                       ray.origin = intersectionPoint + surfaceNormal * 1e-3f;
+                       ray.mask = RAY_MASK_SECONDARY;
+                   }
                }
                else {
                    dstTex.write(float4(uniforms.light.color, 1.0f), tid);
