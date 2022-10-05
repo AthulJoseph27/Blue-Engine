@@ -30,15 +30,24 @@ extension MPSIntersectionDistancePrimitiveIndexCoordinates: sizeable {}
 struct Vertex: sizeable{
     var position: SIMD3<Float>
     var color: SIMD4<Float>
+    var uvCoordinate: SIMD2<Float>
+}
+
+struct VertexIn: sizeable{
+    var position: SIMD3<Float>
+    var uvCoordinate: SIMD2<Float>
+    var normal: SIMD3<Float>
 }
 
 struct VertexOut: sizeable{
-    var index: uint
     var position: SIMD3<Float>
+    var color: SIMD3<Float>
+    var uvCoordinate: SIMD2<Float>
+    var textureId: uint
 }
 
-struct ModelConstants: sizeable {
-    var modelMatrix = matrix_identity_float4x4
+struct PrimitiveData: sizeable {
+    var texture: MTLTexture?
 }
 
 struct TriangleIn: sizeable {
@@ -62,6 +71,12 @@ struct AreaLight: sizeable {
     var color: SIMD3<Float>
 }
 
+struct Material: sizeable {
+    var useTextureColor: Bool = false
+    var useMaterialColor: Bool = false
+    var color: SIMD4<Float> = SIMD4<Float>(0, 0, 1, 1)
+}
+
 struct RotationMatrix: sizeable {
     var rotationMatrix: matrix_float4x4
 }
@@ -72,6 +87,15 @@ struct CameraOut: sizeable {
     var right: SIMD3<Float>
     var up: SIMD3<Float>
 //    var rotationMatrix: matrix_float4x4
+}
+
+struct ModelConstants: sizeable {
+    var modelMatrix = matrix_identity_float4x4
+}
+
+struct SceneConstants: sizeable {
+    var viewMatrix = matrix_identity_float4x4
+    var projectionMatrix = matrix_identity_float4x4
 }
 
 class Masks {

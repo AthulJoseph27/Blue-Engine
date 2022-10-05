@@ -4,13 +4,15 @@ class DebugCamera: SceneCamera {
     var cameraType: CameraTypes = CameraTypes.Debug
     
     var position = SIMD3<Float>(1080, 720, -1200)
-    var deltaPosition = SIMD3<Float>(repeating: 0)
+    var deltaPosition = SIMD3<Float>(0, 0, 0)
     var rotation = SIMD3<Float>(0, 0, 0)
     var deltaRotation = SIMD3<Float>(0, 0, 0)
-
+    var projectionMatrix: matrix_float4x4 {
+        return matrix_float4x4.prespective(degreeFov: 45, aspectRatio: 16.0/9.0, near: 0.1, far: 1000)
+    }
     
     func update(deltaTime: Float) {
-
+        
         if(Keyboard.isKeyPressed(.leftArrow)) {
             self.deltaPosition.x -= deltaTime
         }
@@ -50,7 +52,6 @@ class DebugCamera: SceneCamera {
         if(Keyboard.isKeyPressed(.x)) {
             self.deltaRotation.x += deltaTime
         }
-        
     }
     
     

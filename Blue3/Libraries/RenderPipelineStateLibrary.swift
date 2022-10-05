@@ -1,6 +1,7 @@
 import MetalKit
 
 enum RenderPipelineStateTypes {
+    case Basic
     case RayTracing
 }
 
@@ -12,6 +13,7 @@ class RenderPipelineStateLibrary {
     }
     
     public static func createRenderPipelineState() {
+        renderPipelineStates.updateValue(Basic_RenderPipelineState(), forKey: .Basic)
         renderPipelineStates.updateValue(RayTracing_RenderPipelineState(), forKey: .RayTracing)
     }
     
@@ -27,6 +29,19 @@ class RenderPipelineStateLibrary {
 protocol RenderPipelineState {
     var name: String { get }
     var renderPipelineState: MTLRenderPipelineState! { get }
+}
+
+public struct Basic_RenderPipelineState: RenderPipelineState {
+    var name: String = "Baisc Render Pipeline State"
+    var renderPipelineState: MTLRenderPipelineState!
+    
+    init() {
+        do{
+            renderPipelineState = try Engine.device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.descriptor(.Basic))
+        }catch let error as NSError{
+            print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
+        }
+    }
 }
 
 public struct RayTracing_RenderPipelineState: RenderPipelineState {

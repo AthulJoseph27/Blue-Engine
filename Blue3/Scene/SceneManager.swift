@@ -3,6 +3,7 @@ import MetalKit
 enum SceneTypes {
     case BasicScene
     case Sandbox
+    case RefractionScene
 }
 
 class SceneManager {
@@ -25,6 +26,8 @@ class SceneManager {
             _currentScene = BasicScene(drawableSize: drawableSize)
         case .Sandbox:
             _currentScene = Sandbox(drawableSize: drawableSize)
+        case .RefractionScene:
+            _currentScene = RefractionScene(drawableSize: drawableSize)
         }
     }
         

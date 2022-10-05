@@ -11,6 +11,7 @@ enum MeshTypes {
     case Cone
     case Torus
     case Monkey
+    case SpaceShip
 }
 
 class MeshLibrary {
@@ -30,6 +31,8 @@ class MeshLibrary {
         meshes.updateValue(ModelMesh(modelName: "Cone"), forKey: .Cone)
         meshes.updateValue(ModelMesh(modelName: "Torus"), forKey: .Torus)
         meshes.updateValue(ModelMesh(modelName: "Monkey"), forKey: .Monkey)
+        meshes.updateValue(ModelMesh(modelName: "E 45 Aircraft_obj"), forKey: .SpaceShip)
+        
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->CustomMesh{

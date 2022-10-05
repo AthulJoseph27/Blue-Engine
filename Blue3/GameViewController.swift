@@ -1,11 +1,3 @@
-//
-//  GameViewController.swift
-//  Rays macOS
-//
-//  Created by Viktor Chernikov on 16/04/2019.
-//  Copyright © 2019 Viktor Chernikov. All rights reserved.
-//
-
 import Cocoa
 import MetalKit
 
@@ -26,10 +18,9 @@ class NSLabel: NSTextField {
 // Our macOS specific view controller
 class GameViewController: NSViewController {
 
-    var renderer: Renderer!
     var mtkView: MTKView!
     var counterView: NSLabel!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,19 +44,14 @@ class GameViewController: NSViewController {
         mtkView.device = defaultDevice
 
         counterView = NSLabel(frame: NSRect(x: 10, y: 10, width: 150, height: 50))
-        counterView.stringValue = "----"
+        counterView.stringValue = ""
         counterView.textColor = .white
         mtkView.addSubview(counterView)
-
-        do {
-            let newRenderer = try Renderer(withMetalKitView: mtkView) { [unowned self] value in
-                self.counterView.stringValue = String(format: "MRays/s: %.3f", value / 1_000_000)
-            }
-            renderer = newRenderer
-            renderer.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
-            mtkView.delegate = renderer
-        } catch {
-            print("Renderer cannot be initialized : \(error)")
+        
+        RendererManager.initialize(view: mtkView){ [unowned self] value in
+            self.counterView.stringValue = String(format: "MRays/s: %.3f", value / 1_000_000)
         }
+        RendererManager.setRenderer(.RayTracing)
+        
     }
 }

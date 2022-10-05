@@ -5,12 +5,15 @@ class Scene {
     internal var cameraManager = CameraManager()
     
     internal var vertices: [SIMD3<Float>] = []
+    internal var uvCoordinates: [SIMD2<Float>] = []
+    internal var textureIds: [uint] = []
     internal var colors: [SIMD3<Float>] = []
     internal var normals: [SIMD3<Float>] = []
     internal var masks: [uint] = []
     internal var reflectivities: [Float] = []
     internal var refractiveIndices: [Float] = []
     internal var skyBox: MTLTexture!
+    internal var textures: [MTLTexture?] = []
 
     init(drawableSize: CGSize) {
         skyBox = Skyboxibrary.skybox(.Jungle)
@@ -28,19 +31,35 @@ class Scene {
         return cross(e1, e2);
     }
     
+    func getTriangleNormal(v: [SIMD3<Float>]) -> SIMD3<Float> {
+        let e1: SIMD3<Float> = normalize(v[1] - v[0]);
+        let e2: SIMD3<Float> = normalize(v[2] - v[0]);
+        
+        return cross(e1, e2);
+    }
+    
     private func addSolid(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4) {
+        
         let n = solid.mesh.vertices.count
+        let start = vertices.count
         
         for i in 0..<n {
             let vertex = solid.mesh.vertices[i]
             var transformedVertex = vector4(vertex.x, vertex.y, vertex.z, 1.0)
             transformedVertex = transform * transformedVertex;
             vertices.append(SIMD3<Float>(transformedVertex.x, transformedVertex.y, transformedVertex.z))
-
-            let normal = solid.mesh.normals[i]
-            var transformedNormal = vector4(normal.x, normal.y, normal.z, 1.0)
-            transformedNormal = normalize(transform * transformedNormal)
-            normals.append(normal)
+            
+            if(i<solid.mesh.uvCoordinates.count) {
+                uvCoordinates.append(solid.mesh.uvCoordinates[i])
+            }
+        }
+        
+        for i in 0..<(n/3) {
+            let j = i*3
+            let normal = getTriangleNormal(v0: vertices[start+j], v1: vertices[start+j+1], S: vertices[start+j+2])
+            for _ in 0..<3{
+                normals.append(normal)
+            }
         }
         
         if reflectivity != -1 {
@@ -57,6 +76,18 @@ class Scene {
         
         colors.append(contentsOf: solid.mesh.colors)
         masks.append(contentsOf: solid.mesh.masks)
+        
+        let nextTextureId = uint(textures.count)
+        
+        for i in solid.mesh.submeshIds {
+            textureIds.append(nextTextureId + i)
+        }
+        
+        for tex in solid.mesh.baseColorTextures {
+            textures.append(tex)
+        }
+        
+        textures.append(contentsOf: solid.mesh.baseColorTextures)
     }
     
     func addObject(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {

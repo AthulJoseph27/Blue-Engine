@@ -4,26 +4,35 @@ protocol Mesh {
     var vertices:          [SIMD3<Float>] { get set }
     var normals:           [SIMD3<Float>] { get }
     var colors:            [SIMD3<Float>] { get }
+    var uvCoordinates:      [SIMD2<Float>] { get }
     var masks:             [uint]         { get }
     var reflectivities:    [Float]        { get set }
     var refractiveIndices: [Float]        { get set }
 }
 
 class CustomMesh: Mesh {
-    internal var vertices: [SIMD3<Float>]
-    internal var normals:  [SIMD3<Float>]
-    internal var colors:   [SIMD3<Float>]
-    internal var masks:    [uint]
-    internal var reflectivities: [Float]
+    internal var vertices:  [SIMD3<Float>]
+    internal var normals:   [SIMD3<Float>]
+    internal var colors:    [SIMD3<Float>]
+    internal var submeshIds: [uint]
+    internal var uvCoordinates: [SIMD2<Float>]
+    internal var masks:     [uint]
+    internal var reflectivities:    [Float]
     internal var refractiveIndices: [Float]
+    internal var materials:         [Material]
+    internal var baseColorTextures:  [MTLTexture?]
     
     init() {
         self.vertices = []
         self.normals = []
         self.colors = []
+        self.submeshIds = []
+        self.uvCoordinates = []
         self.masks = []
         self.reflectivities = []
         self.refractiveIndices = []
+        self.materials = []
+        self.baseColorTextures = []
         createMesh()
     }
     
@@ -36,20 +45,40 @@ class CustomMesh: Mesh {
         return normalize(cross(AB, AC))
     }
     
-    func addTriangle(vertices: [SIMD3<Float>], color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil, refractiveIndex: Float = -1) {
+    func addTriangle(vertices: [SIMD3<Float>], uvCoords: [SIMD2<Float>]? = nil, color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, normals: [SIMD3<Float>] = [], mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil, refractiveIndex: Float = -1, submeshId:Int = 0) {
         
         self.vertices.append(contentsOf: vertices)
         
         var nr = normal
         
-        if nr == nil {
-            nr = computeNormal(vertices: vertices)
+        var _uvCoords = uvCoords ?? []
+
+        if uvCoords == nil {
+            for _ in 0..<3{
+                _uvCoords.append(SIMD2<Float>(0, 0))
+            }
+        }
+        
+        uvCoordinates.append(contentsOf: _uvCoords)
+        
+        if normals.count == 0 {
+            
+            if nr == nil {
+                nr = computeNormal(vertices: vertices)
+            }
+            
+            for _ in 0..<3{
+                self.normals.append(nr!)
+            }
+        }else{
+            self.normals.append(contentsOf: normals)
         }
         
         for _ in 0..<3{
-            normals.append(nr!)
             colors.append(color)
+            submeshIds.append(uint(submeshId))
         }
+
         
         var rf = reflectivity
         
@@ -66,11 +95,11 @@ class CustomMesh: Mesh {
 class TriangleMesh : CustomMesh {
     override func createMesh() {
         let vertices = [
-            SIMD3<Float>(0, 0, 100),
-            SIMD3<Float>(2160 ,0, 100),
-            SIMD3<Float>(1080, 1440, 100)
+            SIMD3<Float>(0, 10, -20),
+            SIMD3<Float>(-10 , -10, -20),
+            SIMD3<Float>(10, -10, -20)
         ]
-        addTriangle(vertices: vertices, color: SIMD3<Float>(0, 1, 0))
+        addTriangle(vertices: vertices, uvCoords: [SIMD2<Float>(0.5, 0.5), SIMD2<Float>(0, 1), SIMD2<Float>(1, 1)], color: SIMD3<Float>(0, 1, 0))
     }
     
 }
@@ -78,13 +107,13 @@ class TriangleMesh : CustomMesh {
 class QuadMesh : CustomMesh {
     override func createMesh() {
         let vertices = [
-            SIMD3<Float>( 1080, 1080, 100),
-            SIMD3<Float>(1080, 2160, 100),
-            SIMD3<Float>(2160, 1080, 100),
-            SIMD3<Float>( 2160, 2160, 100),
+            SIMD3<Float>( 0, 0, -20),
+            SIMD3<Float>( 0, 10, -20),
+            SIMD3<Float>(10, 0, -20),
+            SIMD3<Float>(10, 10, -20),
         ]
-        addTriangle(vertices: [vertices[0], vertices[3], vertices[1]])
-        addTriangle(vertices: [vertices[0], vertices[2], vertices[3]])
+        addTriangle(vertices: [vertices[0], vertices[3], vertices[1]], uvCoords: [SIMD2<Float>(0, 1), SIMD2<Float>(1, 0), SIMD2<Float>(1, 1)])
+        addTriangle(vertices: [vertices[0], vertices[2], vertices[3]], uvCoords: [SIMD2<Float>(0, 1), SIMD2<Float>(0, 0), SIMD2<Float>(1, 0)])
     }
 }
 
@@ -131,88 +160,112 @@ class CubeMesh : CustomMesh {
 
 class ModelMesh: CustomMesh {
 //    private var _meshes: [Any]!
-    private var _modelName: String!
+    private var modelName: String!
 
     init(modelName: String) {
-        self._modelName = modelName
+        self.modelName = modelName
         super.init()
     }
     
+    private func getTexture(for semantic: MDLMaterialSemantic,
+                             in material: MDLMaterial?,
+                             textureOrigin: MTKTextureLoader.Origin) -> MTLTexture? {
+            let textureLoader = MTKTextureLoader(device: Engine.device)
+            guard let materialProperty = material?.property(with: semantic) else { return nil }
+            guard let sourceTexture = materialProperty.textureSamplerValue?.texture else { return nil }
+            let options: [MTKTextureLoader.Option : Any] = [
+                MTKTextureLoader.Option.origin : textureOrigin as Any,
+                MTKTextureLoader.Option.generateMipmaps : true
+            ]
+            let tex = try? textureLoader.newTexture(texture: sourceTexture, options: options)
+            return tex
+        }
+    
+    private func addMesh(mtkSubmesh: MTKSubmesh!, mdlMesh: MDLSubmesh, submeshId: Int) {
+        if mtkSubmesh.mesh == nil {
+            return
+        }
+        
+        if submeshIds.isEmpty || submeshIds.last! != submeshId {
+            // Add new Texture
+            baseColorTextures.append(getTexture(for: .baseColor, in: mdlMesh.material, textureOrigin: .bottomLeft))
+//            materials.append(mdlMesh.)
+        }
+        
+        let mtkMesh = mtkSubmesh.mesh!
+        
+        let vertexData = mtkMesh.vertexBuffers[0].buffer.contents()
+        var pointer = vertexData.bindMemory(to: VertexIn.self, capacity: 1)
+        var count = mtkMesh.vertexCount
+        
+        var vertices: [SIMD3<Float>] = []
+        var uvCoords: [SIMD2<Float>] = []
+        var normals:  [SIMD3<Float>] = []
+        
+        
+        for _ in 0..<count {
+            vertices.append(pointer.pointee.position)
+            uvCoords.append(pointer.pointee.uvCoordinate)
+            normals.append(pointer.pointee.normal)
+            pointer = pointer.advanced(by: 1)
+        }
+        
+        let indexBuffer = mtkSubmesh.indexBuffer.buffer.contents()
+        var indexPointer = indexBuffer.bindMemory(to: UInt32.self, capacity: 1)
+        indexPointer = indexPointer.advanced(by: mtkSubmesh.indexBuffer.offset)
+        
+        count = mtkSubmesh.indexCount/3
+        
+        for _ in 0..<count {
+            var triangleVertices: [SIMD3<Float>] = []
+            var triangleUVCoords: [SIMD2<Float>] = []
+            var triangleNormals:  [SIMD3<Float>] = []
+            
+            for _ in 0..<3 {
+                let index = Int(indexPointer.pointee)
+                triangleVertices.append(vertices[index])
+                triangleUVCoords.append(uvCoords[index])
+                triangleNormals.append(normals[index])
+                indexPointer = indexPointer.advanced(by: 1)
+            }
+            addTriangle(vertices: triangleVertices, uvCoords: triangleUVCoords, normals: triangleNormals)
+        }
+        
+    }
+    
     private func loadModel() {
-        guard let assetUrl = Bundle.main.url(forResource: _modelName, withExtension: "obj") else {
-            fatalError("Asset\(_modelName!) does not exist")
-        }
-        
-        var triangles: [TriangleIn] = []
-//        var textureFile: String = ""
-        
-        do {
-            let contents = try String(contentsOf: assetUrl.absoluteURL)
-            var lines = contents.split(separator:"\n")
-
-            lines.removeAll(where: { $0.starts(with: "#") })
-            
-            var vertices: [SIMD3<Float>] = []
-            var normals: [SIMD3<Float>] = []
-            var uvCoordinates: [SIMD2<Float>] = []
-            
-            for line in lines {
-                if line.prefix(2) == "v " {
-                    let tmp = line.dropFirst(2).split(separator: " ")
-                    let vertex = SIMD3<Float>(Float(tmp[0]) ?? 0.0, Float(tmp[1]) ?? 0.0, Float(tmp[2]) ?? 0.0)
-                    vertices.append(vertex)
-                } else if line.prefix(2) == "vn" {
-                    let tmp = line.dropFirst(3).split(separator: " ")
-                    let normal = SIMD3<Float>(Float(tmp[0]) ?? 0.0, Float(tmp[1]) ?? 0.0, Float(tmp[2]) ?? 0.0)
-                    normals.append(normal)
-                } else if line.prefix(2) == "vt" {
-                    let tmp = line.dropFirst(3).split(separator: " ")
-                    let uvCoord = SIMD2<Float>(Float(tmp[0]) ?? 0.0, Float(tmp[1]) ?? 0.0)
-                    uvCoordinates.append(uvCoord)
-                } else if line.first == "f" {
-                    let currVertices = line.dropFirst(2).split(separator: " ")
-                    var triangle = TriangleIn(vertices: [], normal: SIMD3<Float>(repeating: 0), color: SIMD4<Float>(repeating: 0), uvCoordinates: [])
-                    
-                    for i in 0..<3 {
-                        let vertex = currVertices[i]
-                        let tmp = vertex.split(separator: "/")
-                        triangle.vertices.append((Int(tmp[0]) ?? 1) - 1)
-                        triangle.uvCoordinates.append(uvCoordinates[(Int(tmp[1]) ?? 1) - 1])
-                        triangle.normal = normals[(Int(tmp[2]) ?? 1) - 1]
-                    }
-                    
-                    triangles.append(triangle)
-                    
-                    if currVertices.count == 4 {
-                        triangle = TriangleIn(vertices: [], normal: SIMD3<Float>(repeating: 0), color: SIMD4<Float>(repeating: 0), uvCoordinates: [])
-                        
-                        for i in 0..<4 {
-                            if i == 1 {
-                                continue
-                            }
-                            
-                            let vertex = currVertices[i]
-                            let tmp = vertex.split(separator: "/")
-                            triangle.vertices.append((Int(tmp[0]) ?? 1) - 1)
-                            triangle.uvCoordinates.append(uvCoordinates[(Int(tmp[1]) ?? 1) - 1])
-                            triangle.normal = normals[(Int(tmp[2]) ?? 1) - 1]
-                        }
-                        
-                        triangles.append(triangle)
-                    }
-                    
-                } else if line.prefix(6) == "mtllib" {
-//                    textureFile = String(line.dropFirst(7))
+        guard let assetURL = Bundle.main.url(forResource: modelName, withExtension: "obj") else {
+            fatalError("Asset \(String(describing: modelName)) does not exist.")
                 }
-            }
-            
-            for triangle in triangles {
-                let vi = triangle.vertices
-                addTriangle(vertices: [vertices[vi[0]], vertices[vi[1]], vertices[vi[2]]], normal: triangle.normal)
-            }
-        } catch {
-            print("Failed to load model")
-        }
+                
+        let descriptor = MTKModelIOVertexDescriptorFromMetal(VertexDescriptorLibrary.getDescriptor(.Read))
+               (descriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
+               (descriptor.attributes[1] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
+               (descriptor.attributes[2] as! MDLVertexAttribute).name = MDLVertexAttributeNormal
+
+                let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
+                let asset: MDLAsset = MDLAsset(url: assetURL,
+                                               vertexDescriptor: descriptor,
+                                               bufferAllocator: bufferAllocator)
+                asset.loadTextures()
+                
+                do{
+                    let mtkMeshes = try MTKMesh.newMeshes(asset: asset,
+                                                          device: Engine.device).metalKitMeshes
+                    
+                    let mdlMeshes = try MTKMesh.newMeshes(asset: asset,
+                                                          device: Engine.device).modelIOMeshes
+                    
+                    for i in 0..<mtkMeshes[0].submeshes.count {
+                        let mtkSubmesh = mtkMeshes[0].submeshes[i]
+                        let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh
+                        
+                        addMesh(mtkSubmesh: mtkSubmesh, mdlMesh: mdlSubmesh, submeshId: i)
+                    }
+                    
+                } catch {
+                    print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
+                }
     }
     
     override func createMesh() {

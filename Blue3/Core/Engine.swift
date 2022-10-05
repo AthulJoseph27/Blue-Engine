@@ -12,6 +12,7 @@ class Engine {
         self.defaultLibrary = device.makeDefaultLibrary()
         self.textureLoader = MTKTextureLoader(device: device)
         
+        VertexDescriptorLibrary.initialize()
         ComputePipelineDescriptorLibrary.initialize()
         ComputePipelineStateLibrary.initialize()
         RenderPipelineDescriptorLibrary.initialize()
