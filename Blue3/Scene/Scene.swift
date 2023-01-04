@@ -6,7 +6,6 @@ class Scene {
     
     internal var vertices: [SIMD3<Float>] = []
     internal var uvCoordinates: [SIMD2<Float>] = []
-    internal var textureIds: [uint] = []
     internal var colors: [SIMD3<Float>] = []
     internal var normals: [SIMD3<Float>] = []
     internal var masks: [uint] = []
@@ -14,6 +13,9 @@ class Scene {
     internal var refractiveIndices: [Float] = []
     internal var skyBox: MTLTexture!
     internal var textures: [MTLTexture?] = []
+    internal var textureIds: [uint] = []
+    internal var materials: [Material] = []
+    internal var materialIds: [uint] = []
 
     init(drawableSize: CGSize) {
         skyBox = Skyboxibrary.skybox(.Jungle)
@@ -83,11 +85,46 @@ class Scene {
             textureIds.append(nextTextureId + i)
         }
         
-        for tex in solid.mesh.baseColorTextures {
-            textures.append(tex)
-        }
+//        for tex in solid.mesh.baseColorTextures {
+//            if tex == nil {
+//                textures.append(nil)
+//                continue
+//            }
+//
+//            let textureDescriptor = MTLTextureDescriptor()
+//            textureDescriptor.pixelFormat = tex!.pixelFormat
+//            textureDescriptor.textureType = .type2D
+//            textureDescriptor.width = tex!.width
+//            textureDescriptor.height = tex!.height
+//            textureDescriptor.usage = .shaderRead
+//            textureDescriptor.storageMode = .shared
+//
+//            let region = MTLRegionMake2D(0, 0, tex!.width, tex!.height)
+//
+//            if tex!.buffer?.contents() == nil {
+//                textures.append(nil)
+//                continue
+//            }
+//
+//            let pixelData = tex!.buffer?.contents()
+//            let pixelBytes = pixelData?.bindMemory(to: Float.self, capacity: tex!.bufferBytesPerRow * tex!.height)
+////
+//            let newTexture = Engine.device.makeTexture(descriptor: textureDescriptor)!
+//            newTexture.replace(region: region, mipmapLevel: 0, withBytes: pixelBytes!, bytesPerRow: tex!.bufferBytesPerRow)
+//
+//            textures.append(tex)
+//        }
         
         textures.append(contentsOf: solid.mesh.baseColorTextures)
+        
+        let nextMaterialId = uint(materials.count)
+        
+        for i in solid.mesh.submeshIds {
+            materialIds.append(nextMaterialId + i)
+        }
+        
+//        print(solid.mesh.submeshIds)
+        materials.append(contentsOf: solid.mesh.materials)
     }
     
     func addObject(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {

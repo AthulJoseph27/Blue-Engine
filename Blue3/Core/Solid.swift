@@ -21,7 +21,6 @@ class Solid: Node {
 
 extension Solid {
     public func setColor(_ color: SIMD4<Float>) {
-        material.useMaterialColor = true
         material.color = color
     }
 }

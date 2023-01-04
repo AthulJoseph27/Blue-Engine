@@ -173,13 +173,29 @@ class ModelMesh: CustomMesh {
             let textureLoader = MTKTextureLoader(device: Engine.device)
             guard let materialProperty = material?.property(with: semantic) else { return nil }
             guard let sourceTexture = materialProperty.textureSamplerValue?.texture else { return nil }
-            let options: [MTKTextureLoader.Option : Any] = [
+        let options: [MTKTextureLoader.Option : Any] = [
                 MTKTextureLoader.Option.origin : textureOrigin as Any,
-                MTKTextureLoader.Option.generateMipmaps : true
+                MTKTextureLoader.Option.generateMipmaps : true,
             ]
+        
             let tex = try? textureLoader.newTexture(texture: sourceTexture, options: options)
             return tex
         }
+    
+    private func getMaterial(_ mdlMaterial: MDLMaterial?)->Material {
+        var _material = Material()
+        
+        if mdlMaterial == nil {
+            return _material
+        }
+        
+        if let ambient = mdlMaterial!.property(with: .emission)?.float3Value { _material.ambient = ambient }
+        if let diffuse = mdlMaterial!.property(with: .baseColor)?.float3Value { _material.diffuse = diffuse }
+        if let specular = mdlMaterial!.property(with: .specular)?.float3Value { _material.specular = specular }
+        if let shininess = mdlMaterial!.property(with: .specularExponent)?.floatValue { _material.shininess = shininess }
+        
+        return _material
+    }
     
     private func addMesh(mtkSubmesh: MTKSubmesh!, mdlMesh: MDLSubmesh, submeshId: Int) {
         if mtkSubmesh.mesh == nil {
@@ -189,7 +205,7 @@ class ModelMesh: CustomMesh {
         if submeshIds.isEmpty || submeshIds.last! != submeshId {
             // Add new Texture
             baseColorTextures.append(getTexture(for: .baseColor, in: mdlMesh.material, textureOrigin: .bottomLeft))
-//            materials.append(mdlMesh.)
+            materials.append(getMaterial(mdlMesh.material))
         }
         
         let mtkMesh = mtkSubmesh.mesh!
@@ -201,7 +217,6 @@ class ModelMesh: CustomMesh {
         var vertices: [SIMD3<Float>] = []
         var uvCoords: [SIMD2<Float>] = []
         var normals:  [SIMD3<Float>] = []
-        
         
         for _ in 0..<count {
             vertices.append(pointer.pointee.position)
@@ -228,7 +243,7 @@ class ModelMesh: CustomMesh {
                 triangleNormals.append(normals[index])
                 indexPointer = indexPointer.advanced(by: 1)
             }
-            addTriangle(vertices: triangleVertices, uvCoords: triangleUVCoords, normals: triangleNormals)
+            addTriangle(vertices: triangleVertices, uvCoords: triangleUVCoords, normals: triangleNormals, submeshId: submeshId)
         }
         
     }
@@ -256,6 +271,7 @@ class ModelMesh: CustomMesh {
                     let mdlMeshes = try MTKMesh.newMeshes(asset: asset,
                                                           device: Engine.device).modelIOMeshes
                     
+                    print(mtkMeshes[0].submeshes.count)
                     for i in 0..<mtkMeshes[0].submeshes.count {
                         let mtkSubmesh = mtkMeshes[0].submeshes[i]
                         let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh

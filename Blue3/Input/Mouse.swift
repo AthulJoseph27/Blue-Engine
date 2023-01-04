@@ -53,7 +53,7 @@ class Mouse {
         return position
     }
 
-    ///Movement on the y axis since last time getDY() was called.
+    ///Movement on the y axis since last time getDY() was called. 
     public static func getDY()->Float{
         let result = mousePositionDelta.y
         mousePositionDelta.y = 0

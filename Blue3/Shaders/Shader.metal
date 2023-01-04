@@ -6,13 +6,15 @@ struct VertexIn {
     float3 color           [[ attribute(1) ]];
     float2 uvCoordinate    [[ attribute(2) ]];
     uint textureId         [[ attribute(3) ]];
+    uint materialId        [[ attribute(4) ]];
 };
 
 struct RasterizerData {
     float4 position [[ position ]];
     float4 color;
     float2 uvCoordinate;
-//    uint textureId [[ id(0) ]];
+    uint textureId  [[ id(0) ]];
+    uint materialId [[ id(1) ]];
 };
 
 struct ModelConstants {
@@ -25,13 +27,16 @@ struct SceneConstants {
 };
 
 struct Material {
-    bool useTexture;
-    bool useMaterialColor;
-    float4 color;
+    float4 color    [[ attribute(0) ]];
+    bool isLit      [[ attribute(1) ]];
+    float3 ambient  [[ attribute(2) ]];
+    float3 diffuse  [[ attribute(3) ]];
+    float3 specular [[ attribute(4) ]];
+    float shininess [[ attribute(5) ]];
 };
 
 struct PrimitiveData {
-    texture2d<float> texture;
+    texture2d<float> texture [[ id(0) ]];
 };
 
 vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]], constant SceneConstants &sceneConstants [[ buffer(1) ]]){
@@ -39,17 +44,28 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     rd.position = sceneConstants.projectionMatrix * sceneConstants.viewMatrix *  float4(vertexIn.position, 1);
     rd.color = float4(vertexIn.color, 1);
     rd.uvCoordinate = vertexIn.uvCoordinate;
-//    rd.textureId = vertexIn.textureId;
+    rd.textureId = vertexIn.textureId;
+    rd.materialId = vertexIn.materialId;
     
     return rd;
 }
 
-fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]]){
-    float4 color = float4(0, 1, 0, 1);
+fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], const device Material* materials [[ buffer(0) ]], const device PrimitiveData* primitiveData [[ buffer(1) ]]){
+    float4 color = materials[rd.materialId].color;
     
-//    if(!is_null_texture(primitiveData[rd.textureId].texture)){
-//        color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
-//    }
+    if(!is_null_texture(primitiveData[rd.textureId].texture)){
+        color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
+    }
     
     return half4(color.r, color.g, color.b, color.a);
 }
+
+//fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], const device Material* materials [[ buffer(0) ]], const device PrimitiveData* primitiveData [[ buffer(1) ]], array<texture2d<float>, 20> textures [[ texture(0) ]]){
+//    float4 color = materials[rd.materialId].color;
+//
+//    if(!is_null_texture(primitiveData[rd.textureId].texture)){
+//        color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
+//    }
+//
+//    return half4(color.r, color.g, color.b, color.a);
+//}

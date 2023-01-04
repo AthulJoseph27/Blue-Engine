@@ -38,11 +38,11 @@ class DebugCamera: SceneCamera {
         }
         
         if(Keyboard.isKeyPressed(.w)) {
-            self.deltaPosition.z -= deltaTime
+            self.deltaPosition.z -= deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.s)) {
-            self.deltaPosition.z += deltaTime
+            self.deltaPosition.z += deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.z)) {

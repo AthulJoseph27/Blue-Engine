@@ -50,7 +50,12 @@ public struct Basic_VertexDescriptor: VertexDescriptor{
         vertexDescriptor.attributes[3].bufferIndex = 0
         vertexDescriptor.attributes[3].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size
         
-        vertexDescriptor.layouts[0].stride = Vertex.stride
+        //MaterialId
+        vertexDescriptor.attributes[4].format = .uint
+        vertexDescriptor.attributes[4].bufferIndex = 0
+        vertexDescriptor.attributes[4].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size + uint.size
+        
+        vertexDescriptor.layouts[0].stride = VertexOut.stride
     }
 }
 

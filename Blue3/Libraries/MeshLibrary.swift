@@ -12,6 +12,7 @@ enum MeshTypes {
     case Torus
     case Monkey
     case SpaceShip
+    case Chest
 }
 
 class MeshLibrary {
@@ -32,6 +33,7 @@ class MeshLibrary {
         meshes.updateValue(ModelMesh(modelName: "Torus"), forKey: .Torus)
         meshes.updateValue(ModelMesh(modelName: "Monkey"), forKey: .Monkey)
         meshes.updateValue(ModelMesh(modelName: "E 45 Aircraft_obj"), forKey: .SpaceShip)
+        meshes.updateValue(ModelMesh(modelName: "chest"), forKey: .Chest)
         
     }
     

@@ -44,6 +44,7 @@ struct VertexOut: sizeable{
     var color: SIMD3<Float>
     var uvCoordinate: SIMD2<Float>
     var textureId: uint
+    var materialId: uint
 }
 
 struct PrimitiveData: sizeable {
@@ -72,9 +73,13 @@ struct AreaLight: sizeable {
 }
 
 struct Material: sizeable {
-    var useTextureColor: Bool = false
-    var useMaterialColor: Bool = false
-    var color: SIMD4<Float> = SIMD4<Float>(0, 0, 1, 1)
+    var color = SIMD4<Float>(0.6, 0.6, 0.6, 1.0)
+    var isLit: Bool = true
+    
+    var ambient: SIMD3<Float> = SIMD3<Float>(0.1, 0.1, 0.1)
+    var diffuse: SIMD3<Float> = SIMD3<Float>(1,1,1)
+    var specular: SIMD3<Float> = SIMD3<Float>(1,1,1)
+    var shininess: Float = 2
 }
 
 struct RotationMatrix: sizeable {
