@@ -16,6 +16,10 @@ class Scene {
     internal var textureIds: [uint] = []
     internal var materials: [Material] = []
     internal var materialIds: [uint] = []
+    internal var modelConstants: [ModelConstants] = []
+    internal var modelConstantIds: [uint] = []
+    internal var objects: [Solid] = []
+    internal var lightSources: [Light] = []
 
     init(drawableSize: CGSize) {
         skyBox = Skyboxibrary.skybox(.Jungle)
@@ -45,11 +49,15 @@ class Scene {
         let n = solid.mesh.vertices.count
         let start = vertices.count
         
+        let nextModelConstantId = uint(modelConstants.count)
+        modelConstants.append(solid.modelContants)
+        
         for i in 0..<n {
             let vertex = solid.mesh.vertices[i]
             var transformedVertex = vector4(vertex.x, vertex.y, vertex.z, 1.0)
             transformedVertex = transform * transformedVertex;
             vertices.append(SIMD3<Float>(transformedVertex.x, transformedVertex.y, transformedVertex.z))
+            modelConstantIds.append(nextModelConstantId)
             
             if(i<solid.mesh.uvCoordinates.count) {
                 uvCoordinates.append(solid.mesh.uvCoordinates[i])
@@ -123,29 +131,32 @@ class Scene {
             materialIds.append(nextMaterialId + i)
         }
         
-//        print(solid.mesh.submeshIds)
         materials.append(contentsOf: solid.mesh.materials)
+        objects.append(solid)
     }
     
     func addObject(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {
         addSolid(solid: solid, reflectivity: reflectivity, refractiveIndex: refractiveIndex, transform: transform)
     }
     
-    func addLight(solid: Solid, color: SIMD3<Float> = SIMD3<Float>(repeating: 1), transform: matrix_float4x4 = matrix_identity_float4x4) {
+    func addLight(light: Light, color: SIMD3<Float> = SIMD3<Float>(repeating: 1), transform: matrix_float4x4 = matrix_identity_float4x4) {
         
-        solid.mesh.colors = []
+        light.mesh.colors = []
         
-        for _ in 0..<solid.mesh.vertices.count {
-            solid.mesh.colors.append(color)
+        for _ in 0..<light.mesh.vertices.count {
+            light.mesh.colors.append(color)
         }
         
-        let triangleCount = solid.mesh.vertices.count / 3
-        solid.mesh.masks = []
+        let triangleCount = light.mesh.vertices.count / 3
+        light.mesh.masks = []
         for _ in 0..<triangleCount {
-            solid.mesh.masks.append(Masks.TRIANGLE_MASK_LIGHT)
+            light.mesh.masks.append(Masks.TRIANGLE_MASK_LIGHT)
         }
         
-        addSolid(solid: solid, reflectivity: -1, transform: transform)
+        addSolid(solid: light, reflectivity: -1, transform: transform)
+        lightSources.append(light)
+        objects.append(light)
+
     }
     
     func addCamera(_ camera: SceneCamera, _ setAsCurrentCamera: Bool = true) {

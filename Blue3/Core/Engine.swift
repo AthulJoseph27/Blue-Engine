@@ -13,6 +13,7 @@ class Engine {
         self.textureLoader = MTKTextureLoader(device: device)
         
         VertexDescriptorLibrary.initialize()
+        DepthStencilLibrary.intialize()
         ComputePipelineDescriptorLibrary.initialize()
         ComputePipelineStateLibrary.initialize()
         RenderPipelineDescriptorLibrary.initialize()

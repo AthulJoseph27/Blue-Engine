@@ -1,12 +1,14 @@
 import MetalKit
 
 class Solid: Node {
+    var meshType: MeshTypes!
     var mesh: CustomMesh!
     var modelContants = ModelConstants()
     private var material = Material()
     
     init(_ meshType: MeshTypes) {
         super.init()
+        self.meshType = meshType
         mesh = MeshLibrary.mesh(meshType)
     }
     

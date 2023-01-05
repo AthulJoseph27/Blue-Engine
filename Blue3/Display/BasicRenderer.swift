@@ -6,6 +6,8 @@ import os
 class BasicRenderer: Renderer {
     
     var vertexBuffer: MTLBuffer!
+    var modelConstantsBuffer: MTLBuffer!
+    var lightSourceBuffer: MTLBuffer!
     var textureBuffer: MTLBuffer!
     var materialBuffer: MTLBuffer!
     var sourceTextures: MTLBuffer!
@@ -60,10 +62,9 @@ class BasicRenderer: Renderer {
         var vertices: [VertexOut] = []
         
         for i in 0..<scene.vertices.count {
-            vertices.append(VertexOut(position: scene.vertices[i], color: scene.colors[i], uvCoordinate: scene.uvCoordinates[i], textureId: scene.textureIds[i], materialId: scene.materialIds[i]))
+            vertices.append(VertexOut(position: scene.vertices[i], color: scene.colors[i], uvCoordinate: scene.uvCoordinates[i], textureId: scene.textureIds[i], materialId: scene.materialIds[i],
+                normal: scene.normals[i]))
         }
-        
-//        loadTextureFromBundle()
         
         let storageOptions: MTLResourceOptions
 
@@ -74,6 +75,14 @@ class BasicRenderer: Renderer {
         #endif
 
         self.vertexBuffer = device.makeBuffer(bytes: &vertices, length: VertexOut.stride(vertices.count), options: storageOptions)
+        
+        var modelConstants: [ModelConstants] = []
+        for i in 0..<scene.modelConstants.count {
+            modelConstants.append(scene.modelConstants[i])
+        }
+        
+        self.modelConstantsBuffer = device.makeBuffer(bytes: &modelConstants, length: ModelConstants.stride(modelConstants.count), options: storageOptions)
+        
         
         var textures: [PrimitiveData] = []
         var materials: [Material] = scene.materials
@@ -86,11 +95,21 @@ class BasicRenderer: Renderer {
         
         self.materialBuffer = device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         
+        
+        var lightSources: [LightData] = []
+        
+        for light in scene.lightSources {
+            lightSources.append(light.lightData)
+        }
+        
+        self.lightSourceBuffer = device.makeBuffer(bytes: &lightSources, length: LightData.stride(lightSources.count), options: storageOptions)
+        
         #if arch(x86_64)
         if storageOptions.contains(.storageModeManaged) {
             vertexBuffer.didModifyRange(0..<vertexBuffer.length)
             textureBuffer.didModifyRange(0..<textureBuffer.length)
             materialBuffer.didModifyRange(0..<materialBuffer.length)
+            lightSourceBuffer.didModifyRange(0..<lightSourceBuffer.length)
         }
         #endif
         
@@ -147,14 +166,19 @@ class BasicRenderer: Renderer {
 
         let blitEncoder = commandBuffer?.makeBlitCommandEncoder()
         blitEncoder?.label = "Heap Transfer Blit Encoder";
-
+        
         for i in 0..<scene.textures.count{
             
             let texture = scene.textures[i]
             
+            if texture == nil {
+                continue
+            }
+            
             let textureDescriptor = newDescriptorFromTexture(texture: texture, storageMode: heap.storageMode)
-
-            let heapTexture = heap.makeTexture(descriptor: textureDescriptor);
+//            print(textureDescriptor)
+//            print(heap)
+            let heapTexture = heap.makeTexture(descriptor: textureDescriptor)
 
             heapTexture?.label = texture?.label;
 
@@ -226,9 +250,19 @@ class BasicRenderer: Renderer {
         
         sceneConstants.viewMatrix = currentCamera.viewMatrix
         sceneConstants.projectionMatrix = currentCamera.projectionMatrix
+        sceneConstants.cameraPosition = currentCamera.position
         
+        var modelConstants: [ModelConstants] = []
+        for i in 0..<scene.modelConstants.count {
+            modelConstants.append(scene.modelConstants[i])
+        }
+        
+        self.modelConstantsBuffer = device.makeBuffer(bytes: &modelConstants, length: ModelConstants.stride(modelConstants.count))
+        
+        commandEncoder!.setDepthStencilState(DepthStencilLibrary.depthStencilState(.Less ))
         commandEncoder!.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         commandEncoder!.setVertexBytes(&sceneConstants, length: SceneConstants.stride, index: 1)
+        commandEncoder!.setVertexBuffer(modelConstantsBuffer, offset: 0, index: 2)
         
         let sampleDescriptor = MTLSamplerDescriptor()
         sampleDescriptor.minFilter = .linear
@@ -240,6 +274,9 @@ class BasicRenderer: Renderer {
         commandEncoder!.setFragmentSamplerState(sampler, index: 0)
         commandEncoder!.setFragmentBuffer(materialBuffer, offset: 0, index: 0)
         commandEncoder!.setFragmentBuffer(sourceTextures, offset: 0, index: 1)
+        commandEncoder!.setFragmentBuffer(lightSourceBuffer, offset: 0, index: 2)
+        var lightSourcesCount = uint(scene.lightSources.count)
+        commandEncoder!.setFragmentBytes(&lightSourcesCount, length: uint.size, index: 3)
     }
     
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}

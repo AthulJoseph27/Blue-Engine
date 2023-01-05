@@ -56,6 +56,7 @@
 		3C6EB39628C9E5F300556C13 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39528C9E5F300556C13 /* Node.swift */; };
 		3C6EB39828C9EFF300556C13 /* MeshLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */; };
 		3C6EB39B28C9F09200556C13 /* RayTracingShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C6EB39A28C9F09200556C13 /* RayTracingShader.metal */; };
+		3C8A2D242966F41F00613E52 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A2D232966F41F00613E52 /* Light.swift */; };
 		3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2528CAE820003DFC0D /* CameraManager.swift */; };
 		3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2728CAE84E003DFC0D /* Camera.swift */; };
 		3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2928CAE863003DFC0D /* DebugCamera.swift */; };
@@ -69,23 +70,7 @@
 		3CAA0E8628EDCEFD00288DC4 /* E-45-nor_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */; };
 		3CAA0E8728EDCEFD00288DC4 /* E-45 _col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */; };
 		3CAA0E8828EDCEFD00288DC4 /* E-45 _col_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */; };
-		3CAA0E8928EDCEFD00288DC4 /* ms3d.ms3d in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7028EDCEFD00288DC4 /* ms3d.ms3d */; };
-		3CAA0E8A28EDCEFD00288DC4 /* E 45 Aircraft_ply.ply in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7128EDCEFD00288DC4 /* E 45 Aircraft_ply.ply */; };
-		3CAA0E8B28EDCEFD00288DC4 /* E 45 Aircraft_stl.stl in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7228EDCEFD00288DC4 /* E 45 Aircraft_stl.stl */; };
-		3CAA0E8C28EDCEFD00288DC4 /* E 45 Aircraft-sketchfab-Version.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7328EDCEFD00288DC4 /* E 45 Aircraft-sketchfab-Version.fbx */; };
-		3CAA0E8D28EDCEFD00288DC4 /* E 45 Aircraft_x3d.x3d in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7428EDCEFD00288DC4 /* E 45 Aircraft_x3d.x3d */; };
-		3CAA0E8E28EDCEFD00288DC4 /* E 45 Aircraft Cycles Render and High-Poly.blend in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7528EDCEFD00288DC4 /* E 45 Aircraft Cycles Render and High-Poly.blend */; };
-		3CAA0E8F28EDCEFD00288DC4 /* E 45 Aircraft_3ds.3ds in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7628EDCEFD00288DC4 /* E 45 Aircraft_3ds.3ds */; };
-		3CAA0E9028EDCEFD00288DC4 /* E 45 Aircraft_dae.dae in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7728EDCEFD00288DC4 /* E 45 Aircraft_dae.dae */; };
-		3CAA0E9128EDCEFD00288DC4 /* E 45 Aircraft_x.x in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7828EDCEFD00288DC4 /* E 45 Aircraft_x.x */; };
-		3CAA0E9228EDCEFD00288DC4 /* E 45 Aircraft_Export_Ready.blend in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7928EDCEFD00288DC4 /* E 45 Aircraft_Export_Ready.blend */; };
-		3CAA0E9328EDCEFD00288DC4 /* E 45 Aircraft_dxf.dxf in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7A28EDCEFD00288DC4 /* E 45 Aircraft_dxf.dxf */; };
-		3CAA0E9428EDCEFD00288DC4 /* E 45 Aircraft_fbx6.1_ASCII.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7B28EDCEFD00288DC4 /* E 45 Aircraft_fbx6.1_ASCII.fbx */; };
 		3CAA0E9528EDCEFD00288DC4 /* E 45 Aircraft_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */; };
-		3CAA0E9628EDCEFD00288DC4 /* E 45 Aircraft_fbx.7.4_binary.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7D28EDCEFD00288DC4 /* E 45 Aircraft_fbx.7.4_binary.fbx */; };
-		3CAA0E9728EDCEFD00288DC4 /* E 45 Aircraft_abc.abc in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7E28EDCEFD00288DC4 /* E 45 Aircraft_abc.abc */; };
-		3CAA0E9828EDCEFD00288DC4 /* E 45 Aircraft.blend in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7F28EDCEFD00288DC4 /* E 45 Aircraft.blend */; };
-		3CAA0E9928EDCEFD00288DC4 /* E 45 Aircraft_wrl.wrl in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E8028EDCEFD00288DC4 /* E 45 Aircraft_wrl.wrl */; };
 		3CB10E6128ED73EA00198979 /* Cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CB10E5F28ED73EA00198979 /* Cube.mtl */; };
 		3CB10E6228ED73EA00198979 /* Cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CB10E6028ED73EA00198979 /* Cube.obj */; };
 		3CB687B228DC4E2C00C8234E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB687B128DC4E2C00C8234E /* Renderer.swift */; };
@@ -101,6 +86,7 @@
 		3CEB47AE28F1511100C11332 /* chest_01_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEB47A428F1511100C11332 /* chest_01_Mixed_AO.png */; };
 		3CEB47AF28F1511100C11332 /* chest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CEB47A528F1511100C11332 /* chest.mtl */; };
 		3CFAC0A628CDC1F400C6FB6C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */; };
+		3CFC6CCD2966ACEF00DF34C7 /* DepthStencilStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFC6CCC2966ACEF00DF34C7 /* DepthStencilStateLibrary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +160,7 @@
 		3C6EB39528C9E5F300556C13 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshLibrary.swift; sourceTree = "<group>"; };
 		3C6EB39A28C9F09200556C13 /* RayTracingShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RayTracingShader.metal; sourceTree = "<group>"; tabWidth = 3; };
+		3C8A2D232966F41F00613E52 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		3C95AA2528CAE820003DFC0D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		3C95AA2728CAE84E003DFC0D /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		3C95AA2928CAE863003DFC0D /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
@@ -187,23 +174,7 @@
 		3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-nor_1.jpg"; sourceTree = "<group>"; };
 		3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col.jpg"; sourceTree = "<group>"; };
 		3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col_3.jpg"; sourceTree = "<group>"; };
-		3CAA0E7028EDCEFD00288DC4 /* ms3d.ms3d */ = {isa = PBXFileReference; lastKnownFileType = file; path = ms3d.ms3d; sourceTree = "<group>"; };
-		3CAA0E7128EDCEFD00288DC4 /* E 45 Aircraft_ply.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_ply.ply"; sourceTree = "<group>"; };
-		3CAA0E7228EDCEFD00288DC4 /* E 45 Aircraft_stl.stl */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft_stl.stl"; sourceTree = "<group>"; };
-		3CAA0E7328EDCEFD00288DC4 /* E 45 Aircraft-sketchfab-Version.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft-sketchfab-Version.fbx"; sourceTree = "<group>"; };
-		3CAA0E7428EDCEFD00288DC4 /* E 45 Aircraft_x3d.x3d */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "E 45 Aircraft_x3d.x3d"; sourceTree = "<group>"; };
-		3CAA0E7528EDCEFD00288DC4 /* E 45 Aircraft Cycles Render and High-Poly.blend */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft Cycles Render and High-Poly.blend"; sourceTree = "<group>"; };
-		3CAA0E7628EDCEFD00288DC4 /* E 45 Aircraft_3ds.3ds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft_3ds.3ds"; sourceTree = "<group>"; };
-		3CAA0E7728EDCEFD00288DC4 /* E 45 Aircraft_dae.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = "E 45 Aircraft_dae.dae"; sourceTree = "<group>"; };
-		3CAA0E7828EDCEFD00288DC4 /* E 45 Aircraft_x.x */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_x.x"; sourceTree = "<group>"; };
-		3CAA0E7928EDCEFD00288DC4 /* E 45 Aircraft_Export_Ready.blend */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft_Export_Ready.blend"; sourceTree = "<group>"; };
-		3CAA0E7A28EDCEFD00288DC4 /* E 45 Aircraft_dxf.dxf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_dxf.dxf"; sourceTree = "<group>"; };
-		3CAA0E7B28EDCEFD00288DC4 /* E 45 Aircraft_fbx6.1_ASCII.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_fbx6.1_ASCII.fbx"; sourceTree = "<group>"; };
 		3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.obj"; sourceTree = "<group>"; };
-		3CAA0E7D28EDCEFD00288DC4 /* E 45 Aircraft_fbx.7.4_binary.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft_fbx.7.4_binary.fbx"; sourceTree = "<group>"; };
-		3CAA0E7E28EDCEFD00288DC4 /* E 45 Aircraft_abc.abc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft_abc.abc"; sourceTree = "<group>"; };
-		3CAA0E7F28EDCEFD00288DC4 /* E 45 Aircraft.blend */ = {isa = PBXFileReference; lastKnownFileType = file; path = "E 45 Aircraft.blend"; sourceTree = "<group>"; };
-		3CAA0E8028EDCEFD00288DC4 /* E 45 Aircraft_wrl.wrl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_wrl.wrl"; sourceTree = "<group>"; };
 		3CB10E5F28ED73EA00198979 /* Cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.mtl; sourceTree = "<group>"; };
 		3CB10E6028ED73EA00198979 /* Cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.obj; sourceTree = "<group>"; };
 		3CB687B128DC4E2C00C8234E /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -220,6 +191,7 @@
 		3CEB47A528F1511100C11332 /* chest.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chest.mtl; sourceTree = "<group>"; };
 		3CFAC0A228CDBC4E00C6FB6C /* Blue3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue3-Bridging-Header.h"; sourceTree = "<group>"; };
 		3CFAC0A528CDC1F400C6FB6C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		3CFC6CCC2966ACEF00DF34C7 /* DepthStencilStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthStencilStateLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +367,7 @@
 				3C6EB39128C9E5D900556C13 /* Mesh.swift */,
 				3C6EB39328C9E5E700556C13 /* Solid.swift */,
 				3C6EB39528C9E5F300556C13 /* Node.swift */,
+				3C8A2D232966F41F00613E52 /* Light.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -419,6 +392,7 @@
 				3C6EB39728C9EFF300556C13 /* MeshLibrary.swift */,
 				3C462F2E28D06C150088CFBE /* SkyboxLibrary.swift */,
 				3C30F85928E9B5EF00E799A4 /* VertexDescriptorLibrary.swift */,
+				3CFC6CCC2966ACEF00DF34C7 /* DepthStencilStateLibrary.swift */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -473,32 +447,6 @@
 		3CAA0E6628EDCEFD00288DC4 /* E-45-Aircraft */ = {
 			isa = PBXGroup;
 			children = (
-				3CAA0E6728EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl */,
-				3CAA0E6828EDCEFD00288DC4 /* textures */,
-				3CAA0E7028EDCEFD00288DC4 /* ms3d.ms3d */,
-				3CAA0E7128EDCEFD00288DC4 /* E 45 Aircraft_ply.ply */,
-				3CAA0E7228EDCEFD00288DC4 /* E 45 Aircraft_stl.stl */,
-				3CAA0E7328EDCEFD00288DC4 /* E 45 Aircraft-sketchfab-Version.fbx */,
-				3CAA0E7428EDCEFD00288DC4 /* E 45 Aircraft_x3d.x3d */,
-				3CAA0E7528EDCEFD00288DC4 /* E 45 Aircraft Cycles Render and High-Poly.blend */,
-				3CAA0E7628EDCEFD00288DC4 /* E 45 Aircraft_3ds.3ds */,
-				3CAA0E7728EDCEFD00288DC4 /* E 45 Aircraft_dae.dae */,
-				3CAA0E7828EDCEFD00288DC4 /* E 45 Aircraft_x.x */,
-				3CAA0E7928EDCEFD00288DC4 /* E 45 Aircraft_Export_Ready.blend */,
-				3CAA0E7A28EDCEFD00288DC4 /* E 45 Aircraft_dxf.dxf */,
-				3CAA0E7B28EDCEFD00288DC4 /* E 45 Aircraft_fbx6.1_ASCII.fbx */,
-				3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */,
-				3CAA0E7D28EDCEFD00288DC4 /* E 45 Aircraft_fbx.7.4_binary.fbx */,
-				3CAA0E7E28EDCEFD00288DC4 /* E 45 Aircraft_abc.abc */,
-				3CAA0E7F28EDCEFD00288DC4 /* E 45 Aircraft.blend */,
-				3CAA0E8028EDCEFD00288DC4 /* E 45 Aircraft_wrl.wrl */,
-			);
-			path = "E-45-Aircraft";
-			sourceTree = "<group>";
-		};
-		3CAA0E6828EDCEFD00288DC4 /* textures */ = {
-			isa = PBXGroup;
-			children = (
 				3CAA0E6928EDCEFD00288DC4 /* E-45_col_2.jpg */,
 				3CAA0E6A28EDCEFD00288DC4 /* E-45_glass_nor_.jpg */,
 				3CAA0E6B28EDCEFD00288DC4 /* E-45_REF 1.jpg */,
@@ -506,8 +454,10 @@
 				3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */,
 				3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */,
 				3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */,
+				3CAA0E6728EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl */,
+				3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */,
 			);
-			path = textures;
+			path = "E-45-Aircraft";
 			sourceTree = "<group>";
 		};
 		3CB10E5E28ED73E000198979 /* Cube */ = {
@@ -600,7 +550,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1340;
+				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					3C6EB33828C9B3FF00556C13 = {
 						CreatedOnToolsVersion = 13.4;
@@ -641,17 +591,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3CAA0E8D28EDCEFD00288DC4 /* E 45 Aircraft_x3d.x3d in Resources */,
 				3C2A46A628D6D64F008CE0BA /* Cylinder.obj in Resources */,
 				3CEB47AA28F1511100C11332 /* chest_02_Roughness.png in Resources */,
 				3C2A46A728D6D64F008CE0BA /* Cylinder.mtl in Resources */,
-				3CAA0E9828EDCEFD00288DC4 /* E 45 Aircraft.blend in Resources */,
-				3CAA0E8B28EDCEFD00288DC4 /* E 45 Aircraft_stl.stl in Resources */,
 				3CAA0E8128EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl in Resources */,
 				3CAA0E8228EDCEFD00288DC4 /* E-45_col_2.jpg in Resources */,
-				3CAA0E9228EDCEFD00288DC4 /* E 45 Aircraft_Export_Ready.blend in Resources */,
-				3CAA0E9028EDCEFD00288DC4 /* E 45 Aircraft_dae.dae in Resources */,
-				3CAA0E9728EDCEFD00288DC4 /* E 45 Aircraft_abc.abc in Resources */,
 				3CEB47A928F1511100C11332 /* chest_02_Metallic.png in Resources */,
 				3CAA0E3028EDB0D800288DC4 /* Monkey.mtl in Resources */,
 				3CEB47AB28F1511100C11332 /* chest_01_Base_Color.png in Resources */,
@@ -661,26 +605,19 @@
 				3CB10E6128ED73EA00198979 /* Cube.mtl in Resources */,
 				3CEB47A628F1511100C11332 /* chest.obj in Resources */,
 				3CEB47AD28F1511100C11332 /* chest_01_Metallic.png in Resources */,
-				3CAA0E8E28EDCEFD00288DC4 /* E 45 Aircraft Cycles Render and High-Poly.blend in Resources */,
 				3C2A46B028D6D676008CE0BA /* Icosphere.mtl in Resources */,
 				3CB10E6228ED73EA00198979 /* Cube.obj in Resources */,
-				3CAA0E8928EDCEFD00288DC4 /* ms3d.ms3d in Resources */,
 				3CEB47AC28F1511100C11332 /* chest_02_Mixed_AO.png in Resources */,
 				3C462F3528D06C6C0088CFBE /* Sky.jpg in Resources */,
 				3CAA0E8528EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg in Resources */,
 				3C2A469C28D6D624008CE0BA /* Sphere.obj in Resources */,
 				3CAA0E8628EDCEFD00288DC4 /* E-45-nor_1.jpg in Resources */,
-				3CAA0E8A28EDCEFD00288DC4 /* E 45 Aircraft_ply.ply in Resources */,
-				3CAA0E8F28EDCEFD00288DC4 /* E 45 Aircraft_3ds.3ds in Resources */,
 				3CEB47A728F1511100C11332 /* chest_02_Base_Color.png in Resources */,
-				3CAA0E9128EDCEFD00288DC4 /* E 45 Aircraft_x.x in Resources */,
-				3CAA0E9328EDCEFD00288DC4 /* E 45 Aircraft_dxf.dxf in Resources */,
 				3C462F3428D06C6C0088CFBE /* Beach.jpeg in Resources */,
 				3CAA0E3128EDB0D800288DC4 /* Monkey.obj in Resources */,
 				3C6EB34428C9B40000556C13 /* Assets.xcassets in Resources */,
 				3C6EB34728C9B40000556C13 /* Main.storyboard in Resources */,
 				3C2A469D28D6D624008CE0BA /* Sphere.mtl in Resources */,
-				3CAA0E9628EDCEFD00288DC4 /* E 45 Aircraft_fbx.7.4_binary.fbx in Resources */,
 				3CAA0E8728EDCEFD00288DC4 /* E-45 _col.jpg in Resources */,
 				3CEB47A828F1511100C11332 /* chest_01_Roughness.png in Resources */,
 				3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */,
@@ -688,10 +625,7 @@
 				3CEB47AE28F1511100C11332 /* chest_01_Mixed_AO.png in Resources */,
 				3CAA0E8328EDCEFD00288DC4 /* E-45_glass_nor_.jpg in Resources */,
 				3C2A46A228D6D635008CE0BA /* Torus.mtl in Resources */,
-				3CAA0E9928EDCEFD00288DC4 /* E 45 Aircraft_wrl.wrl in Resources */,
-				3CAA0E8C28EDCEFD00288DC4 /* E 45 Aircraft-sketchfab-Version.fbx in Resources */,
 				3C462F3628D06C6C0088CFBE /* NightCity.jpg in Resources */,
-				3CAA0E9428EDCEFD00288DC4 /* E 45 Aircraft_fbx6.1_ASCII.fbx in Resources */,
 				3CEB47AF28F1511100C11332 /* chest.mtl in Resources */,
 				3C4C7F4D28E934630048AED6 /* SampleTexture.jpg in Resources */,
 				3C2A46A128D6D635008CE0BA /* Torus.obj in Resources */,
@@ -735,6 +669,7 @@
 				3C6EB37428C9B4C000556C13 /* Preferences.swift in Sources */,
 				3C6EB38028C9C43000556C13 /* ComputePipelineDescriptorLibrary.swift in Sources */,
 				3C6EB38A28C9E54300556C13 /* SceneManager.swift in Sources */,
+				3CFC6CCD2966ACEF00DF34C7 /* DepthStencilStateLibrary.swift in Sources */,
 				3C6EB37128C9B4A700556C13 /* Engine.swift in Sources */,
 				3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */,
 				3C6EB37928C9B4FE00556C13 /* Keyboard.swift in Sources */,
@@ -742,6 +677,7 @@
 				3C6EB38C28C9E55A00556C13 /* Scene.swift in Sources */,
 				3CC60E6628CE020D002BB0D0 /* BasicScene.swift in Sources */,
 				3C6EB39B28C9F09200556C13 /* RayTracingShader.metal in Sources */,
+				3C8A2D242966F41F00613E52 /* Light.swift in Sources */,
 				3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */,
 				3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */,
 				3CB687B228DC4E2C00C8234E /* Renderer.swift in Sources */,
@@ -836,6 +772,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -896,6 +833,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -923,9 +861,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue3/Blue3.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -952,9 +892,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue3/Blue3.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -980,6 +922,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -998,6 +941,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -1015,6 +959,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue3UITests;
@@ -1031,6 +976,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue3UITests;

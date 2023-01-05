@@ -45,6 +45,7 @@ struct VertexOut: sizeable{
     var uvCoordinate: SIMD2<Float>
     var textureId: uint
     var materialId: uint
+    var normal: SIMD3<Float>
 }
 
 struct PrimitiveData: sizeable {
@@ -70,6 +71,17 @@ struct AreaLight: sizeable {
     var right: SIMD3<Float>
     var up: SIMD3<Float>
     var color: SIMD3<Float>
+}
+
+struct LightData: sizeable {
+    var position = SIMD3<Float>(repeating: 0)
+    var color = SIMD3<Float>(repeating: 1)
+    
+    var brightness: Float = 1.0
+    var ambientIntensity: Float = 1.0
+    var diffuseIntensity: Float = 1.0
+    var specularIntensity: Float = 1.0
+    
 }
 
 struct Material: sizeable {
@@ -101,6 +113,7 @@ struct ModelConstants: sizeable {
 struct SceneConstants: sizeable {
     var viewMatrix = matrix_identity_float4x4
     var projectionMatrix = matrix_identity_float4x4
+    var cameraPosition = SIMD3<Float>(repeating: 0)
 }
 
 class Masks {

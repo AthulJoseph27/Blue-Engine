@@ -3,7 +3,7 @@ import simd
 class DebugCamera: SceneCamera {
     var cameraType: CameraTypes = CameraTypes.Debug
     
-    var position = SIMD3<Float>(1080, 720, -1200)
+    var position = SIMD3<Float>(0, 70, 405)
     var deltaPosition = SIMD3<Float>(0, 0, 0)
     var rotation = SIMD3<Float>(0, 0, 0)
     var deltaRotation = SIMD3<Float>(0, 0, 0)
@@ -14,11 +14,11 @@ class DebugCamera: SceneCamera {
     func update(deltaTime: Float) {
         
         if(Keyboard.isKeyPressed(.leftArrow)) {
-            self.deltaPosition.x -= deltaTime
+            self.deltaPosition.x -= deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.rightArrow)) {
-            self.deltaPosition.x += deltaTime
+            self.deltaPosition.x += deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.downArrow)) {

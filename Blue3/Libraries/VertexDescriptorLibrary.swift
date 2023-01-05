@@ -55,6 +55,16 @@ public struct Basic_VertexDescriptor: VertexDescriptor{
         vertexDescriptor.attributes[4].bufferIndex = 0
         vertexDescriptor.attributes[4].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size + uint.size
         
+        //ModelConstantId
+        vertexDescriptor.attributes[5].format = .uint
+        vertexDescriptor.attributes[5].bufferIndex = 0
+        vertexDescriptor.attributes[5].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size + uint.size
+        
+        //Normal
+        vertexDescriptor.attributes[6].format = .float3
+        vertexDescriptor.attributes[6].bufferIndex = 0
+        vertexDescriptor.attributes[6].offset = SIMD3<Float>.size + SIMD3<Float>.size
+        
         vertexDescriptor.layouts[0].stride = VertexOut.stride
     }
 }

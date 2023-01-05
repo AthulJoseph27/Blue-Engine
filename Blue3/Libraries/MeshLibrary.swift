@@ -2,6 +2,7 @@ import MetalKit
 import simd
 
 enum MeshTypes {
+    case None
     case Triangle
     case Quad
     case Cube
@@ -23,6 +24,7 @@ class MeshLibrary {
     }
     
     private static func createDefaultMeshes() {
+        meshes.updateValue(CustomMesh(), forKey: .None)
         meshes.updateValue(TriangleMesh(), forKey: .Triangle)
         meshes.updateValue(QuadMesh(), forKey: .Quad)
         meshes.updateValue(ModelMesh(modelName: "Cube"), forKey: .Cube)
@@ -34,7 +36,6 @@ class MeshLibrary {
         meshes.updateValue(ModelMesh(modelName: "Monkey"), forKey: .Monkey)
         meshes.updateValue(ModelMesh(modelName: "E 45 Aircraft_obj"), forKey: .SpaceShip)
         meshes.updateValue(ModelMesh(modelName: "chest"), forKey: .Chest)
-        
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->CustomMesh{

@@ -183,7 +183,7 @@ class ModelMesh: CustomMesh {
         }
     
     private func getMaterial(_ mdlMaterial: MDLMaterial?)->Material {
-        var _material = Material()
+        var _material = Material(isLit: true)
         
         if mdlMaterial == nil {
             return _material
@@ -261,7 +261,9 @@ class ModelMesh: CustomMesh {
                 let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
                 let asset: MDLAsset = MDLAsset(url: assetURL,
                                                vertexDescriptor: descriptor,
-                                               bufferAllocator: bufferAllocator)
+                                               bufferAllocator: bufferAllocator,
+                                               preserveTopology: true,
+                                               error: nil)
                 asset.loadTextures()
                 
                 do{
@@ -269,9 +271,8 @@ class ModelMesh: CustomMesh {
                                                           device: Engine.device).metalKitMeshes
                     
                     let mdlMeshes = try MTKMesh.newMeshes(asset: asset,
-                                                          device: Engine.device).modelIOMeshes
+                                                           device: Engine.device).modelIOMeshes
                     
-                    print(mtkMeshes[0].submeshes.count)
                     for i in 0..<mtkMeshes[0].submeshes.count {
                         let mtkSubmesh = mtkMeshes[0].submeshes[i]
                         let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh

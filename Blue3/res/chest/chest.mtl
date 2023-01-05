@@ -2,7 +2,7 @@
 # File Created: 05.02.2020 19:16:02
 
 newmtl chest_01
-	Ns 80.0000
+	Ns 100.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
