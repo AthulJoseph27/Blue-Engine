@@ -22,9 +22,9 @@ class Sandbox: Scene {
         
         transform = matrix_identity_float4x4
         transform.translate(direction: SIMD3<Float>(0, 0, 0))
-//        transform.scale(axis: SIMD3<Float>(repeating: 50))
+        transform.scale(axis: SIMD3<Float>(repeating: 50))
         
-        let triangle = Solid(.Chest)
+        let triangle = Solid(.SpaceShip)
         addObject(solid: triangle, transform: transform)
 
 //        addLight(light: Light(meshType: .Sphere, lightData: LightData(position: SIMD3<Float>(100, 0, 0), color: SIMD3<Float>(1, 1, 1), brightness: 2, ambientIntensity: 0.4, diffuseIntensity: 1.0, specularIntensity: 1.0)), transform: transform)

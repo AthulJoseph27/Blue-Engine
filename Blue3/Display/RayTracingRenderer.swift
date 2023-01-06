@@ -85,7 +85,7 @@ class RayTracingRenderer: Renderer {
     }
     
     private func createScene() {
-        SceneManager.setScene(.RefractionScene, view.drawableSize)
+        SceneManager.setScene(.Sandbox, view.drawableSize)
         scene = SceneManager.currentScene
         scene.skyBox = Skyboxibrary.skybox(.Sky)
     }

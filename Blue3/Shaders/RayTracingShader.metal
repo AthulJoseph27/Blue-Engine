@@ -302,10 +302,10 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    
                    float3 objectColor;
                    
-                   sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
-                                   lightColor, lightDistance);
-//                   sampleSpotLight(r, intersectionPoint, lightDirection,
+//                   sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
 //                                   lightColor, lightDistance);
+                   sampleSpotLight(r, intersectionPoint, lightDirection,
+                                   lightColor, lightDistance);
                    lightColor *= saturate(dot(surfaceNormal, lightDirection));
                    
                    if(materials[materialIds[intersection.primitiveIndex]].isTextureEnabled){
