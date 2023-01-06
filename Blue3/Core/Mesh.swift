@@ -4,23 +4,19 @@ protocol Mesh {
     var vertices:          [SIMD3<Float>] { get set }
     var normals:           [SIMD3<Float>] { get }
     var colors:            [SIMD3<Float>] { get }
-    var uvCoordinates:      [SIMD2<Float>] { get }
+    var uvCoordinates:     [SIMD2<Float>] { get }
     var masks:             [uint]         { get }
-    var reflectivities:    [Float]        { get set }
-    var refractiveIndices: [Float]        { get set }
 }
 
 class CustomMesh: Mesh {
-    internal var vertices:  [SIMD3<Float>]
-    internal var normals:   [SIMD3<Float>]
-    internal var colors:    [SIMD3<Float>]
-    internal var submeshIds: [uint]
-    internal var uvCoordinates: [SIMD2<Float>]
-    internal var masks:     [uint]
-    internal var reflectivities:    [Float]
-    internal var refractiveIndices: [Float]
-    internal var materials:         [Material]
-    internal var baseColorTextures:  [MTLTexture?]
+    internal var vertices:              [SIMD3<Float>]
+    internal var normals:               [SIMD3<Float>]
+    internal var colors:                [SIMD3<Float>]
+    internal var submeshIds:            [uint]
+    internal var uvCoordinates:         [SIMD2<Float>]
+    internal var masks:                 [uint]
+    internal var materials:             [Material]
+    internal var baseColorTextures:     [MTLTexture?]
     
     init() {
         self.vertices = []
@@ -29,8 +25,6 @@ class CustomMesh: Mesh {
         self.submeshIds = []
         self.uvCoordinates = []
         self.masks = []
-        self.reflectivities = []
-        self.refractiveIndices = []
         self.materials = []
         self.baseColorTextures = []
         createMesh()
@@ -45,7 +39,7 @@ class CustomMesh: Mesh {
         return normalize(cross(AB, AC))
     }
     
-    func addTriangle(vertices: [SIMD3<Float>], uvCoords: [SIMD2<Float>]? = nil, color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, normals: [SIMD3<Float>] = [], mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, reflectivity: Float? = nil, refractiveIndex: Float = -1, submeshId:Int = 0) {
+    func addTriangle(vertices: [SIMD3<Float>], uvCoords: [SIMD2<Float>]? = nil, color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, normals: [SIMD3<Float>] = [], mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, submeshId:Int = 0) {
         
         self.vertices.append(contentsOf: vertices)
         
@@ -78,17 +72,8 @@ class CustomMesh: Mesh {
             colors.append(color)
             submeshIds.append(uint(submeshId))
         }
-
-        
-        var rf = reflectivity
-        
-        if rf == nil {
-            rf = Float.random(in: 0..<1)
-        }
         
         masks.append(mask)
-        reflectivities.append(rf!)
-        refractiveIndices.append(refractiveIndex)
     }
 }
 
@@ -192,7 +177,11 @@ class ModelMesh: CustomMesh {
         if let ambient = mdlMaterial!.property(with: .emission)?.float3Value { _material.ambient = ambient }
         if let diffuse = mdlMaterial!.property(with: .baseColor)?.float3Value { _material.diffuse = diffuse }
         if let specular = mdlMaterial!.property(with: .specular)?.float3Value { _material.specular = specular }
+        if let emission = mdlMaterial!.property(with: .emission)?.float3Value { _material.emissive = emission }
         if let shininess = mdlMaterial!.property(with: .specularExponent)?.floatValue { _material.shininess = shininess }
+        if let opacity = mdlMaterial!.property(with: .opacity)?.floatValue { _material.opacity = opacity }
+        if let opticalDensity = mdlMaterial!.property(with: .materialIndexOfRefraction)?.floatValue { _material.opticalDensity = opticalDensity }
+        if let roughness = mdlMaterial!.property(with: .roughness)?.floatValue { _material.roughness = roughness }
         
         return _material
     }

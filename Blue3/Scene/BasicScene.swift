@@ -47,7 +47,7 @@ class BasicScene: Scene {
         createCube(faceMask: Masks.FACE_MASK_ALL, color: SIMD3<Float>([0.725, 0.71, 0.68]), reflectivity: 1.0, refractiveIndex: -1.5, transform: transform, inwardNormals: false, triangleMask: uint(TRIANGLE_MASK_GEOMETRY))
     }
     
-    func createCubeFace(_ vertices: inout [SIMD3<Float>],_ normals: inout [SIMD3<Float>],_ colors: inout [SIMD3<Float>], _ reflectivities: inout [Float], _ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
+    func createCubeFace(_ vertices: inout [SIMD3<Float>],_ normals: inout [SIMD3<Float>],_ colors: inout [SIMD3<Float>], _ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
         
         let v0 = cubeVertices[i0]
         let v1 = cubeVertices[i1]
@@ -83,8 +83,6 @@ class BasicScene: Scene {
         
         for _ in 0..<2 {
             masks.append(triangleMask)
-            reflectivities.append(reflectivity)
-            refractiveIndices.append(refractiveIndex)
         }
     }
     
@@ -111,27 +109,27 @@ class BasicScene: Scene {
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_X) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 0, 4, 6, 2, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 0, 4, 6, 2, inwardNormals, triangleMask)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_X) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 1, 3, 7, 5, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 1, 3, 7, 5, inwardNormals, triangleMask)
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_Y) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 0, 1, 5, 4, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 0, 1, 5, 4, inwardNormals, triangleMask)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_Y) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 2, 6, 7, 3, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 2, 6, 7, 3, inwardNormals, triangleMask)
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_Z) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 0, 2, 3, 1, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 0, 2, 3, 1, inwardNormals, triangleMask)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_Z) != 0) {
-            createCubeFace(&vertices, &normals, &colors, &reflectivities, cubeVertices, color, reflectivity, refractiveIndex, 4, 5, 7, 6, inwardNormals, triangleMask)
+            createCubeFace(&vertices, &normals, &colors, cubeVertices, color, reflectivity, refractiveIndex, 4, 5, 7, 6, inwardNormals, triangleMask)
         }
     }
 }

@@ -8,6 +8,24 @@ using namespace metal;
 #define PI 3.14159265359
 //#define FRENEL_ANGLE 7*PI/8
 
+struct Material {
+    float4 color            [[ attribute(0) ]];
+    bool isLit              [[ attribute(1) ]];
+    float3 ambient          [[ attribute(2) ]];
+    float3 diffuse          [[ attribute(3) ]];
+    float3 specular         [[ attribute(4) ]];
+    float3 emissive         [[ attribute(5) ]];
+    float shininess         [[ attribute(5) ]];
+    float opacity           [[ attribute(6) ]];
+    float opticalDensity    [[ attribute(7) ]];
+    float roughness         [[ attribute(8) ]];
+    bool isTextureEnabled   [[ attribute(9) ]];
+};
+
+struct PrimitiveData {
+    texture2d<float> texture [[ id(0) ]];
+};
+
 struct Ray {
     packed_float3 origin;
     uint mask;
@@ -124,6 +142,31 @@ inline void sampleAreaLight(constant AreaLight & light,
     lightColor *= saturate(dot(-lightDirection, light.forward));
 }
 
+inline void sampleSpotLight(float2 u,
+                            float3 position,
+                            thread float3 & lightDirection,
+                            thread float3 & lightColor,
+                            thread float & lightDistance)
+{
+    float radius = 10000;
+    float3 center = float3(radius * 100, radius * 100, radius * 100);
+    u = u * 2.0f - 1.0f;
+    
+    center.x += radius * u.x;
+    center.y += radius * u.y;
+    
+    lightDirection = center - position;
+    
+    lightDistance = INFINITY;
+    
+//    float inverseLightDistance = 1.0f / max(lightDistance, 1e-3f);
+    
+//    lightDirection *= inverseLightDistance;
+    lightColor = float3(1, 0.7, 0.7);
+//    lightColor *= (inverseLightDistance * inverseLightDistance);
+//    lightColor *= saturate(dot(-lightDirection, light.forward));
+}
+
 inline float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
     normalize(u);
 
@@ -141,6 +184,26 @@ inline float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
     }
 
         return float3(skyBox.read(uint2((int)_u, (int)_v)));
+}
+
+inline float3 sampleCosineWeightedHemisphere(float2 u) {
+    float phi = 2.0f * M_PI_F * u.x;
+    
+    float cos_phi;
+    float sin_phi = sincos(phi, cos_phi);
+    
+    float cos_theta = sqrt(u.y);
+    float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
+    
+    return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
+}
+
+inline float3 alignHemisphereWithNormal(float3 sample, float3 normal) {
+    float3 up = normal;
+    float3 right = normalize(cross(normal, float3(0.0072f, 1.0f, 0.0034f)));
+    float3 forward = cross(right, up);
+    
+    return sample.x * right + sample.y * up + sample.z * forward;
 }
 
 inline float3 reflectRay(Ray ray, float3 intersectionPoint, float3 normal, float reflectivity, float rX, float rY) {
@@ -201,12 +264,16 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         device float3 *vertexColors,
                         device float3 *vertexNormals,
                         device uint *triangleMasks,
-                        device float *reflectivities,
-                        device float *refractiveIndices,
+                        device Material *materials,
+                        device uint *materialIds,
+                        device PrimitiveData *primitiveData,
+                        device uint *textureIds,
+                        device float2 *uvCoordinates,
                         constant unsigned int & bounce,
                         texture2d<unsigned int> randomTex,
                         texture2d<float, access::write> dstTex,
-                        texture2d<float, access::read> skyBox)
+                        texture2d<float, access::read> skyBox,
+                        sampler sampler2d[[ sampler(0) ]])
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
            unsigned int rayIdx = tid.y * uniforms.width + tid.x;
@@ -237,21 +304,36 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    
                    sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
                                    lightColor, lightDistance);
+//                   sampleSpotLight(r, intersectionPoint, lightDirection,
+//                                   lightColor, lightDistance);
                    lightColor *= saturate(dot(surfaceNormal, lightDirection));
                    
-                   objectColor = interpolateVertexAttribute(vertexColors, intersection);
+                   if(materials[materialIds[intersection.primitiveIndex]].isTextureEnabled){
+                       objectColor = primitiveData[textureIds[intersection.primitiveIndex]].texture.sample(sampler2d, interpolateVertexAttribute(uvCoordinates, intersection)).xyz;
+                   } else {
+                       objectColor = interpolateVertexAttribute(vertexColors, intersection);
+                   }
                    color *= objectColor;
                    
                    shadowRay.origin = intersectionPoint + surfaceNormal * 1e-3f;
                    shadowRay.direction = lightDirection;
                    shadowRay.mask = RAY_MASK_SHADOW;
                    shadowRay.maxDistance = lightDistance - 1e-3f;
-                   
 
                    shadowRay.color = lightColor * color;
                    
-                   float refractiveIndex = refractiveIndices[intersection.primitiveIndex];
-                   float reflectivity = reflectivities[intersection.primitiveIndex];
+                   Material material = materials[materialIds[intersection.primitiveIndex]];
+                   
+                   float refractiveIndex = 0;
+
+                   if(material.opacity < 0.99) {
+                       refractiveIndex = material.opticalDensity;
+                       if(refractiveIndex < 1.0) {
+                           refractiveIndex = 1.0 / refractiveIndex;
+                       }
+                   }
+
+                   float reflectivity = 1.0 - material.roughness;
                    
 //                   float angleBIN = dot(surfaceNormal, -ray.direction);
                    
@@ -262,19 +344,17 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        ray.color = color;
                        ray.mask = RAY_MASK_PRIMARY;
                        ray.maxDistance = INFINITY;
-//                       shadowRay.maxDistance = -1.0f;
                    }else if(reflectivity > 0.0f){
                        // Reflect ray
                        ray.direction = reflect(ray.direction, surfaceNormal);
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
                        ray.color = color * reflectivity;
                        ray.mask = RAY_MASK_SECONDARY;
-                       ray.maxDistance = INFINITY;
-//                       shadowRay.maxDistance = -1.0f;
+                       //                       ray.maxDistance = INFINITY;
                    }else{
                        r = float2(halton(offset + uniforms.frameIndex, bounce + 1),
                                   halton(offset + uniforms.frameIndex, bounce + 3));
-                       
+
                        ray.origin = intersectionPoint + surfaceNormal * 1e-3f;
                        ray.direction = reflectRay(ray, intersectionPoint, surfaceNormal, 0.0f, r.x, r.y);
                        ray.color = color;
@@ -289,11 +369,13 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                }
            }
            else {
-               if(ray.maxDistance >= 0.0f){
-                   dstTex.write(float4(getSkyBoxColor(ray.direction, skyBox), 1.0f), tid);
-               }
+//               if(ray.maxDistance >= 0.0f && ray.mask == RAY_MASK_PRIMARY){
+//                   dstTex.write(, tid);
+//               }
+               ray.color = color * getSkyBoxColor(ray.direction, skyBox);
+               shadowRay.color = ray.color;
                ray.maxDistance = -1.0f;
-               shadowRay.maxDistance = -1.0f;
+//               shadowRay.maxDistance = -1.0f;
            }
        }
 }
@@ -309,14 +391,13 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
         device Ray & shadowRay = shadowRays[rayIdx];
 
         float intersectionDistance = intersections[rayIdx];
-
+        float3 color = dstTex.read(tid).xyz;
+        
         if (shadowRay.maxDistance >= 0.0f && intersectionDistance < 0.0f) {
-            float3 color = shadowRay.color;
-
-            color += dstTex.read(tid).xyz;
-
-            dstTex.write(float4(color, 1.0f), tid);
+            color += shadowRay.color;
         }
+        
+        dstTex.write(float4(color, 1.0f), tid);
     }
 }
 

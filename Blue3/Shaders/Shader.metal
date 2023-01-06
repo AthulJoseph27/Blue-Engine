@@ -34,12 +34,17 @@ struct SceneConstants {
 };
 
 struct Material {
-    float4 color    [[ attribute(0) ]];
-    bool isLit      [[ attribute(1) ]];
-    float3 ambient  [[ attribute(2) ]];
-    float3 diffuse  [[ attribute(3) ]];
-    float3 specular [[ attribute(4) ]];
-    float shininess [[ attribute(5) ]];
+    float4 color            [[ attribute(0) ]];
+    bool isLit              [[ attribute(1) ]];
+    float3 ambient          [[ attribute(2) ]];
+    float3 diffuse          [[ attribute(3) ]];
+    float3 specular         [[ attribute(4) ]];
+    float3 emissive         [[ attribute(5) ]];
+    float shininess         [[ attribute(5) ]];
+    float opacity           [[ attribute(6) ]];
+    float opticalDensity    [[ attribute(7) ]];
+    float roughness         [[ attribute(8) ]];
+    bool isTextureEnabled   [[ attribute(9) ]];
 };
 
 struct PrimitiveData {

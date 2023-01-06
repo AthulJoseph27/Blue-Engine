@@ -88,10 +88,16 @@ struct Material: sizeable {
     var color = SIMD4<Float>(0.6, 0.6, 0.6, 1.0)
     var isLit: Bool = true
     
-    var ambient: SIMD3<Float> = SIMD3<Float>(0.1, 0.1, 0.1)
-    var diffuse: SIMD3<Float> = SIMD3<Float>(1,1,1)
-    var specular: SIMD3<Float> = SIMD3<Float>(1,1,1)
-    var shininess: Float = 2
+    var ambient = SIMD3<Float>(0.1, 0.1, 0.1)
+    var diffuse = SIMD3<Float>(1, 1, 1)
+    var specular = SIMD3<Float>(1, 1, 1)
+    var emissive = SIMD3<Float>(1, 1, 1)
+    var shininess: Float = 2.0
+    var opacity: Float = 1.0
+    var opticalDensity: Float = 1.0
+    var roughness: Float = 1.0
+    var isTextureEnabled: Bool = true
+    
 }
 
 struct RotationMatrix: sizeable {

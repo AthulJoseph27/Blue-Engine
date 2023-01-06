@@ -60,6 +60,7 @@
 		3C95AA2628CAE820003DFC0D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2528CAE820003DFC0D /* CameraManager.swift */; };
 		3C95AA2828CAE84E003DFC0D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2728CAE84E003DFC0D /* Camera.swift */; };
 		3C95AA2A28CAE863003DFC0D /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95AA2928CAE863003DFC0D /* DebugCamera.swift */; };
+		3C9E4F2B2967F279004E654A /* Heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9E4F2A2967F279004E654A /* Heap.swift */; };
 		3CAA0E3028EDB0D800288DC4 /* Monkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E2E28EDB0D800288DC4 /* Monkey.mtl */; };
 		3CAA0E3128EDB0D800288DC4 /* Monkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E2F28EDB0D800288DC4 /* Monkey.obj */; };
 		3CAA0E8128EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6728EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl */; };
@@ -68,7 +69,7 @@
 		3CAA0E8428EDCEFD00288DC4 /* E-45_REF 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6B28EDCEFD00288DC4 /* E-45_REF 1.jpg */; };
 		3CAA0E8528EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6C28EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg */; };
 		3CAA0E8628EDCEFD00288DC4 /* E-45-nor_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */; };
-		3CAA0E8728EDCEFD00288DC4 /* E-45 _col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */; };
+		3CAA0E8728EDCEFD00288DC4 /* E-45_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6E28EDCEFD00288DC4 /* E-45_col.jpg */; };
 		3CAA0E8828EDCEFD00288DC4 /* E-45 _col_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */; };
 		3CAA0E9528EDCEFD00288DC4 /* E 45 Aircraft_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */; };
 		3CB10E6128ED73EA00198979 /* Cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CB10E5F28ED73EA00198979 /* Cube.mtl */; };
@@ -164,6 +165,7 @@
 		3C95AA2528CAE820003DFC0D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		3C95AA2728CAE84E003DFC0D /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		3C95AA2928CAE863003DFC0D /* DebugCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
+		3C9E4F2A2967F279004E654A /* Heap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heap.swift; sourceTree = "<group>"; };
 		3CAA0E2E28EDB0D800288DC4 /* Monkey.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.mtl; sourceTree = "<group>"; };
 		3CAA0E2F28EDB0D800288DC4 /* Monkey.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.obj; sourceTree = "<group>"; };
 		3CAA0E6728EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.mtl"; sourceTree = "<group>"; };
@@ -172,7 +174,7 @@
 		3CAA0E6B28EDCEFD00288DC4 /* E-45_REF 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_REF 1.jpg"; sourceTree = "<group>"; };
 		3CAA0E6C28EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-steel detail_2_col.jpg"; sourceTree = "<group>"; };
 		3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-nor_1.jpg"; sourceTree = "<group>"; };
-		3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col.jpg"; sourceTree = "<group>"; };
+		3CAA0E6E28EDCEFD00288DC4 /* E-45_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_col.jpg"; sourceTree = "<group>"; };
 		3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col_3.jpg"; sourceTree = "<group>"; };
 		3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.obj"; sourceTree = "<group>"; };
 		3CB10E5F28ED73EA00198979 /* Cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.mtl; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 				3C6EB39328C9E5E700556C13 /* Solid.swift */,
 				3C6EB39528C9E5F300556C13 /* Node.swift */,
 				3C8A2D232966F41F00613E52 /* Light.swift */,
+				3C9E4F2A2967F279004E654A /* Heap.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -452,7 +455,7 @@
 				3CAA0E6B28EDCEFD00288DC4 /* E-45_REF 1.jpg */,
 				3CAA0E6C28EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg */,
 				3CAA0E6D28EDCEFD00288DC4 /* E-45-nor_1.jpg */,
-				3CAA0E6E28EDCEFD00288DC4 /* E-45 _col.jpg */,
+				3CAA0E6E28EDCEFD00288DC4 /* E-45_col.jpg */,
 				3CAA0E6F28EDCEFD00288DC4 /* E-45 _col_3.jpg */,
 				3CAA0E6728EDCEFD00288DC4 /* E 45 Aircraft_obj.mtl */,
 				3CAA0E7C28EDCEFD00288DC4 /* E 45 Aircraft_obj.obj */,
@@ -618,7 +621,7 @@
 				3C6EB34428C9B40000556C13 /* Assets.xcassets in Resources */,
 				3C6EB34728C9B40000556C13 /* Main.storyboard in Resources */,
 				3C2A469D28D6D624008CE0BA /* Sphere.mtl in Resources */,
-				3CAA0E8728EDCEFD00288DC4 /* E-45 _col.jpg in Resources */,
+				3CAA0E8728EDCEFD00288DC4 /* E-45_col.jpg in Resources */,
 				3CEB47A828F1511100C11332 /* chest_01_Roughness.png in Resources */,
 				3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */,
 				3C2A46B128D6D676008CE0BA /* Icosphere.obj in Resources */,
@@ -678,6 +681,7 @@
 				3CC60E6628CE020D002BB0D0 /* BasicScene.swift in Sources */,
 				3C6EB39B28C9F09200556C13 /* RayTracingShader.metal in Sources */,
 				3C8A2D242966F41F00613E52 /* Light.swift in Sources */,
+				3C9E4F2B2967F279004E654A /* Heap.swift in Sources */,
 				3C6EB36C28C9B45A00556C13 /* GameView.swift in Sources */,
 				3C6EB38628C9C57C00556C13 /* RenderPipelineDescriptorLibrary.swift in Sources */,
 				3CB687B228DC4E2C00C8234E /* Renderer.swift in Sources */,

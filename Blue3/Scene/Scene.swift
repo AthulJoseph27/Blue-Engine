@@ -9,8 +9,6 @@ class Scene {
     internal var colors: [SIMD3<Float>] = []
     internal var normals: [SIMD3<Float>] = []
     internal var masks: [uint] = []
-    internal var reflectivities: [Float] = []
-    internal var refractiveIndices: [Float] = []
     internal var skyBox: MTLTexture!
     internal var textures: [MTLTexture?] = []
     internal var textureIds: [uint] = []
@@ -44,7 +42,7 @@ class Scene {
         return cross(e1, e2);
     }
     
-    private func addSolid(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4) {
+    private func addSolid(solid: Solid, transform: matrix_float4x4) {
         
         let n = solid.mesh.vertices.count
         let start = vertices.count
@@ -72,18 +70,6 @@ class Scene {
             }
         }
         
-        if reflectivity != -1 {
-            for _ in 0..<(n/3) {
-                reflectivities.append(reflectivity)
-            }
-        } else {
-            reflectivities.append(contentsOf: solid.mesh.reflectivities)
-        }
-        
-        for _ in 0..<(n/3) {
-            refractiveIndices.append(refractiveIndex)
-        }
-        
         colors.append(contentsOf: solid.mesh.colors)
         masks.append(contentsOf: solid.mesh.masks)
         
@@ -92,36 +78,6 @@ class Scene {
         for i in solid.mesh.submeshIds {
             textureIds.append(nextTextureId + i)
         }
-        
-//        for tex in solid.mesh.baseColorTextures {
-//            if tex == nil {
-//                textures.append(nil)
-//                continue
-//            }
-//
-//            let textureDescriptor = MTLTextureDescriptor()
-//            textureDescriptor.pixelFormat = tex!.pixelFormat
-//            textureDescriptor.textureType = .type2D
-//            textureDescriptor.width = tex!.width
-//            textureDescriptor.height = tex!.height
-//            textureDescriptor.usage = .shaderRead
-//            textureDescriptor.storageMode = .shared
-//
-//            let region = MTLRegionMake2D(0, 0, tex!.width, tex!.height)
-//
-//            if tex!.buffer?.contents() == nil {
-//                textures.append(nil)
-//                continue
-//            }
-//
-//            let pixelData = tex!.buffer?.contents()
-//            let pixelBytes = pixelData?.bindMemory(to: Float.self, capacity: tex!.bufferBytesPerRow * tex!.height)
-////
-//            let newTexture = Engine.device.makeTexture(descriptor: textureDescriptor)!
-//            newTexture.replace(region: region, mipmapLevel: 0, withBytes: pixelBytes!, bytesPerRow: tex!.bufferBytesPerRow)
-//
-//            textures.append(tex)
-//        }
         
         textures.append(contentsOf: solid.mesh.baseColorTextures)
         
@@ -135,8 +91,8 @@ class Scene {
         objects.append(solid)
     }
     
-    func addObject(solid: Solid, reflectivity: Float = -1, refractiveIndex: Float = -1, transform: matrix_float4x4 = matrix_identity_float4x4) {
-        addSolid(solid: solid, reflectivity: reflectivity, refractiveIndex: refractiveIndex, transform: transform)
+    func addObject(solid: Solid, transform: matrix_float4x4 = matrix_identity_float4x4) {
+        addSolid(solid: solid, transform: transform)
     }
     
     func addLight(light: Light, color: SIMD3<Float> = SIMD3<Float>(repeating: 1), transform: matrix_float4x4 = matrix_identity_float4x4) {
@@ -153,7 +109,7 @@ class Scene {
             light.mesh.masks.append(Masks.TRIANGLE_MASK_LIGHT)
         }
         
-        addSolid(solid: light, reflectivity: -1, transform: transform)
+        addSolid(solid: light, transform: transform)
         lightSources.append(light)
         objects.append(light)
 

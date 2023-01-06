@@ -3,7 +3,7 @@ import MetalPerformanceShaders
 import simd
 import os
 
-let maxBounce = 13
+let maxBounce = 4
 
 let maxFramesInFlight = 3
 let alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
@@ -19,13 +19,24 @@ class RayTracingRenderer: Renderer {
     var vertexPositionBuffer: MTLBuffer!
     var vertexNormalBuffer: MTLBuffer!
     var vertexColorBuffer: MTLBuffer!
+    var textureIdsBuffer: MTLBuffer!
+    var materialIdsBuffer: MTLBuffer!
+    var uvCoordsBuffer: MTLBuffer!
+    
     var rayBuffer: MTLBuffer!
     var shadowRayBuffer: MTLBuffer!
     var intersectionBuffer: MTLBuffer!
     var uniformBuffer: MTLBuffer!
     var triangleMaskBuffer: MTLBuffer!
-    var reflectivityBuffer: MTLBuffer!
-    var refractiveIndexBuffer: MTLBuffer!
+    
+    var textureBuffer: MTLBuffer!
+    var materialBuffer: MTLBuffer!
+    var sourceTextures: MTLBuffer!
+    var texture: MTLTexture!
+    
+    var heap: Heap!
+    
+    var textureSampler : MTLSamplerState!
 
     var rayPipeline: MTLComputePipelineState!
     var shadePipeline: MTLComputePipelineState!
@@ -54,6 +65,14 @@ class RayTracingRenderer: Renderer {
         self.createScene()
         self.createBuffers()
         self.createIntersector()
+        heap = Heap()
+        heap.initialize(scene: scene, sourceTextureBuffer: &sourceTextures)
+        
+        let sampleDescriptor = MTLSamplerDescriptor()
+        sampleDescriptor.minFilter = .linear
+        sampleDescriptor.magFilter = .linear
+        
+        self.textureSampler = device.makeSamplerState(descriptor: sampleDescriptor)
     }
     
     private func createPipelines() {
@@ -66,9 +85,9 @@ class RayTracingRenderer: Renderer {
     }
     
     private func createScene() {
-        SceneManager.setScene(.Sandbox, view.drawableSize)
+        SceneManager.setScene(.RefractionScene, view.drawableSize)
         scene = SceneManager.currentScene
-//        scene.skyBox = Skyboxibrary.skybox(.Sky)
+        scene.skyBox = Skyboxibrary.skybox(.Sky)
     }
     
     private func createBuffers() {
@@ -76,8 +95,17 @@ class RayTracingRenderer: Renderer {
         var normals = scene.normals
         var colors = scene.colors
         var masks = scene.masks
-        var reflectivities = scene.reflectivities
-        var refractiveIndices = scene.refractiveIndices
+        var textureIds: [uint] = []
+        var materialIds: [uint] = []
+        var uvCoords = scene.uvCoordinates
+        
+        for i in stride(from: 0, to: scene.materialIds.count, by: 3) {
+            materialIds.append(scene.materialIds[i])
+        }
+        
+        for i in stride(from: 0, to: scene.textureIds.count, by: 3) {
+            textureIds.append(scene.textureIds[i])
+        }
         
         let uniformBufferSize = alignedUniformsSize * maxFramesInFlight
 
@@ -97,8 +125,17 @@ class RayTracingRenderer: Renderer {
         self.vertexColorBuffer = device.makeBuffer(bytes: &colors, length: colors.count * float3Size, options: storageOptions)
         self.vertexNormalBuffer = device.makeBuffer(bytes: &normals, length: normals.count * float3Size, options: storageOptions)
         self.triangleMaskBuffer = device.makeBuffer(bytes: &masks, length: masks.count * uint.stride, options: storageOptions)
-        self.reflectivityBuffer = device.makeBuffer(bytes: &reflectivities, length: reflectivities.count * Float.stride, options: storageOptions)
-        self.refractiveIndexBuffer = device.makeBuffer(bytes: &refractiveIndices, length: refractiveIndices.count * Float.stride, options: storageOptions)
+        
+        var materials: [Material] = scene.materials
+        self.materialBuffer = device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
+        self.materialIdsBuffer = device.makeBuffer(bytes: &materialIds, length: uint.stride(materialIds.count), options: storageOptions)
+        
+        self.textureIdsBuffer = device.makeBuffer(bytes: &textureIds, length: uint.stride(textureIds.count), options: storageOptions)
+        
+        self.uvCoordsBuffer = device.makeBuffer(bytes: &uvCoords, length: SIMD2<Float>.stride * uvCoords.count, options: storageOptions)
+        
+//        print(uvCoords.count);
+//        print(textureIds.count);
         // When using managed buffers, we need to indicate that we modified the buffer so that the GPU
         // copy can be updated
         #if arch(x86_64)
@@ -166,7 +203,7 @@ class RayTracingRenderer: Renderer {
         uniforms.pointee.light.forward = SIMD3<Float>(0, -1, 0)
         uniforms.pointee.light.right = SIMD3<Float>(0.25, 0, 0)
         uniforms.pointee.light.up = SIMD3<Float>(0, 0, 0.25)
-        uniforms.pointee.light.color = SIMD3<Float>(4, 4, 4);
+        uniforms.pointee.light.color = SIMD3<Float>(4, 4, 4)
 
         let fieldOfView = 45.0 * (Float.pi / 180.0)
         let aspectRatio = Float(size.width) / Float(size.height)
@@ -212,7 +249,9 @@ class RayTracingRenderer: Renderer {
         renderTargetDescriptor.storageMode = .private
         renderTargetDescriptor.usage = [.shaderRead, .shaderWrite]
         
+        
         renderTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
+        
         accumulationTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
         
         let randomTextureDescriptor = MTLTextureDescriptor()
@@ -295,8 +334,10 @@ class RayTracingRenderer: Renderer {
             guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
 
             let buffers = [uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer,
-                           vertexColorBuffer, vertexNormalBuffer, triangleMaskBuffer, reflectivityBuffer, refractiveIndexBuffer]
-            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0]
+                           vertexColorBuffer, vertexNormalBuffer, triangleMaskBuffer, materialBuffer, materialIdsBuffer, sourceTextures, textureIdsBuffer, uvCoordsBuffer]
+            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+            
+            shadeEncoder.useHeap(heap.heap)
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
         
             var bounce = uint(i)
@@ -305,6 +346,8 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.setTexture(randomTexture, index: 0)
             shadeEncoder.setTexture(renderTarget, index: 1)
             shadeEncoder.setTexture(scene.skyBox, index: 2)
+            
+            shadeEncoder.setSamplerState(textureSampler, index: 0)
             shadeEncoder.setComputePipelineState(shadePipeline)
             shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             shadeEncoder.endEncoding()
@@ -332,6 +375,7 @@ class RayTracingRenderer: Renderer {
             colorEncoder.setComputePipelineState(shadowPipeline)
             colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             colorEncoder.endEncoding()
+            
         }
         
         guard let denoiseEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
