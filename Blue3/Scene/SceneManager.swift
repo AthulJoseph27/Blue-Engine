@@ -32,6 +32,7 @@ class SceneManager {
     }
         
     public static func tickScene(deltaTime: Float) {
+        _currentScene.updateScene(deltaTime: deltaTime)
         _currentScene.updateCameras(deltaTime: deltaTime)
         _currentScene.updateObjects(deltaTime: deltaTime)
     }

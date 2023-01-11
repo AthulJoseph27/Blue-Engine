@@ -4,7 +4,7 @@ class Solid: Node {
     var meshType: MeshTypes!
     var mesh: CustomMesh!
     var modelContants = ModelConstants()
-    private var material = Material()
+    private var material = Material(isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
     
     init(_ meshType: MeshTypes) {
         super.init()
@@ -28,6 +28,11 @@ extension Solid {
     
     public func setRoughness(_ roughness: Float) {
         material.roughness = roughness
+    }
+    
+    public func setOpticalDensity(_ opticalDensity: Float) {
+        material.opticalDensity = opticalDensity
+        material.opacity = 0.9
     }
     
     public func enableTexture(_ enable: Bool) {

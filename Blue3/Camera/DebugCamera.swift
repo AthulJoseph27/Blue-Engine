@@ -7,6 +7,8 @@ class DebugCamera: SceneCamera {
     var deltaPosition = SIMD3<Float>(0, 0, 0)
     var rotation = SIMD3<Float>(0, 0, 0)
     var deltaRotation = SIMD3<Float>(0, 0, 0)
+    var rotationAboutOrigin = SIMD3<Float>(0, 0, 0)
+    var deltaRotationAboutOrigin = SIMD3<Float>(0, 0, 0)
     var projectionMatrix: matrix_float4x4 {
         return matrix_float4x4.prespective(degreeFov: 45, aspectRatio: 16.0/9.0, near: 0.1, far: 1000)
     }
@@ -22,11 +24,11 @@ class DebugCamera: SceneCamera {
         }
         
         if(Keyboard.isKeyPressed(.downArrow)) {
-            self.deltaPosition.y -= deltaTime
+            self.deltaPosition.y -= deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.upArrow)) {
-            self.deltaPosition.y  += deltaTime
+            self.deltaPosition.y  += deltaTime * 100
         }
         
         if(Keyboard.isKeyPressed(.a)) {
@@ -52,6 +54,9 @@ class DebugCamera: SceneCamera {
         if(Keyboard.isKeyPressed(.x)) {
             self.deltaRotation.x += deltaTime
         }
+        
+        self.deltaRotationAboutOrigin.x = Mouse.getDWheelX()
+        self.deltaRotationAboutOrigin.y = Mouse.getDWheelY()
     }
     
     

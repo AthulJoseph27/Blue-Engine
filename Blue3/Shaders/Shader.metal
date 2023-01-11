@@ -48,7 +48,10 @@ struct Material {
 };
 
 struct PrimitiveData {
-    texture2d<float> texture [[ id(0) ]];
+    texture2d<float> texture        [[ id(0) ]];
+    texture2d<float> normalMap      [[ id(1) ]];
+    texture2d<float> metallicMap    [[ id(2) ]];
+    texture2d<float> roughnessMap   [[ id(3) ]];
 };
 
 struct Light {
@@ -84,7 +87,7 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
 fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], const device Material* materials [[ buffer(0) ]], const device PrimitiveData* primitiveData [[ buffer(1) ]], constant Light* lightDatas [[ buffer(2) ]], constant int &lightCount [[ buffer(3) ]]){
     float4 color = materials[rd.materialId].color;
     
-    if(!is_null_texture(primitiveData[rd.textureId].texture)){
+    if(materials[rd.materialId].isTextureEnabled){
         color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
     }
     

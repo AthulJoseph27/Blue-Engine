@@ -18,6 +18,12 @@
 		3C2A46AC28D6D662008CE0BA /* Cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C2A46AA28D6D662008CE0BA /* Cone.obj */; };
 		3C2A46B028D6D676008CE0BA /* Icosphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C2A46AE28D6D676008CE0BA /* Icosphere.mtl */; };
 		3C2A46B128D6D676008CE0BA /* Icosphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C2A46AF28D6D676008CE0BA /* Icosphere.obj */; };
+		3C30B6C929693FCD00C436B6 /* picture8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C329693FCD00C436B6 /* picture8.png */; };
+		3C30B6CA29693FCD00C436B6 /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C429693FCD00C436B6 /* wood.png */; };
+		3C30B6CB29693FCD00C436B6 /* wood5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C529693FCD00C436B6 /* wood5.png */; };
+		3C30B6CC29693FCD00C436B6 /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C629693FCD00C436B6 /* leaf.png */; };
+		3C30B6CD29693FCD00C436B6 /* fireplace_room.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C729693FCD00C436B6 /* fireplace_room.obj */; };
+		3C30B6CE29693FCD00C436B6 /* fireplace_room.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C30B6C829693FCD00C436B6 /* fireplace_room.mtl */; };
 		3C30F85A28E9B5EF00E799A4 /* VertexDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C30F85928E9B5EF00E799A4 /* VertexDescriptorLibrary.swift */; };
 		3C40310228DB02D80015B305 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C40310128DB02D80015B305 /* Shader.metal */; };
 		3C40310428DB04030015B305 /* RendererManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C40310328DB04030015B305 /* RendererManager.swift */; };
@@ -119,6 +125,12 @@
 		3C2A46AA28D6D662008CE0BA /* Cone.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cone.obj; sourceTree = "<group>"; };
 		3C2A46AE28D6D676008CE0BA /* Icosphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.mtl; sourceTree = "<group>"; };
 		3C2A46AF28D6D676008CE0BA /* Icosphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.obj; sourceTree = "<group>"; };
+		3C30B6C329693FCD00C436B6 /* picture8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picture8.png; sourceTree = "<group>"; };
+		3C30B6C429693FCD00C436B6 /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		3C30B6C529693FCD00C436B6 /* wood5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood5.png; sourceTree = "<group>"; };
+		3C30B6C629693FCD00C436B6 /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
+		3C30B6C729693FCD00C436B6 /* fireplace_room.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.obj; sourceTree = "<group>"; };
+		3C30B6C829693FCD00C436B6 /* fireplace_room.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.mtl; sourceTree = "<group>"; };
 		3C30F85928E9B5EF00E799A4 /* VertexDescriptorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexDescriptorLibrary.swift; sourceTree = "<group>"; };
 		3C40310128DB02D80015B305 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
 		3C40310328DB04030015B305 /* RendererManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererManager.swift; sourceTree = "<group>"; };
@@ -280,6 +292,19 @@
 			path = Meshes;
 			sourceTree = "<group>";
 		};
+		3C30B6C129693FCD00C436B6 /* fireplace_room */ = {
+			isa = PBXGroup;
+			children = (
+				3C30B6C329693FCD00C436B6 /* picture8.png */,
+				3C30B6C429693FCD00C436B6 /* wood.png */,
+				3C30B6C529693FCD00C436B6 /* wood5.png */,
+				3C30B6C629693FCD00C436B6 /* leaf.png */,
+				3C30B6C729693FCD00C436B6 /* fireplace_room.obj */,
+				3C30B6C829693FCD00C436B6 /* fireplace_room.mtl */,
+			);
+			path = fireplace_room;
+			sourceTree = "<group>";
+		};
 		3C52C9FA28EC3FB700C4F92D /* Monkey */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,6 +450,7 @@
 		3C6EB39C28CA0D8A00556C13 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				3C30B6C129693FCD00C436B6 /* fireplace_room */,
 				3CEB479B28F1511100C11332 /* chest */,
 				3CAA0E6628EDCEFD00288DC4 /* E-45-Aircraft */,
 				3C2A46B228D6D689008CE0BA /* Meshes */,
@@ -609,11 +635,15 @@
 				3CEB47A628F1511100C11332 /* chest.obj in Resources */,
 				3CEB47AD28F1511100C11332 /* chest_01_Metallic.png in Resources */,
 				3C2A46B028D6D676008CE0BA /* Icosphere.mtl in Resources */,
+				3C30B6CC29693FCD00C436B6 /* leaf.png in Resources */,
 				3CB10E6228ED73EA00198979 /* Cube.obj in Resources */,
 				3CEB47AC28F1511100C11332 /* chest_02_Mixed_AO.png in Resources */,
+				3C30B6CE29693FCD00C436B6 /* fireplace_room.mtl in Resources */,
 				3C462F3528D06C6C0088CFBE /* Sky.jpg in Resources */,
 				3CAA0E8528EDCEFD00288DC4 /* E-45-steel detail_2_col.jpg in Resources */,
 				3C2A469C28D6D624008CE0BA /* Sphere.obj in Resources */,
+				3C30B6CB29693FCD00C436B6 /* wood5.png in Resources */,
+				3C30B6CA29693FCD00C436B6 /* wood.png in Resources */,
 				3CAA0E8628EDCEFD00288DC4 /* E-45-nor_1.jpg in Resources */,
 				3CEB47A728F1511100C11332 /* chest_02_Base_Color.png in Resources */,
 				3C462F3428D06C6C0088CFBE /* Beach.jpeg in Resources */,
@@ -621,11 +651,13 @@
 				3C6EB34428C9B40000556C13 /* Assets.xcassets in Resources */,
 				3C6EB34728C9B40000556C13 /* Main.storyboard in Resources */,
 				3C2A469D28D6D624008CE0BA /* Sphere.mtl in Resources */,
+				3C30B6CD29693FCD00C436B6 /* fireplace_room.obj in Resources */,
 				3CAA0E8728EDCEFD00288DC4 /* E-45_col.jpg in Resources */,
 				3CEB47A828F1511100C11332 /* chest_01_Roughness.png in Resources */,
 				3C061F6028CC404500EA61E1 /* Jungle.jpg in Resources */,
 				3C2A46B128D6D676008CE0BA /* Icosphere.obj in Resources */,
 				3CEB47AE28F1511100C11332 /* chest_01_Mixed_AO.png in Resources */,
+				3C30B6C929693FCD00C436B6 /* picture8.png in Resources */,
 				3CAA0E8328EDCEFD00288DC4 /* E-45_glass_nor_.jpg in Resources */,
 				3C2A46A228D6D635008CE0BA /* Torus.mtl in Resources */,
 				3C462F3628D06C6C0088CFBE /* NightCity.jpg in Resources */,

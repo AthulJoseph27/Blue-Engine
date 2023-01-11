@@ -51,7 +51,7 @@ class GameViewController: NSViewController {
         RendererManager.initialize(view: mtkView){ [unowned self] value in
             self.counterView.stringValue = String(format: "MRays/s: %.3f", value / 1_000_000)
         }
-        RendererManager.setRenderer(.RayTracing)
+        RendererManager.setRenderer(.VertexShader)
         
     }
 }

@@ -65,7 +65,7 @@ extension GameView {
     }
 
     override func scrollWheel(with event: NSEvent) {
-        Mouse.scrollMouse(deltaY: Float(event.deltaY))
+        Mouse.scrollMouse(delta: SIMD2<Float>(Float(event.deltaX), Float(event.deltaY)))
     }
 
     override func mouseDragged(with event: NSEvent) {

@@ -8,9 +8,14 @@ class Scene {
     internal var uvCoordinates: [SIMD2<Float>] = []
     internal var colors: [SIMD3<Float>] = []
     internal var normals: [SIMD3<Float>] = []
+    internal var tangents: [SIMD3<Float>] = []
+    internal var bitangents: [SIMD3<Float>] = []
     internal var masks: [uint] = []
     internal var skyBox: MTLTexture!
     internal var textures: [MTLTexture?] = []
+    internal var normalMapTextures: [MTLTexture?] = []
+    internal var metallicMapTextures: [MTLTexture?] = []
+    internal var roughnessMapTextures: [MTLTexture?] = []
     internal var textureIds: [uint] = []
     internal var materials: [Material] = []
     internal var materialIds: [uint] = []
@@ -18,6 +23,8 @@ class Scene {
     internal var modelConstantIds: [uint] = []
     internal var objects: [Solid] = []
     internal var lightSources: [Light] = []
+    
+    internal var deltaRotation = SIMD3<Float>(repeating: 0);
 
     init(drawableSize: CGSize) {
         skyBox = Skyboxibrary.skybox(.Jungle)
@@ -45,7 +52,7 @@ class Scene {
     private func addSolid(solid: Solid, transform: matrix_float4x4) {
         
         let n = solid.mesh.vertices.count
-        let start = vertices.count
+//        let start = vertices.count
         
         let nextModelConstantId = uint(modelConstants.count)
         modelConstants.append(solid.modelContants)
@@ -62,24 +69,32 @@ class Scene {
             }
         }
         
-        for i in 0..<(n/3) {
-            let j = i*3
-            let normal = getTriangleNormal(v0: vertices[start+j], v1: vertices[start+j+1], S: vertices[start+j+2])
-            for _ in 0..<3{
-                normals.append(normal)
-            }
-        }
+//        for i in 0..<(n/3) {
+//            let j = i*3
+//            let normal = getTriangleNormal(v0: vertices[start+j], v1: vertices[start+j+1], S: vertices[start+j+2])
+//            for _ in 0..<3{
+//                normals.append(normal)
+//            }
+//        }
+        normals.append(contentsOf: solid.mesh.normals)
+        tangents.append(contentsOf: solid.mesh.tangents)
+        bitangents.append(contentsOf: solid.mesh.bitangents)
         
         colors.append(contentsOf: solid.mesh.colors)
         masks.append(contentsOf: solid.mesh.masks)
         
         let nextTextureId = uint(textures.count)
-        
         for i in solid.mesh.submeshIds {
             textureIds.append(nextTextureId + i)
         }
         
         textures.append(contentsOf: solid.mesh.baseColorTextures)
+        normalMapTextures.append(contentsOf: solid.mesh.normalMapTextures)
+        metallicMapTextures.append(contentsOf: solid.mesh.metallicMapTextures)
+        roughnessMapTextures.append(contentsOf: solid.mesh.normalMapTextures)
+        
+        assert(textures.count == normalMapTextures.count && textures.count == metallicMapTextures.count && roughnessMapTextures.count == textures.count)
+        
         
         let nextMaterialId = uint(materials.count)
         
@@ -124,5 +139,10 @@ class Scene {
     
     func updateCameras(deltaTime: Float) {
         cameraManager.update(deltaTime: deltaTime)
+    }
+    
+    func updateScene(deltaTime: Float) {
+        deltaRotation.x += Mouse.getDWheelX()
+        deltaRotation.y += Mouse.getDWheelY()
     }
 }

@@ -11,22 +11,32 @@ protocol Mesh {
 class CustomMesh: Mesh {
     internal var vertices:              [SIMD3<Float>]
     internal var normals:               [SIMD3<Float>]
+    internal var tangents:              [SIMD3<Float>]
+    internal var bitangents:            [SIMD3<Float>]
     internal var colors:                [SIMD3<Float>]
     internal var submeshIds:            [uint]
     internal var uvCoordinates:         [SIMD2<Float>]
     internal var masks:                 [uint]
     internal var materials:             [Material]
     internal var baseColorTextures:     [MTLTexture?]
+    internal var normalMapTextures:     [MTLTexture?]
+    internal var metallicMapTextures:   [MTLTexture?]
+    internal var roughnessMapTextures:  [MTLTexture?]
     
     init() {
         self.vertices = []
         self.normals = []
+        self.tangents = []
+        self.bitangents = []
         self.colors = []
         self.submeshIds = []
         self.uvCoordinates = []
         self.masks = []
         self.materials = []
         self.baseColorTextures = []
+        self.normalMapTextures = []
+        self.metallicMapTextures = []
+        self.roughnessMapTextures = []
         createMesh()
     }
     
@@ -39,7 +49,7 @@ class CustomMesh: Mesh {
         return normalize(cross(AB, AC))
     }
     
-    func addTriangle(vertices: [SIMD3<Float>], uvCoords: [SIMD2<Float>]? = nil, color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, normals: [SIMD3<Float>] = [], mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, submeshId:Int = 0) {
+    func addTriangle(vertices: [SIMD3<Float>], uvCoords: [SIMD2<Float>]? = nil, color: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.8), normal: SIMD3<Float>? = nil, normals: [SIMD3<Float>] = [], tangents: [SIMD3<Float>] = [], bitangents: [SIMD3<Float>] = [], mask: uint32 = Masks.TRIANGLE_MASK_GEOMETRY, submeshId:Int = 0) {
         
         self.vertices.append(contentsOf: vertices)
         
@@ -63,9 +73,13 @@ class CustomMesh: Mesh {
             
             for _ in 0..<3{
                 self.normals.append(nr!)
+                self.tangents.append(SIMD3<Float>(repeating: 1))
+                self.bitangents.append(SIMD3<Float>(repeating: 1))
             }
         }else{
             self.normals.append(contentsOf: normals)
+            self.tangents.append(contentsOf: tangents)
+            self.bitangents.append(contentsOf: bitangents)
         }
         
         for _ in 0..<3{
@@ -194,7 +208,29 @@ class ModelMesh: CustomMesh {
         if submeshIds.isEmpty || submeshIds.last! != submeshId {
             // Add new Texture
             baseColorTextures.append(getTexture(for: .baseColor, in: mdlMesh.material, textureOrigin: .bottomLeft))
-            materials.append(getMaterial(mdlMesh.material))
+            normalMapTextures.append(getTexture(for: .objectSpaceNormal, in: mdlMesh.material, textureOrigin: .bottomLeft))
+            metallicMapTextures.append(getTexture(for: .metallic , in: mdlMesh.material, textureOrigin: .bottomLeft))
+            roughnessMapTextures.append(getTexture(for: .roughness, in: mdlMesh.material, textureOrigin: .bottomLeft))
+            
+            var material = getMaterial(mdlMesh.material)
+            
+            if baseColorTextures.last == nil {
+                material.isTextureEnabled = false
+            }
+            
+            if normalMapTextures.last == nil {
+                material.isNormalMapEnabled = false
+            }
+            
+            if metallicMapTextures.last == nil {
+                material.isMetallicMapEnabled = false
+            }
+            
+            if roughnessMapTextures.last == nil {
+                material.isRoughnessMapEnabled = false
+            }
+            
+            materials.append(material)
         }
         
         let mtkMesh = mtkSubmesh.mesh!
@@ -203,14 +239,18 @@ class ModelMesh: CustomMesh {
         var pointer = vertexData.bindMemory(to: VertexIn.self, capacity: 1)
         var count = mtkMesh.vertexCount
         
-        var vertices: [SIMD3<Float>] = []
-        var uvCoords: [SIMD2<Float>] = []
-        var normals:  [SIMD3<Float>] = []
+        var vertices:   [SIMD3<Float>] = []
+        var uvCoords:   [SIMD2<Float>] = []
+        var normals:    [SIMD3<Float>] = []
+        var tangents:   [SIMD3<Float>] = []
+        var bitangents: [SIMD3<Float>] = []
         
         for _ in 0..<count {
             vertices.append(pointer.pointee.position)
             uvCoords.append(pointer.pointee.uvCoordinate)
             normals.append(pointer.pointee.normal)
+            tangents.append(pointer.pointee.tangent)
+            bitangents.append(pointer.pointee.bitangent)
             pointer = pointer.advanced(by: 1)
         }
         
@@ -221,18 +261,22 @@ class ModelMesh: CustomMesh {
         count = mtkSubmesh.indexCount/3
         
         for _ in 0..<count {
-            var triangleVertices: [SIMD3<Float>] = []
-            var triangleUVCoords: [SIMD2<Float>] = []
-            var triangleNormals:  [SIMD3<Float>] = []
+            var triangleVertices:   [SIMD3<Float>] = []
+            var triangleUVCoords:   [SIMD2<Float>] = []
+            var triangleNormals:    [SIMD3<Float>] = []
+            var triangleTangents:   [SIMD3<Float>] = []
+            var triangleBitangents: [SIMD3<Float>] = []
             
             for _ in 0..<3 {
                 let index = Int(indexPointer.pointee)
                 triangleVertices.append(vertices[index])
                 triangleUVCoords.append(uvCoords[index])
                 triangleNormals.append(normals[index])
+                triangleTangents.append(tangents[index])
+                triangleBitangents.append(bitangents[index])
                 indexPointer = indexPointer.advanced(by: 1)
             }
-            addTriangle(vertices: triangleVertices, uvCoords: triangleUVCoords, normals: triangleNormals, submeshId: submeshId)
+            addTriangle(vertices: triangleVertices, uvCoords: triangleUVCoords, normals: triangleNormals, tangents: triangleTangents, bitangents: triangleBitangents, submeshId: submeshId)
         }
         
     }
@@ -247,31 +291,43 @@ class ModelMesh: CustomMesh {
                (descriptor.attributes[1] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
                (descriptor.attributes[2] as! MDLVertexAttribute).name = MDLVertexAttributeNormal
 
-                let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
-                let asset: MDLAsset = MDLAsset(url: assetURL,
-                                               vertexDescriptor: descriptor,
-                                               bufferAllocator: bufferAllocator,
-                                               preserveTopology: true,
-                                               error: nil)
-                asset.loadTextures()
+        let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
+        let asset: MDLAsset = MDLAsset(url: assetURL,
+                                       vertexDescriptor: descriptor,
+                                       bufferAllocator: bufferAllocator,
+                                       preserveTopology: true,
+                                       error: nil)
+        asset.loadTextures()
+        
+        var mdlMeshes: [MDLMesh] = []
+        do{
+            mdlMeshes = try MTKMesh.newMeshes(asset: asset,
+                                                   device: Engine.device).modelIOMeshes
+            
+        } catch {
+            print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
+        }
+        
+        var mtkMeshes: [MTKMesh] = []
+        
+        for mdlMesh in mdlMeshes {
+            mdlMesh.addTangentBasis(forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate, tangentAttributeNamed: MDLVertexAttributeBitangent, bitangentAttributeNamed: MDLVertexAttributeTangent)
+            mdlMesh.vertexDescriptor = descriptor
+            
+            do {
+                let mtkMesh = try MTKMesh(mesh: mdlMesh, device: Engine.device)
+                mtkMeshes.append(mtkMesh)
+            } catch {
+                print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
+            }
+        }
                 
-                do{
-                    let mtkMeshes = try MTKMesh.newMeshes(asset: asset,
-                                                          device: Engine.device).metalKitMeshes
-                    
-                    let mdlMeshes = try MTKMesh.newMeshes(asset: asset,
-                                                           device: Engine.device).modelIOMeshes
-                    
-                    for i in 0..<mtkMeshes[0].submeshes.count {
-                        let mtkSubmesh = mtkMeshes[0].submeshes[i]
-                        let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh
-                        
-                        addMesh(mtkSubmesh: mtkSubmesh, mdlMesh: mdlSubmesh, submeshId: i)
-                    }
-                    
-                } catch {
-                    print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
-                }
+        for i in 0..<mtkMeshes[0].submeshes.count {
+            let mtkSubmesh = mtkMeshes[0].submeshes[i]
+            let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh
+            
+            addMesh(mtkSubmesh: mtkSubmesh, mdlMesh: mdlSubmesh, submeshId: i)
+        }
     }
     
     override func createMesh() {

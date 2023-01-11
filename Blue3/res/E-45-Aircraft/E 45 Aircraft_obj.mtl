@@ -11,7 +11,7 @@ Ni 1.000000
 d 0.375745
 illum 2
 map_Kd E-45_glass_nor_.jpg
-map_Bump E-45_glass_nor_.jpg
+map_objectSpaceNormal E-45_glass_nor_.jpg
 
 newmtl ship
 Ns 17.647059
@@ -23,6 +23,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd E-45_col.jpg
-map_Bump E-45-nor_1.jpg
+map_objectSpaceNormal E-45-nor_1.jpg
 map_Ks E-45_col.jpg
 refl E-45_REF 1.jpg

@@ -3,7 +3,7 @@ import MetalPerformanceShaders
 import simd
 import os
 
-let maxBounce = 4
+let maxBounce = 6
 
 let maxFramesInFlight = 3
 let alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
@@ -18,6 +18,8 @@ class RayTracingRenderer: Renderer {
 
     var vertexPositionBuffer: MTLBuffer!
     var vertexNormalBuffer: MTLBuffer!
+    var vertexTangentBuffer: MTLBuffer!
+    var vertexBitangentBuffer: MTLBuffer!
     var vertexColorBuffer: MTLBuffer!
     var textureIdsBuffer: MTLBuffer!
     var materialIdsBuffer: MTLBuffer!
@@ -93,6 +95,8 @@ class RayTracingRenderer: Renderer {
     private func createBuffers() {
         var vertices = scene.vertices
         var normals = scene.normals
+        var tangents = scene.tangents
+        var bitangents = scene.bitangents
         var colors = scene.colors
         var masks = scene.masks
         var textureIds: [uint] = []
@@ -124,6 +128,8 @@ class RayTracingRenderer: Renderer {
         self.vertexPositionBuffer = device.makeBuffer(bytes: &vertices, length: vertices.count * float3Size, options: storageOptions)
         self.vertexColorBuffer = device.makeBuffer(bytes: &colors, length: colors.count * float3Size, options: storageOptions)
         self.vertexNormalBuffer = device.makeBuffer(bytes: &normals, length: normals.count * float3Size, options: storageOptions)
+        self.vertexTangentBuffer = device.makeBuffer(bytes: &tangents, length: tangents.count * float3Size, options: storageOptions)
+        self.vertexBitangentBuffer = device.makeBuffer(bytes: &bitangents, length: bitangents.count * float3Size, options: storageOptions)
         self.triangleMaskBuffer = device.makeBuffer(bytes: &masks, length: masks.count * uint.stride, options: storageOptions)
         
         var materials: [Material] = scene.materials
@@ -174,7 +180,9 @@ class RayTracingRenderer: Renderer {
         let currentCam = scene.cameraManager.currentCamera!
         uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition
         
-        if abs(currentCam.deltaPosition.x) > 0 || abs(currentCam.deltaPosition.y) > 0 || abs(currentCam.deltaPosition.z) > 0 {
+        if  abs(currentCam.deltaPosition.x) > 0 ||
+            abs(currentCam.deltaPosition.y) > 0 ||
+            abs(currentCam.deltaPosition.z) > 0 {
             scene.cameraManager.currentCamera!.position += currentCam.deltaPosition
             scene.cameraManager.currentCamera!.deltaPosition = SIMD3<Float>(repeating: 0)
             frameIndex = 0
@@ -185,11 +193,14 @@ class RayTracingRenderer: Renderer {
         transform.rotate(angle: currentCam.rotation.y + currentCam.deltaRotation.y, axis: SIMD3<Float>(0, 1, 0))
         transform.rotate(angle: currentCam.rotation.x + currentCam.deltaRotation.x, axis: SIMD3<Float>(1, 0, 0))
         
-        if abs(currentCam.deltaRotation.x) > 0 || abs(currentCam.deltaRotation.y) > 0 || abs(currentCam.deltaRotation.z) > 0 {
+        if  abs(currentCam.deltaRotation.x) > 0 ||
+            abs(currentCam.deltaRotation.y) > 0 ||
+            abs(currentCam.deltaRotation.z) > 0 {
             scene.cameraManager.currentCamera!.rotation += currentCam.deltaRotation
             scene.cameraManager.currentCamera!.deltaRotation = SIMD3<Float>(repeating: 0)
             frameIndex = 0
         }
+        
         
         let newForward = transform * SIMD4<Float>(0, 0, -1, 1)
         let newRigth = transform * SIMD4<Float>(1, 0, 0, 1)
@@ -334,8 +345,8 @@ class RayTracingRenderer: Renderer {
             guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
 
             let buffers = [uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer,
-                           vertexColorBuffer, vertexNormalBuffer, triangleMaskBuffer, materialBuffer, materialIdsBuffer, sourceTextures, textureIdsBuffer, uvCoordsBuffer]
-            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+                           vertexColorBuffer, vertexNormalBuffer, vertexTangentBuffer, vertexBitangentBuffer, triangleMaskBuffer, materialBuffer, materialIdsBuffer, sourceTextures, textureIdsBuffer, uvCoordsBuffer]
+            let offsets: [Int] = [uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             
             shadeEncoder.useHeap(heap.heap)
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)

@@ -37,6 +37,8 @@ struct VertexIn: sizeable{
     var position: SIMD3<Float>
     var uvCoordinate: SIMD2<Float>
     var normal: SIMD3<Float>
+    var tangent: SIMD3<Float>
+    var bitangent: SIMD3<Float>
 }
 
 struct VertexOut: sizeable{
@@ -97,7 +99,9 @@ struct Material: sizeable {
     var opticalDensity: Float = 1.0
     var roughness: Float = 1.0
     var isTextureEnabled: Bool = true
-    
+    var isNormalMapEnabled: Bool = true
+    var isMetallicMapEnabled: Bool = true
+    var isRoughnessMapEnabled: Bool = true
 }
 
 struct RotationMatrix: sizeable {

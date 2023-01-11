@@ -9,21 +9,27 @@ using namespace metal;
 //#define FRENEL_ANGLE 7*PI/8
 
 struct Material {
-    float4 color            [[ attribute(0) ]];
-    bool isLit              [[ attribute(1) ]];
-    float3 ambient          [[ attribute(2) ]];
-    float3 diffuse          [[ attribute(3) ]];
-    float3 specular         [[ attribute(4) ]];
-    float3 emissive         [[ attribute(5) ]];
-    float shininess         [[ attribute(5) ]];
-    float opacity           [[ attribute(6) ]];
-    float opticalDensity    [[ attribute(7) ]];
-    float roughness         [[ attribute(8) ]];
-    bool isTextureEnabled   [[ attribute(9) ]];
+    float4 color               [[ attribute(0)  ]];
+    bool isLit                 [[ attribute(1)  ]];
+    float3 ambient             [[ attribute(2)  ]];
+    float3 diffuse             [[ attribute(3)  ]];
+    float3 specular            [[ attribute(4)  ]];
+    float3 emissive            [[ attribute(5)  ]];
+    float shininess            [[ attribute(5)  ]];
+    float opacity              [[ attribute(6)  ]];
+    float opticalDensity       [[ attribute(7)  ]];
+    float roughness            [[ attribute(8)  ]];
+    bool isTextureEnabled      [[ attribute(9)  ]];
+    bool isNormalMapEnabled    [[ attribute(10) ]];
+    bool isMetallicMapEnabled  [[ attribute(11) ]];
+    bool isRoughnessMapEnabled [[ attribute(12) ]];
 };
 
 struct PrimitiveData {
-    texture2d<float> texture [[ id(0) ]];
+    texture2d<float> texture        [[ id(0) ]];
+    texture2d<float> normalMap      [[ id(1) ]];
+    texture2d<float> metallicMap    [[ id(2) ]];
+    texture2d<float> roughnessMap   [[ id(3) ]];
 };
 
 struct Ray {
@@ -89,9 +95,12 @@ kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
         
         ray.origin = camera.position;
         
-        ray.direction = normalize(uv.x * camera.right +
-                                  uv.y * camera.up +
-                                  camera.forward);
+        float3 direction = normalize(uv.x * camera.right +
+                                       uv.y * camera.up +
+                                       camera.forward);
+        
+        ray.direction = direction;
+        
         ray.mask = RAY_MASK_PRIMARY;
         
         ray.maxDistance = INFINITY;
@@ -263,6 +272,8 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         device Intersection *intersections,
                         device float3 *vertexColors,
                         device float3 *vertexNormals,
+                        device float3 *vertexTangents,
+                        device float3 *vertexBitangents,
                         device uint *triangleMasks,
                         device Material *materials,
                         device uint *materialIds,
@@ -288,9 +299,24 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                if (mask == TRIANGLE_MASK_GEOMETRY) {
                    float3 intersectionPoint = ray.origin + ray.direction * intersection.distance;
-
+                
+                   Material material = materials[materialIds[intersection.primitiveIndex]];
+                   float2 uvCoord = interpolateVertexAttribute(uvCoordinates, intersection);
+                   
                    float3 surfaceNormal = interpolateVertexAttribute(vertexNormals, intersection);
                    surfaceNormal = normalize(surfaceNormal);
+                   
+                   float3 tangent = interpolateVertexAttribute(vertexTangents, intersection);
+                   normalize(tangent);
+                   
+                   float3 bitangent = interpolateVertexAttribute(vertexTangents, intersection);
+                   normalize(bitangent);
+                   
+                   if(material.isNormalMapEnabled) {
+                       float3 sampleNormal = primitiveData[textureIds[intersection.primitiveIndex]].normalMap.sample(sampler2d, uvCoord).rgb * 2 - 1;
+                       float3x3 TBN = {tangent, bitangent, surfaceNormal};
+                       surfaceNormal = TBN * sampleNormal * -1;
+                   }
 
                    unsigned int offset = randomTex.read(tid).x;
                    float2 r = float2(halton(offset + uniforms.frameIndex, 0),
@@ -308,8 +334,8 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                                    lightColor, lightDistance);
                    lightColor *= saturate(dot(surfaceNormal, lightDirection));
                    
-                   if(materials[materialIds[intersection.primitiveIndex]].isTextureEnabled){
-                       objectColor = primitiveData[textureIds[intersection.primitiveIndex]].texture.sample(sampler2d, interpolateVertexAttribute(uvCoordinates, intersection)).xyz;
+                   if(material.isTextureEnabled){
+                       objectColor = primitiveData[textureIds[intersection.primitiveIndex]].texture.sample(sampler2d, uvCoord).xyz;
                    } else {
                        objectColor = interpolateVertexAttribute(vertexColors, intersection);
                    }
@@ -322,11 +348,9 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    shadowRay.color = lightColor * color;
                    
-                   Material material = materials[materialIds[intersection.primitiveIndex]];
-                   
                    float refractiveIndex = 0;
 
-                   if(material.opacity < 0.99) {
+                   if(material.opacity < 1.0) {
                        refractiveIndex = material.opticalDensity;
                        if(refractiveIndex < 1.0) {
                            refractiveIndex = 1.0 / refractiveIndex;
@@ -334,6 +358,12 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    }
 
                    float reflectivity = 1.0 - material.roughness;
+                   
+                   if(material.isMetallicMapEnabled) {
+                       reflectivity = primitiveData[textureIds[intersection.primitiveIndex]].metallicMap.sample(sampler2d, uvCoord).x;
+                   } else if(material.isRoughnessMapEnabled) {
+                       reflectivity = 1.0 - primitiveData[textureIds[intersection.primitiveIndex]].metallicMap.sample(sampler2d, uvCoord).x;
+                   }
                    
 //                   float angleBIN = dot(surfaceNormal, -ray.direction);
                    
@@ -369,13 +399,14 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                }
            }
            else {
-//               if(ray.maxDistance >= 0.0f && ray.mask == RAY_MASK_PRIMARY){
-//                   dstTex.write(, tid);
-//               }
-               ray.color = color * getSkyBoxColor(ray.direction, skyBox);
+               float3 skyColor = getSkyBoxColor(ray.direction, skyBox);
+               if(ray.maxDistance >= 0.0f && ray.mask == RAY_MASK_PRIMARY){
+                   dstTex.write(float4(skyColor, 1), tid);
+               }
+               ray.color = color * skyColor;
                shadowRay.color = ray.color;
                ray.maxDistance = -1.0f;
-//               shadowRay.maxDistance = -1.0f;
+               shadowRay.maxDistance = -1.0f;
            }
        }
 }
@@ -412,7 +443,7 @@ kernel void accumulateKernel(uint2 tid [[thread_position_in_grid]],
         if (uniforms.frameIndex > 0) {
             float3 prevColor = accumTex.read(tid).xyz;
             prevColor *= uniforms.frameIndex;
-            
+
             color += prevColor;
             color /= (uniforms.frameIndex + 1);
         }
@@ -453,7 +484,7 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     
     float3 color = tex.sample(sam, in.uv).xyz;
     
-    color = color / (1.0f + color);
+//    color = color / (1.0f + color);
     
     return float4(color, 1.0f);
 }

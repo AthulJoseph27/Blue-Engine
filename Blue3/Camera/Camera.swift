@@ -5,12 +5,12 @@ enum CameraTypes {
 }
 
 protocol SceneCamera {
-    var cameraType: CameraTypes           { get }
-    var position: SIMD3<Float>            { get set }
-    var deltaPosition: SIMD3<Float>       { get set }
-    var rotation: SIMD3<Float>            { get set }
-    var deltaRotation: SIMD3<Float>       { get set }
-    var projectionMatrix: matrix_float4x4 { get }
+    var cameraType: CameraTypes                 { get }
+    var position: SIMD3<Float>                  { get set }
+    var deltaPosition: SIMD3<Float>             { get set }
+    var rotation: SIMD3<Float>                  { get set }
+    var deltaRotation: SIMD3<Float>             { get set }
+    var projectionMatrix: matrix_float4x4       { get }
     func update(deltaTime: Float)
 }
 

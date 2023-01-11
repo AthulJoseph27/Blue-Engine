@@ -11,12 +11,15 @@ class Mouse {
     private static var mouseButtonList = [Bool].init(repeating: false, count: MOUSE_BUTTON_COUNT)
 
     private static var overallMousePosition = SIMD2<Float>(repeating: 0)
-        private static var mousePositionDelta = SIMD2<Float>(repeating: 0)
+    private static var mousePositionDelta = SIMD2<Float>(repeating: 0)
 
-    private static var scrollWheelPosition: Float = 0
-    private static var lastWheelPosition: Float = 0.0
-
-    private static var scrollWheelChange: Float = 0.0
+    private static var scrollWheelPositionY: Float = 0
+    private static var lastWheelPositionY: Float = 0.0
+    private static var scrollWheelChangeY: Float = 0.0
+    
+    private static var scrollWheelPositionX: Float = 0
+    private static var lastWheelPositionX: Float = 0.0
+    private static var scrollWheelChangeX: Float = 0.0
 
     public static func setMouseButtonPressed(button: Int, isOn: Bool){
         mouseButtonList[button] = isOn
@@ -36,9 +39,12 @@ class Mouse {
         self.mousePositionDelta += deltaPosition
     }
 
-    public static func scrollMouse(deltaY: Float){
-        scrollWheelPosition += deltaY
-        scrollWheelChange += deltaY
+    public static func scrollMouse(delta: SIMD2<Float>){
+        scrollWheelPositionX += delta.x
+        scrollWheelChangeX += delta.x
+        
+        scrollWheelPositionY += delta.y
+        scrollWheelChangeY += delta.y
     }
 
     //Returns the overall position of the mouse on the current window
@@ -47,9 +53,15 @@ class Mouse {
     }
 
     //Returns the movement of the wheel since last time getDWheel() was called
-    public static func getDWheel()->Float{
-        let position = scrollWheelChange
-        scrollWheelChange = 0
+    public static func getDWheelY()->Float{
+        let position = scrollWheelChangeY
+        scrollWheelChangeY = 0
+        return position
+    }
+    
+    public static func getDWheelX()->Float{
+        let position = scrollWheelChangeX
+        scrollWheelChangeX = 0
         return position
     }
 
