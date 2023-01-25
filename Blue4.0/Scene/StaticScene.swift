@@ -9,11 +9,9 @@ class StaticScene: Scene {
     
     var cameraManager = CameraManager()
     
-    var indicesCount: [uint]  = [0]
     var masks: [uint]         = []
     var materials: [Material] = []
     var textures: [Textures]  = []
-    var textureIds: [uint]    = []
     
     var objects: [Solid] = []
     
@@ -21,7 +19,6 @@ class StaticScene: Scene {
     var indexBuffer:         MTLBuffer!
     var customIndexBuffer:   MTLBuffer!
     var textureBuffer:       MTLBuffer!
-    var textureIdsBuffer:    MTLBuffer!
     var materialBuffer:      MTLBuffer!
     var verticesCountBuffer: MTLBuffer!
     var indiciesCountBuffer: MTLBuffer!
@@ -42,7 +39,7 @@ class StaticScene: Scene {
     init() {
         skyBox = Skyboxibrary.skybox(.Jungle)
         transformPipeline = ComputePipelineStateLibrary.pipelineState(.Transform).computePipelineState
-        indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexWrapper).computePipelineState
+        indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexGenerator).computePipelineState
         initialize()
         buildScene()
     }
@@ -130,7 +127,7 @@ class StaticScene: Scene {
                 transformedBuffers.append(transformSolid(vertexBuffer: &solid.mesh.vertexBuffer, indexBuffer: &solid.mesh.indexBuffers[j], transform: solid.modelMatrix))
                 wrappedIndexBuffers.append(wrapIndexBuffer(indexBuffer: &solid.mesh.indexBuffers[j], indexOffset: UInt32(indexOffset), submeshId: submeshId))
                 submeshId += 1
-                indexOffset += (solid.mesh.indexBuffers[i].length / UInt32.stride)
+                indexOffset += (solid.mesh.indexBuffers[j].length / UInt32.stride)
             }
         }
         
@@ -152,10 +149,11 @@ class StaticScene: Scene {
         self.indexBuffer = Engine.device.makeBuffer(bytes: &indicies, length: uint.stride(indicies.count), options: storageOptions)
         
         // Other buffers
-        var indicesCount = [0]
-        indiciesCountBuffer = Engine.device.makeBuffer(bytes: &indicesCount, length: uint.stride(1), options: storageOptions)
         var verticesCount = [0]
         verticesCountBuffer = Engine.device.makeBuffer(bytes: &verticesCount, length: uint.stride(1), options: storageOptions)
+        var indiciesCount = [0]
+        indiciesCountBuffer = Engine.device.makeBuffer(bytes: &indiciesCount, length: uint.stride(1), options: storageOptions)
+        
         let uniformBufferSize = renderOptions.alignedUniformsSize * renderOptions.maxFramesInFlight
         self.uniformBuffer = Engine.device.makeBuffer(length: uniformBufferSize, options: storageOptions)
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)

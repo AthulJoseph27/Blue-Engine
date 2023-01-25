@@ -141,58 +141,57 @@ inline float3 interpolateVertexPosition(device Vertex *vertices, device uint* in
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
 
-inline float2 interpolateVertexUVCoord(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indexOffset, Intersection intersection) {
+inline float2 interpolateVertexUVCoord(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indiciesOffset, Intersection intersection) {
     float3 uvw;
     uvw.xy = intersection.coordinates;
     uvw.z = 1.0f - uvw.x - uvw.y;
     
     unsigned int triangleIndex = intersection.primitiveIndex;
-    
-    float2 T0 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 0].index].uvCoordinate;
-    float2 T1 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 1].index].uvCoordinate;
-    float2 T2 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 2].index].uvCoordinate;
+    float2 T0 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 0].index].uvCoordinate;
+    float2 T1 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 1].index].uvCoordinate;
+    float2 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].uvCoordinate;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
 
-inline float3 interpolateVertexNormal(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indexOffset, Intersection intersection) {
+inline float3 interpolateVertexNormal(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indiciesOffset, Intersection intersection) {
     float3 uvw;
     uvw.xy = intersection.coordinates;
     uvw.z = 1.0f - uvw.x - uvw.y;
     
     unsigned int triangleIndex = intersection.primitiveIndex;
     
-    float3 T0 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 0].index].normal;
-    float3 T1 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 1].index].normal;
-    float3 T2 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 2].index].normal;
+    float3 T0 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 0].index].normal;
+    float3 T1 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 1].index].normal;
+    float3 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].normal;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
 
-inline float3 interpolateVertexTangent(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indexOffset, Intersection intersection) {
+inline float3 interpolateVertexTangent(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset,  uint indiciesOffset,  Intersection intersection) {
     float3 uvw;
     uvw.xy = intersection.coordinates;
     uvw.z = 1.0f - uvw.x - uvw.y;
     
     unsigned int triangleIndex = intersection.primitiveIndex;
     
-    float3 T0 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 0].index].tangent;
-    float3 T1 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 1].index].tangent;
-    float3 T2 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 2].index].tangent;
+    float3 T0 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 0].index].tangent;
+    float3 T1 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 1].index].tangent;
+    float3 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].tangent;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
 
-inline float3 interpolateVertexBiTangent(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indexOffset, Intersection intersection) {
+inline float3 interpolateVertexBiTangent(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset,  uint indiciesOffset,  Intersection intersection) {
     float3 uvw;
     uvw.xy = intersection.coordinates;
     uvw.z = 1.0f - uvw.x - uvw.y;
     
     unsigned int triangleIndex = intersection.primitiveIndex;
     
-    float3 T0 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 0].index].bitangent;
-    float3 T1 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 1].index].bitangent;
-    float3 T2 = vertices[vertexOffset + indicies[indexOffset + triangleIndex * 3 + 2].index].bitangent;
+    float3 T0 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 0].index].bitangent;
+    float3 T1 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 1].index].bitangent;
+    float3 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].bitangent;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
 }
@@ -305,7 +304,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         device Vertex *vertices,
                         device VertexIndex *indices,
                         device uint *verticiesCount,
-                        device uint *indicesCount,
+                        device uint *indiciesCount,
                         device uint *masks,
                         device Material *materials,
                         device PrimitiveData *primitiveData,
@@ -329,10 +328,9 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                // Vertices for this solid starts after these many vertices
                uint verticesOffset = verticiesCount[instanceIndex];
                
-               //Indicies for this solid starts after these many indices
-               uint indicesOffset = indicesCount[instanceIndex];
+               uint indiciesOffset = indiciesCount[instanceIndex];
                
-               VertexIndex vertexIndex = indices[indicesOffset +  intersection.primitiveIndex * 3];
+               VertexIndex vertexIndex = indices[indiciesOffset + intersection.primitiveIndex * 3];
                
                uint submeshId = vertexIndex.submeshId;
                
@@ -342,18 +340,18 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    float3 intersectionPoint = ray.origin + ray.direction * intersection.distance;
                    
                    Material material = materials[submeshId];
-                   float2 uvCoord = interpolateVertexUVCoord(vertices, indices, verticesOffset, indicesOffset, intersection);
+                   float2 uvCoord = interpolateVertexUVCoord(vertices, indices, verticesOffset, indiciesOffset, intersection);
 
-                   float3 surfaceNormal = interpolateVertexNormal(vertices, indices, verticesOffset, indicesOffset, intersection);
+                   float3 surfaceNormal = interpolateVertexNormal(vertices, indices, verticesOffset, indiciesOffset, intersection);
 //                   surfaceNormal = normalize(surfaceNormal);
 
 
                    if(material.isNormalMapEnabled) {
                        float3 sampleNormal = primitiveData[submeshId].normalMap.sample(sampler2d, uvCoord).rgb * 2 - 1;
                        
-                       float3 tangent = interpolateVertexTangent(vertices, indices, verticesOffset, indicesOffset, intersection);
+                       float3 tangent = interpolateVertexTangent(vertices, indices, verticesOffset, indiciesOffset, intersection);
                        
-                       float3 bitangent = interpolateVertexBiTangent(vertices, indices, verticesOffset, indicesOffset, intersection);
+                       float3 bitangent = interpolateVertexBiTangent(vertices, indices, verticesOffset, indiciesOffset, intersection);
                        
                        float3x3 TBN = {tangent, bitangent, sampleNormal};
                        
@@ -381,6 +379,11 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    } else {
                        objectColor = float3(1.0, 1.0, 1.0);
                    }
+                   
+//                   if(instanceIndex != 0) {
+//                       objectColor = float3(0, 1, 0);
+//                   }
+                   
                    color *= objectColor;
 
                    shadowRay.origin = intersectionPoint + surfaceNormal * 1e-3f;

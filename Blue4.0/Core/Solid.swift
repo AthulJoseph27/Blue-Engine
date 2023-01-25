@@ -6,7 +6,6 @@ class Solid: Node {
     var lightSource = false
     var animated = false
     var transformedVertexBuffer: MTLBuffer?
-    var mergedIndexBuffer:     MTLBuffer!
     
     init(_ meshType: MeshTypes, ligthSource: Bool = false) {
         self.meshType = meshType

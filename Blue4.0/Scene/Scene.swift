@@ -9,11 +9,9 @@ protocol Scene {
     
     var heap: Heap   { get set }
     
-    var indicesCount: [uint]     { get set }
     var masks:        [uint]     { get set }
     var materials:    [Material] { get set }
     var textures:     [Textures] { get set }
-    var textureIds:   [uint]     { get set }
     
     var objects: [Solid]         { get set }
     
@@ -21,7 +19,6 @@ protocol Scene {
     var indexBuffer:         MTLBuffer! { get set }
     var customIndexBuffer:   MTLBuffer! { get set }
     var textureBuffer:       MTLBuffer! { get set }
-    var textureIdsBuffer:    MTLBuffer! { get set }
     var materialBuffer:      MTLBuffer! { get set }
     var verticesCountBuffer: MTLBuffer! { get set }
     var indiciesCountBuffer: MTLBuffer! { get set }
@@ -157,7 +154,7 @@ extension Scene {
         uniformBufferIndex = (uniformBufferIndex + 1) % renderOptions.maxFramesInFlight
     }
     
-    func wrapIndexBuffer(indexBuffer: inout MTLBuffer, indexOffset: UInt32, submeshId: UInt32)->MTLBuffer {
+    func wrapIndexBuffer(indexBuffer: inout MTLBuffer, keepOriginalIndex: Bool = false, indexOffset: UInt32, submeshId: UInt32)->MTLBuffer {
         let commandBuffer = Engine.commandQueue.makeCommandBuffer()!
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
         
@@ -171,14 +168,23 @@ extension Scene {
         var sId = submeshId
         var iOffset = indexOffset
         
-//        computeEncoder.setBuffer(indexBuffer, offset: 0, index: 0)
-        computeEncoder.setBuffer(newIndexBuffer, offset: 0, index: 0)
-        computeEncoder.setBytes(&iOffset, length: UInt32.stride, index: 1)
-        computeEncoder.setBytes(&sId, length: UInt32.stride, index: 2)
-        computeEncoder.setBytes(&vertexCount, length: UInt32.stride, index: 3)
+        print("submeshId \(sId), count \(vertexCount)")
         
         var w = indexWrapperPipeline.threadExecutionWidth
-        computeEncoder.setBytes(&w, length: uint.size, index: 4)
+        
+        if(keepOriginalIndex) {
+            computeEncoder.setBuffer(indexBuffer, offset: 0, index: 0)
+            computeEncoder.setBuffer(newIndexBuffer, offset: 0, index: 1)
+            computeEncoder.setBytes(&sId, length: UInt32.stride, index: 2)
+            computeEncoder.setBytes(&vertexCount, length: UInt32.stride, index: 3)
+            computeEncoder.setBytes(&w, length: UInt32.size, index: 4)
+        } else {
+            computeEncoder.setBuffer(newIndexBuffer, offset: 0, index: 0)
+            computeEncoder.setBytes(&iOffset, length: UInt32.stride, index: 1)
+            computeEncoder.setBytes(&sId, length: UInt32.stride, index: 2)
+            computeEncoder.setBytes(&vertexCount, length: UInt32.stride, index: 3)
+            computeEncoder.setBytes(&w, length: UInt32.size, index: 4)
+        }
         
         computeEncoder.setComputePipelineState(indexWrapperPipeline)
         

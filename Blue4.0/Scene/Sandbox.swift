@@ -17,5 +17,12 @@ class Sandbox: StaticScene {
 //        spaceShip.scale = SIMD3<Float>(repeating: 50)
         
         addSolid(solid: spaceShip)
+        
+        let spaceShip2 = Solid(.SpaceShip)
+        spaceShip2.position = SIMD3<Float>(150, 50, 0)
+        spaceShip2.rotation = SIMD3<Float>(0, 1.57, 0)
+        spaceShip2.scale = SIMD3<Float>(repeating: 20)
+        
+        addSolid(solid: spaceShip2)
     }
 }

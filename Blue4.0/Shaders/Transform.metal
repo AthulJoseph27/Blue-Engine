@@ -46,15 +46,36 @@ kernel void transformKernel(uint2 tid [[thread_position_in_grid]],
 }
 
 kernel void indexWrapperKernel(uint2 tid [[thread_position_in_grid]],
+                               device uint* indicies,
                                device VertexIndex *wrappedIndices,
-                               constant unsigned int & indexOffset,
                                constant unsigned int & submeshId,
-                               constant unsigned int & vertexCount,
+                               constant unsigned int & indicesCount,
                                constant unsigned int & width) {
            
     unsigned int idx = tid.y * width + tid.x;
     
-    if (idx >= vertexCount) {
+    if (idx >= indicesCount) {
+        return;
+    }
+
+       
+    VertexIndex index = VertexIndex();
+    index.index = indicies[idx];
+    index.submeshId = submeshId;
+
+    wrappedIndices[idx] = index;
+}
+
+kernel void indexGeneratorKernel(uint2 tid [[thread_position_in_grid]],
+                               device VertexIndex *wrappedIndices,
+                               constant unsigned int & indexOffset,
+                               constant unsigned int & submeshId,
+                               constant unsigned int & indiciesCount,
+                               constant unsigned int & width) {
+           
+    unsigned int idx = tid.y * width + tid.x;
+    
+    if (idx >= indiciesCount) {
         return;
     }
 

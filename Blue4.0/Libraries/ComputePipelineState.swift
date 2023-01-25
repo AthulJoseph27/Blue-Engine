@@ -2,6 +2,7 @@ import MetalKit
 
 enum ComputePipelineStateTypes {
     case Transform
+    case IndexGenerator
     case IndexWrapper
     case GenerateRay
     case Shade
@@ -18,6 +19,7 @@ class ComputePipelineStateLibrary {
 
     public static func createComputePipelineState() {
         computePipelineStates.updateValue(Transform_ComputePipelineState(), forKey: .Transform)
+        computePipelineStates.updateValue(IndexGenerator_ComputePipelineState(), forKey: .IndexGenerator)
         computePipelineStates.updateValue(IndexWrapper_ComputePipelineState(), forKey: .IndexWrapper)
         computePipelineStates.updateValue(RayTracing_ComputePipelineState(), forKey: .GenerateRay)
         computePipelineStates.updateValue(Shade_ComputePipelineState(), forKey: .Shade)
@@ -43,6 +45,21 @@ public struct Transform_ComputePipelineState: ComputePipelineState {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.Transform).computeFunction = Engine.defaultLibrary.makeFunction(name: "transformKernel")
             computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Transform), options: [], reflection: nil)
+        }catch let error as NSError{
+            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
+            return;
+        }
+    }
+}
+
+public struct IndexGenerator_ComputePipelineState: ComputePipelineState {
+    var name: String = "IndexGenerator Compute Pipeline State"
+    var computePipelineState: MTLComputePipelineState!
+    
+    init() {
+        do{
+            ComputePipelineDescriptorLibrary.descriptor(.IndexGenerator).computeFunction = Engine.defaultLibrary.makeFunction(name: "indexGeneratorKernel")
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.IndexGenerator), options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
             return;
