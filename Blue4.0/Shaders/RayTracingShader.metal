@@ -327,7 +327,6 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                
                // Vertices for this solid starts after these many vertices
                uint verticesOffset = verticiesCount[instanceIndex];
-               
                uint indiciesOffset = indiciesCount[instanceIndex];
                
                VertexIndex vertexIndex = indices[indiciesOffset + intersection.primitiveIndex * 3];
@@ -343,8 +342,6 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    float2 uvCoord = interpolateVertexUVCoord(vertices, indices, verticesOffset, indiciesOffset, intersection);
 
                    float3 surfaceNormal = interpolateVertexNormal(vertices, indices, verticesOffset, indiciesOffset, intersection);
-//                   surfaceNormal = normalize(surfaceNormal);
-
 
                    if(material.isNormalMapEnabled) {
                        float3 sampleNormal = primitiveData[submeshId].normalMap.sample(sampler2d, uvCoord).rgb * 2 - 1;
@@ -368,21 +365,17 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    float3 objectColor;
 
-//                   sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
-//                                   lightColor, lightDistance);
-                   sampleSpotLight(r, intersectionPoint, lightDirection,
+                   sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
                                    lightColor, lightDistance);
+//                   sampleSpotLight(r, intersectionPoint, lightDirection,
+//                                   lightColor, lightDistance);
                    lightColor *= saturate(dot(surfaceNormal, lightDirection));
 
                    if(material.isTextureEnabled){
                        objectColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord).xyz;
                    } else {
-                       objectColor = float3(1.0, 1.0, 1.0);
+                       objectColor = materials[submeshId].color.xyz;
                    }
-                   
-//                   if(instanceIndex != 0) {
-//                       objectColor = float3(0, 1, 0);
-//                   }
                    
                    color *= objectColor;
 
@@ -403,13 +396,12 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    }
 
                    float reflectivity = 1.0 - material.roughness;
-                   reflectivity = 0.0;
-//                   if(material.isMetallicMapEnabled) {
-//                       reflectivity = primitiveData[textureId].metallicMap.sample(sampler2d, uvCoord).x;
-//                   } else if(material.isRoughnessMapEnabled) {
-//                       reflectivity = 1.0 - primitiveData[textureId].metallicMap.sample(sampler2d, uvCoord).x;
-//                   }
 
+                   if(material.isMetallicMapEnabled) {
+                       reflectivity = primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
+                   } else if(material.isRoughnessMapEnabled) {
+                       reflectivity = 1.0 - primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
+                   }
 
                    if(refractiveIndex >= 1.0f){
                         // Refract ray
@@ -422,7 +414,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        // Reflect ray
                        ray.direction = reflect(ray.direction, surfaceNormal);
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
-                       ray.color = color * reflectivity;
+                       ray.color = color;
                        ray.mask = RAY_MASK_SECONDARY;
                        //                       ray.maxDistance = INFINITY;
                    }else{
@@ -531,7 +523,7 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     
     float3 color = tex.sample(sam, in.uv).xyz;
     
-//    color = color / (1.0f + color);
+    color = color / (1.0f + color);
     
     return float4(color, 1.0f);
 }

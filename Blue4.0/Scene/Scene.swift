@@ -168,8 +168,6 @@ extension Scene {
         var sId = submeshId
         var iOffset = indexOffset
         
-        print("submeshId \(sId), count \(vertexCount)")
-        
         var w = indexWrapperPipeline.threadExecutionWidth
         
         if(keepOriginalIndex) {
@@ -201,5 +199,12 @@ extension Scene {
     
     mutating func setTexture(index: Int, texture: Textures) {
         textures[index] = texture
+    }
+    
+    func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {
+        let e1: SIMD3<Float> = normalize(v1 - v0);
+        let e2: SIMD3<Float> = normalize(v2 - v0);
+        
+        return cross(e1, e2);
     }
 }

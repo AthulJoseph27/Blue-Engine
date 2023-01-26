@@ -14,6 +14,7 @@ class DynamicScene: Scene {
     var textures: [Textures]  = []
     
     var objects: [Solid] = []
+    var accelerationStructures: [[MPSTriangleAccelerationStructure]] = []
     
     var vertexBuffer:        MTLBuffer!
     var indexBuffer:         MTLBuffer!
@@ -127,8 +128,15 @@ class DynamicScene: Scene {
                 instanceId += 1
             }
             
-            cummulativeVertexCount += verticesCount.last! + UInt32(solid.mesh.vertexBuffer.length / VertexIn.stride)
+            cummulativeVertexCount = verticesCount.last! + UInt32(solid.mesh.vertexBuffer.length / VertexIn.stride)
         }
+        
+        verticesCount.append(cummulativeVertexCount)
+        
+//        print(verticesCount)
+//        print(indiciesCount)
+        
+//        assert(verticesCount.count == indiciesCount.count)
         
         self.vertexBuffer = mergeBuffers(buffers: vertexBuffers, blitEncoder: blitEncoder)
         self.indexBuffer = mergeBuffers(buffers: indexBuffers, blitEncoder: blitEncoder)
@@ -141,8 +149,6 @@ class DynamicScene: Scene {
         let storageOptions: MTLResourceOptions
         storageOptions = .storageModeShared
         
-        print(verticesCount)
-        print(indiciesCount)
         // Other buffers
         verticesCountBuffer = Engine.device.makeBuffer(bytes: &verticesCount, length: UInt32.stride(verticesCount.count), options: storageOptions)
         indiciesCountBuffer = Engine.device.makeBuffer(bytes: &indiciesCount, length: UInt32.stride(indiciesCount.count), options: storageOptions)
@@ -164,7 +170,9 @@ class DynamicScene: Scene {
         
         var instanceCount = 0
         
-        for solid in objects {
+        for j in 0..<objects.count {
+            let solid = objects[j]
+            self.accelerationStructures.append([])
             for i in 0..<solid.mesh.submeshCount {
                 let triangleAccelerationStructure = MPSTriangleAccelerationStructure(group: group)
                 
@@ -173,7 +181,7 @@ class DynamicScene: Scene {
                 triangleAccelerationStructure.vertexStride = VertexIn.stride
                 triangleAccelerationStructure.indexBuffer = indexBuffer
                 triangleAccelerationStructure.indexBufferOffset = indexBufferOffset
-                triangleAccelerationStructure.triangleCount = solid.mesh.indexBuffers[i].length / (3 * Int32.stride)
+                triangleAccelerationStructure.triangleCount = solid.mesh.indexBuffers[i].length / (3 * UInt32.stride)
                 
                 if solid.animated {
                     triangleAccelerationStructure.usage = .refit
@@ -181,12 +189,17 @@ class DynamicScene: Scene {
                 
                 triangleAccelerationStructure.rebuild()
                 
+                self.accelerationStructures[j].append(triangleAccelerationStructure)
                 acceleratedStructures.append(triangleAccelerationStructure)
                 indexBufferOffset += solid.mesh.indexBuffers[i].length
                 instanceCount += 1
             }
             vertexBufferOffset += solid.mesh.vertexBuffer.length
         }
+        
+//        print("Instance count \(instanceCount)")
+//        print("No of vertices \(vertexBuffer.length / VertexIn.stride)")
+//        print("No of indicies \(indexBuffer.length / UInt32.stride)")
         
         instanceAccelerationStructures = []
         

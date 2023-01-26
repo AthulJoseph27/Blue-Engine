@@ -16,19 +16,19 @@ class DebugCamera: SceneCamera {
     func update(deltaTime: Float) {
         
         if(Keyboard.isKeyPressed(.leftArrow)) {
-            self.deltaPosition.x -= deltaTime * 100
+            self.deltaPosition.x -= deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.rightArrow)) {
-            self.deltaPosition.x += deltaTime * 100
+            self.deltaPosition.x += deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.downArrow)) {
-            self.deltaPosition.y -= deltaTime * 100
+            self.deltaPosition.y -= deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.upArrow)) {
-            self.deltaPosition.y  += deltaTime * 100
+            self.deltaPosition.y  += deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.a)) {
@@ -40,11 +40,11 @@ class DebugCamera: SceneCamera {
         }
         
         if(Keyboard.isKeyPressed(.w)) {
-            self.deltaPosition.z -= deltaTime * 100
+            self.deltaPosition.z -= deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.s)) {
-            self.deltaPosition.z += deltaTime * 100
+            self.deltaPosition.z += deltaTime * 1
         }
         
         if(Keyboard.isKeyPressed(.z)) {

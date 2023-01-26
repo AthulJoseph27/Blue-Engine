@@ -3,8 +3,7 @@ import simd
 
 enum MeshTypes {
     case None
-    case Triangle
-    case Quad
+    case Plane
     case Cube
     case Sphere
     case Icosphere
@@ -25,7 +24,7 @@ class MeshLibrary {
     }
     
     private static func createDefaultMeshes() {
-        meshes.updateValue(Mesh(modelName: "None"), forKey: .None)
+        meshes.updateValue(Mesh(modelName: "Plane"), forKey: .Plane)
         meshes.updateValue(Mesh(modelName: "Cube"), forKey: .Cube)
         meshes.updateValue(Mesh(modelName: "Sphere"), forKey: .Sphere)
         meshes.updateValue(Mesh(modelName: "Icosphere"), forKey: .Icosphere)

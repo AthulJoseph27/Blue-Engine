@@ -146,7 +146,7 @@ class RayTracingRenderer: Renderer {
         let height = Int(size.height)
         let w = rayPipeline.threadExecutionWidth
         let h = rayPipeline.maxTotalThreadsPerThreadgroup / w
-        let threadsPerThreadgroup = MTLSizeMake(w, h/4, 1)
+        let threadsPerThreadgroup = MTLSizeMake(w, h, 1)
 
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!

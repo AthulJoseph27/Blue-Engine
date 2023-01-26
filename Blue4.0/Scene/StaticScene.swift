@@ -69,6 +69,20 @@ class StaticScene: Scene {
         }
     }
     
+    func check() {
+        let vertexBufferPointer = vertexBuffer.contents()
+        let vertexBufferData = vertexBufferPointer.bindMemory(to: VertexIn.self, capacity: vertexBuffer.length)
+        for i in 0..<vertexBuffer.length/MemoryLayout<VertexIn>.stride {
+            print("Vertex attribute position: \(vertexBufferData[i].position)")
+        }
+
+        let indexBufferPointer = indexBuffer.contents()
+        let indexBufferData = indexBufferPointer.bindMemory(to: UInt32.self, capacity: indexBuffer.length)
+        for i in 0..<indexBuffer.length/MemoryLayout<UInt32>.stride {
+                print("Index \(i): \(indexBufferData[i])")
+            }
+    }
+    
     func postBuildScene() {
         createBuffers()
         createAcceleratedStructure()
