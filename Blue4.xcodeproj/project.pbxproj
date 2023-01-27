@@ -10,12 +10,97 @@
 		3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3172983D0E8007C0E03 /* Blue4App.swift */; };
 		3C14A31A2983D0E8007C0E03 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3192983D0E8007C0E03 /* ContentView.swift */; };
 		3C14A31C2983D0E9007C0E03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A31B2983D0E9007C0E03 /* Assets.xcassets */; };
-		3C14A31F2983D0E9007C0E03 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */; };
-		3C14A3212983D0E9007C0E03 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3202983D0E9007C0E03 /* Persistence.swift */; };
 		3C14A3242983D0E9007C0E03 /* Blue4.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3222983D0E9007C0E03 /* Blue4.xcdatamodeld */; };
 		3C14A32F2983D0E9007C0E03 /* Blue4Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A32E2983D0E9007C0E03 /* Blue4Tests.swift */; };
 		3C14A3392983D0E9007C0E03 /* Blue4UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3382983D0E9007C0E03 /* Blue4UITests.swift */; };
 		3C14A33B2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */; };
+		3C14A3AF2983D20C007C0E03 /* NightCity.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A34A2983D20C007C0E03 /* NightCity.jpg */; };
+		3C14A3B02983D20C007C0E03 /* E 45 Aircraft_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A34C2983D20C007C0E03 /* E 45 Aircraft_obj.mtl */; };
+		3C14A3B12983D20C007C0E03 /* E-45_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A34D2983D20C007C0E03 /* E-45_col.jpg */; };
+		3C14A3B22983D20C007C0E03 /* E-45_col_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A34E2983D20C007C0E03 /* E-45_col_2.jpg */; };
+		3C14A3B32983D20C007C0E03 /* E-45_glass_nor_.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A34F2983D20C007C0E03 /* E-45_glass_nor_.jpg */; };
+		3C14A3B42983D20C007C0E03 /* E-45_REF 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3502983D20C007C0E03 /* E-45_REF 1.jpg */; };
+		3C14A3B52983D20C007C0E03 /* E-45-steel detail_2_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3512983D20C007C0E03 /* E-45-steel detail_2_col.jpg */; };
+		3C14A3B62983D20C007C0E03 /* E-45-nor_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3522983D20C007C0E03 /* E-45-nor_1.jpg */; };
+		3C14A3B72983D20C007C0E03 /* E 45 Aircraft_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3532983D20C007C0E03 /* E 45 Aircraft_obj.obj */; };
+		3C14A3B82983D20C007C0E03 /* E-45 _col_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */; };
+		3C14A3B92983D20C007C0E03 /* picture8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3562983D20C007C0E03 /* picture8.png */; };
+		3C14A3BA2983D20C007C0E03 /* fireplace_room.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3572983D20C007C0E03 /* fireplace_room.obj */; };
+		3C14A3BB2983D20C007C0E03 /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3582983D20C007C0E03 /* wood.png */; };
+		3C14A3BC2983D20C007C0E03 /* wood5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3592983D20C007C0E03 /* wood5.png */; };
+		3C14A3BD2983D20C007C0E03 /* fireplace_room.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */; };
+		3C14A3BE2983D20C007C0E03 /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35B2983D20C007C0E03 /* leaf.png */; };
+		3C14A3BF2983D20C007C0E03 /* SampleTexture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35C2983D20C007C0E03 /* SampleTexture.jpg */; };
+		3C14A3C02983D20C007C0E03 /* Beach.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35D2983D20C007C0E03 /* Beach.jpeg */; };
+		3C14A3C12983D20C007C0E03 /* Icosphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3602983D20C007C0E03 /* Icosphere.mtl */; };
+		3C14A3C22983D20C007C0E03 /* Icosphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3612983D20C007C0E03 /* Icosphere.obj */; };
+		3C14A3C32983D20C007C0E03 /* Torus.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3632983D20C007C0E03 /* Torus.obj */; };
+		3C14A3C42983D20C007C0E03 /* Torus.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3642983D20C007C0E03 /* Torus.mtl */; };
+		3C14A3C52983D20C007C0E03 /* Cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3662983D20C007C0E03 /* Cube.obj */; };
+		3C14A3C62983D20C007C0E03 /* Cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3672983D20C007C0E03 /* Cube.mtl */; };
+		3C14A3C72983D20C007C0E03 /* Cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3692983D20C007C0E03 /* Cone.obj */; };
+		3C14A3C82983D20C007C0E03 /* Cone.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A36A2983D20C007C0E03 /* Cone.mtl */; };
+		3C14A3C92983D20C007C0E03 /* Sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A36C2983D20C007C0E03 /* Sphere.obj */; };
+		3C14A3CA2983D20C007C0E03 /* Sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A36D2983D20C007C0E03 /* Sphere.mtl */; };
+		3C14A3CB2983D20C007C0E03 /* Plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A36F2983D20C007C0E03 /* Plane.obj */; };
+		3C14A3CC2983D20C007C0E03 /* Plane.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3702983D20C007C0E03 /* Plane.mtl */; };
+		3C14A3CD2983D20C007C0E03 /* Monkey.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3722983D20C007C0E03 /* Monkey.mtl */; };
+		3C14A3CE2983D20C007C0E03 /* Monkey.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3732983D20C007C0E03 /* Monkey.obj */; };
+		3C14A3CF2983D20C007C0E03 /* Cylinder.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3752983D20C007C0E03 /* Cylinder.mtl */; };
+		3C14A3D02983D20C007C0E03 /* Cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3762983D20C007C0E03 /* Cylinder.obj */; };
+		3C14A3D12983D20C007C0E03 /* Jungle.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3772983D20C007C0E03 /* Jungle.jpg */; };
+		3C14A3D22983D20C007C0E03 /* Sky.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3782983D20C007C0E03 /* Sky.jpg */; };
+		3C14A3D32983D20C007C0E03 /* chest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37A2983D20C007C0E03 /* chest.obj */; };
+		3C14A3D42983D20C007C0E03 /* chest_02_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37B2983D20C007C0E03 /* chest_02_Base_Color.png */; };
+		3C14A3D52983D20C007C0E03 /* chest_01_Roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37C2983D20C007C0E03 /* chest_01_Roughness.png */; };
+		3C14A3D62983D20C007C0E03 /* chest_02_Metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37D2983D20C007C0E03 /* chest_02_Metallic.png */; };
+		3C14A3D72983D20C007C0E03 /* chest_02_Roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37E2983D20C007C0E03 /* chest_02_Roughness.png */; };
+		3C14A3D82983D20C007C0E03 /* chest_01_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A37F2983D20C007C0E03 /* chest_01_Base_Color.png */; };
+		3C14A3D92983D20C007C0E03 /* chest_02_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3802983D20C007C0E03 /* chest_02_Mixed_AO.png */; };
+		3C14A3DA2983D20C007C0E03 /* chest_01_Metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3812983D20C007C0E03 /* chest_01_Metallic.png */; };
+		3C14A3DB2983D20C007C0E03 /* chest_01_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */; };
+		3C14A3DC2983D20C007C0E03 /* chest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3832983D20C007C0E03 /* chest.mtl */; };
+		3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3862983D20C007C0E03 /* BasicRenderer.swift */; };
+		3C14A3DE2983D20C007C0E03 /* StaticRayTracingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */; };
+		3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */; };
+		3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3892983D20C007C0E03 /* RenderManager.swift */; };
+		3C14A3E12983D20C007C0E03 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38A2983D20C007C0E03 /* Renderer.swift */; };
+		3C14A3E22983D20C007C0E03 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38C2983D20C007C0E03 /* Math.swift */; };
+		3C14A3E32983D20C007C0E03 /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38D2983D20C007C0E03 /* Mesh.swift */; };
+		3C14A3E42983D20C007C0E03 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38E2983D20C007C0E03 /* Engine.swift */; };
+		3C14A3E52983D20C007C0E03 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38F2983D20C007C0E03 /* Preferences.swift */; };
+		3C14A3E62983D20C007C0E03 /* Heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3902983D20C007C0E03 /* Heap.swift */; };
+		3C14A3E72983D20C007C0E03 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3912983D20C007C0E03 /* Types.swift */; };
+		3C14A3E82983D20C007C0E03 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3922983D20C007C0E03 /* Node.swift */; };
+		3C14A3E92983D20C007C0E03 /* Solid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3932983D20C007C0E03 /* Solid.swift */; };
+		3C14A3EA2983D20C007C0E03 /* KeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3952983D20C007C0E03 /* KeyCodes.swift */; };
+		3C14A3EB2983D20C007C0E03 /* Mouse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3962983D20C007C0E03 /* Mouse.swift */; };
+		3C14A3EC2983D20C007C0E03 /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3972983D20C007C0E03 /* Keyboard.swift */; };
+		3C14A3ED2983D20C007C0E03 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3992983D20C007C0E03 /* CameraManager.swift */; };
+		3C14A3EE2983D20C007C0E03 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A39A2983D20C007C0E03 /* Camera.swift */; };
+		3C14A3EF2983D20C007C0E03 /* DebugCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A39B2983D20C007C0E03 /* DebugCamera.swift */; };
+		3C14A3F02983D20C007C0E03 /* Skybox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A39D2983D20C007C0E03 /* Skybox.swift */; };
+		3C14A3F12983D20C007C0E03 /* RenderPipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A39E2983D20C007C0E03 /* RenderPipelineState.swift */; };
+		3C14A3F22983D20C007C0E03 /* RenderPipelineDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A39F2983D20C007C0E03 /* RenderPipelineDescriptor.swift */; };
+		3C14A3F32983D20C007C0E03 /* MeshLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A02983D20C007C0E03 /* MeshLibrary.swift */; };
+		3C14A3F42983D20C007C0E03 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A12983D20C007C0E03 /* ComputePipelineState.swift */; };
+		3C14A3F52983D20C007C0E03 /* ComputePipelineDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A22983D20C007C0E03 /* ComputePipelineDescriptor.swift */; };
+		3C14A3F62983D20C007C0E03 /* VertexDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A32983D20C007C0E03 /* VertexDescriptor.swift */; };
+		3C14A3F72983D20C007C0E03 /* Transform.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A52983D20C007C0E03 /* Transform.metal */; };
+		3C14A3F82983D20C007C0E03 /* RayTracingShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A62983D20C007C0E03 /* RayTracingShader.metal */; };
+		3C14A3F92983D20C007C0E03 /* PhongShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A72983D20C007C0E03 /* PhongShader.metal */; };
+		3C14A3FA2983D20C007C0E03 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A92983D20C007C0E03 /* Scene.swift */; };
+		3C14A3FB2983D20C007C0E03 /* Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AB2983D20C007C0E03 /* Sandbox.swift */; };
+		3C14A3FC2983D20C007C0E03 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AC2983D20C007C0E03 /* SceneManager.swift */; };
+		3C14A3FD2983D20C007C0E03 /* DynamicScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AD2983D20C007C0E03 /* DynamicScene.swift */; };
+		3C14A3FE2983D20C007C0E03 /* StaticScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AE2983D20C007C0E03 /* StaticScene.swift */; };
+		3C14A4092983D213007C0E03 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A4032983D213007C0E03 /* GameViewController.swift */; };
+		3C14A40A2983D213007C0E03 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A4062983D213007C0E03 /* GameView.swift */; };
+		3C14A418298412C1007C0E03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A417298412C1007C0E03 /* Main.storyboard */; };
+		3C14A41B298422C1007C0E03 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41A298422C1007C0E03 /* ContentViewModel.swift */; };
+		3C14A41D29842CD5007C0E03 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41C29842CD5007C0E03 /* TabButton.swift */; };
+		3C14A41F2984376E007C0E03 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41E2984376E007C0E03 /* BlurView.swift */; };
+		3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A42029844C15007C0E03 /* Sidebar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +125,6 @@
 		3C14A3172983D0E8007C0E03 /* Blue4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4App.swift; sourceTree = "<group>"; };
 		3C14A3192983D0E8007C0E03 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3C14A31B2983D0E9007C0E03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3C14A3202983D0E9007C0E03 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		3C14A3232983D0E9007C0E03 /* Blue4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Blue4.xcdatamodel; sourceTree = "<group>"; };
 		3C14A3252983D0E9007C0E03 /* Blue4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blue4.entitlements; sourceTree = "<group>"; };
 		3C14A32A2983D0E9007C0E03 /* Blue4Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blue4Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +132,94 @@
 		3C14A3342983D0E9007C0E03 /* Blue4UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blue4UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C14A3382983D0E9007C0E03 /* Blue4UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4UITests.swift; sourceTree = "<group>"; };
 		3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3C14A34A2983D20C007C0E03 /* NightCity.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = NightCity.jpg; sourceTree = "<group>"; };
+		3C14A34C2983D20C007C0E03 /* E 45 Aircraft_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.mtl"; sourceTree = "<group>"; };
+		3C14A34D2983D20C007C0E03 /* E-45_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_col.jpg"; sourceTree = "<group>"; };
+		3C14A34E2983D20C007C0E03 /* E-45_col_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_col_2.jpg"; sourceTree = "<group>"; };
+		3C14A34F2983D20C007C0E03 /* E-45_glass_nor_.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_glass_nor_.jpg"; sourceTree = "<group>"; };
+		3C14A3502983D20C007C0E03 /* E-45_REF 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45_REF 1.jpg"; sourceTree = "<group>"; };
+		3C14A3512983D20C007C0E03 /* E-45-steel detail_2_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-steel detail_2_col.jpg"; sourceTree = "<group>"; };
+		3C14A3522983D20C007C0E03 /* E-45-nor_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-nor_1.jpg"; sourceTree = "<group>"; };
+		3C14A3532983D20C007C0E03 /* E 45 Aircraft_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.obj"; sourceTree = "<group>"; };
+		3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col_3.jpg"; sourceTree = "<group>"; };
+		3C14A3562983D20C007C0E03 /* picture8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picture8.png; sourceTree = "<group>"; };
+		3C14A3572983D20C007C0E03 /* fireplace_room.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.obj; sourceTree = "<group>"; };
+		3C14A3582983D20C007C0E03 /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		3C14A3592983D20C007C0E03 /* wood5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood5.png; sourceTree = "<group>"; };
+		3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.mtl; sourceTree = "<group>"; };
+		3C14A35B2983D20C007C0E03 /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
+		3C14A35C2983D20C007C0E03 /* SampleTexture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = SampleTexture.jpg; sourceTree = "<group>"; };
+		3C14A35D2983D20C007C0E03 /* Beach.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Beach.jpeg; sourceTree = "<group>"; };
+		3C14A3602983D20C007C0E03 /* Icosphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.mtl; sourceTree = "<group>"; };
+		3C14A3612983D20C007C0E03 /* Icosphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.obj; sourceTree = "<group>"; };
+		3C14A3632983D20C007C0E03 /* Torus.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Torus.obj; sourceTree = "<group>"; };
+		3C14A3642983D20C007C0E03 /* Torus.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Torus.mtl; sourceTree = "<group>"; };
+		3C14A3662983D20C007C0E03 /* Cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.obj; sourceTree = "<group>"; };
+		3C14A3672983D20C007C0E03 /* Cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.mtl; sourceTree = "<group>"; };
+		3C14A3692983D20C007C0E03 /* Cone.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cone.obj; sourceTree = "<group>"; };
+		3C14A36A2983D20C007C0E03 /* Cone.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cone.mtl; sourceTree = "<group>"; };
+		3C14A36C2983D20C007C0E03 /* Sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sphere.obj; sourceTree = "<group>"; };
+		3C14A36D2983D20C007C0E03 /* Sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sphere.mtl; sourceTree = "<group>"; };
+		3C14A36F2983D20C007C0E03 /* Plane.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Plane.obj; sourceTree = "<group>"; };
+		3C14A3702983D20C007C0E03 /* Plane.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Plane.mtl; sourceTree = "<group>"; };
+		3C14A3722983D20C007C0E03 /* Monkey.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.mtl; sourceTree = "<group>"; };
+		3C14A3732983D20C007C0E03 /* Monkey.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.obj; sourceTree = "<group>"; };
+		3C14A3752983D20C007C0E03 /* Cylinder.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cylinder.mtl; sourceTree = "<group>"; };
+		3C14A3762983D20C007C0E03 /* Cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cylinder.obj; sourceTree = "<group>"; };
+		3C14A3772983D20C007C0E03 /* Jungle.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jungle.jpg; sourceTree = "<group>"; };
+		3C14A3782983D20C007C0E03 /* Sky.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sky.jpg; sourceTree = "<group>"; };
+		3C14A37A2983D20C007C0E03 /* chest.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chest.obj; sourceTree = "<group>"; };
+		3C14A37B2983D20C007C0E03 /* chest_02_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_02_Base_Color.png; sourceTree = "<group>"; };
+		3C14A37C2983D20C007C0E03 /* chest_01_Roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Roughness.png; sourceTree = "<group>"; };
+		3C14A37D2983D20C007C0E03 /* chest_02_Metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_02_Metallic.png; sourceTree = "<group>"; };
+		3C14A37E2983D20C007C0E03 /* chest_02_Roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_02_Roughness.png; sourceTree = "<group>"; };
+		3C14A37F2983D20C007C0E03 /* chest_01_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Base_Color.png; sourceTree = "<group>"; };
+		3C14A3802983D20C007C0E03 /* chest_02_Mixed_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_02_Mixed_AO.png; sourceTree = "<group>"; };
+		3C14A3812983D20C007C0E03 /* chest_01_Metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Metallic.png; sourceTree = "<group>"; };
+		3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Mixed_AO.png; sourceTree = "<group>"; };
+		3C14A3832983D20C007C0E03 /* chest.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chest.mtl; sourceTree = "<group>"; };
+		3C14A3862983D20C007C0E03 /* BasicRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicRenderer.swift; sourceTree = "<group>"; };
+		3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRayTracingRenderer.swift; sourceTree = "<group>"; };
+		3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayTracingRenderer.swift; sourceTree = "<group>"; };
+		3C14A3892983D20C007C0E03 /* RenderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderManager.swift; sourceTree = "<group>"; };
+		3C14A38A2983D20C007C0E03 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		3C14A38C2983D20C007C0E03 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		3C14A38D2983D20C007C0E03 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
+		3C14A38E2983D20C007C0E03 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		3C14A38F2983D20C007C0E03 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		3C14A3902983D20C007C0E03 /* Heap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heap.swift; sourceTree = "<group>"; };
+		3C14A3912983D20C007C0E03 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		3C14A3922983D20C007C0E03 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		3C14A3932983D20C007C0E03 /* Solid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solid.swift; sourceTree = "<group>"; };
+		3C14A3952983D20C007C0E03 /* KeyCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCodes.swift; sourceTree = "<group>"; };
+		3C14A3962983D20C007C0E03 /* Mouse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mouse.swift; sourceTree = "<group>"; };
+		3C14A3972983D20C007C0E03 /* Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
+		3C14A3992983D20C007C0E03 /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		3C14A39A2983D20C007C0E03 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		3C14A39B2983D20C007C0E03 /* DebugCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugCamera.swift; sourceTree = "<group>"; };
+		3C14A39D2983D20C007C0E03 /* Skybox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skybox.swift; sourceTree = "<group>"; };
+		3C14A39E2983D20C007C0E03 /* RenderPipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineState.swift; sourceTree = "<group>"; };
+		3C14A39F2983D20C007C0E03 /* RenderPipelineDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineDescriptor.swift; sourceTree = "<group>"; };
+		3C14A3A02983D20C007C0E03 /* MeshLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshLibrary.swift; sourceTree = "<group>"; };
+		3C14A3A12983D20C007C0E03 /* ComputePipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePipelineState.swift; sourceTree = "<group>"; };
+		3C14A3A22983D20C007C0E03 /* ComputePipelineDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePipelineDescriptor.swift; sourceTree = "<group>"; };
+		3C14A3A32983D20C007C0E03 /* VertexDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VertexDescriptor.swift; sourceTree = "<group>"; };
+		3C14A3A52983D20C007C0E03 /* Transform.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Transform.metal; sourceTree = "<group>"; };
+		3C14A3A62983D20C007C0E03 /* RayTracingShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = RayTracingShader.metal; sourceTree = "<group>"; };
+		3C14A3A72983D20C007C0E03 /* PhongShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = PhongShader.metal; sourceTree = "<group>"; };
+		3C14A3A92983D20C007C0E03 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		3C14A3AB2983D20C007C0E03 /* Sandbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sandbox.swift; sourceTree = "<group>"; };
+		3C14A3AC2983D20C007C0E03 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		3C14A3AD2983D20C007C0E03 /* DynamicScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicScene.swift; sourceTree = "<group>"; };
+		3C14A3AE2983D20C007C0E03 /* StaticScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticScene.swift; sourceTree = "<group>"; };
+		3C14A4032983D213007C0E03 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		3C14A4062983D213007C0E03 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		3C14A40C2983D26F007C0E03 /* Blue4-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue4-Bridging-Header.h"; sourceTree = "<group>"; };
+		3C14A417298412C1007C0E03 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		3C14A41A298422C1007C0E03 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		3C14A41C29842CD5007C0E03 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
+		3C14A41E2984376E007C0E03 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		3C14A42029844C15007C0E03 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,23 +270,15 @@
 		3C14A3162983D0E8007C0E03 /* Blue4 */ = {
 			isa = PBXGroup;
 			children = (
+				3C14A3482983D20C007C0E03 /* Engine */,
+				3C14A41929842288007C0E03 /* ViewModels */,
+				3C14A3472983D1B1007C0E03 /* Views */,
 				3C14A3172983D0E8007C0E03 /* Blue4App.swift */,
-				3C14A3192983D0E8007C0E03 /* ContentView.swift */,
 				3C14A31B2983D0E9007C0E03 /* Assets.xcassets */,
-				3C14A3202983D0E9007C0E03 /* Persistence.swift */,
 				3C14A3252983D0E9007C0E03 /* Blue4.entitlements */,
 				3C14A3222983D0E9007C0E03 /* Blue4.xcdatamodeld */,
-				3C14A31D2983D0E9007C0E03 /* Preview Content */,
 			);
 			path = Blue4;
-			sourceTree = "<group>";
-		};
-		3C14A31D2983D0E9007C0E03 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		3C14A32D2983D0E9007C0E03 /* Blue4Tests */ = {
@@ -133,6 +296,300 @@
 				3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */,
 			);
 			path = Blue4UITests;
+			sourceTree = "<group>";
+		};
+		3C14A3472983D1B1007C0E03 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3192983D0E8007C0E03 /* ContentView.swift */,
+				3C14A41C29842CD5007C0E03 /* TabButton.swift */,
+				3C14A41E2984376E007C0E03 /* BlurView.swift */,
+				3C14A42029844C15007C0E03 /* Sidebar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3C14A3482983D20C007C0E03 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3492983D20C007C0E03 /* res */,
+				3C14A38B2983D20C007C0E03 /* Core */,
+				3C14A3942983D20C007C0E03 /* Input */,
+				3C14A3982983D20C007C0E03 /* Camera */,
+				3C14A39C2983D20C007C0E03 /* Libraries */,
+				3C14A3A42983D20C007C0E03 /* Shaders */,
+				3C14A3A82983D20C007C0E03 /* Scene */,
+				3C14A3842983D20C007C0E03 /* Renderer */,
+				3C14A3FF2983D213007C0E03 /* Display */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		3C14A3492983D20C007C0E03 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A34A2983D20C007C0E03 /* NightCity.jpg */,
+				3C14A34B2983D20C007C0E03 /* E-45-Aircraft */,
+				3C14A3552983D20C007C0E03 /* fireplace_room */,
+				3C14A35C2983D20C007C0E03 /* SampleTexture.jpg */,
+				3C14A35D2983D20C007C0E03 /* Beach.jpeg */,
+				3C14A35E2983D20C007C0E03 /* Meshes */,
+				3C14A3772983D20C007C0E03 /* Jungle.jpg */,
+				3C14A3782983D20C007C0E03 /* Sky.jpg */,
+				3C14A3792983D20C007C0E03 /* chest */,
+			);
+			path = res;
+			sourceTree = "<group>";
+		};
+		3C14A34B2983D20C007C0E03 /* E-45-Aircraft */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A34C2983D20C007C0E03 /* E 45 Aircraft_obj.mtl */,
+				3C14A34D2983D20C007C0E03 /* E-45_col.jpg */,
+				3C14A34E2983D20C007C0E03 /* E-45_col_2.jpg */,
+				3C14A34F2983D20C007C0E03 /* E-45_glass_nor_.jpg */,
+				3C14A3502983D20C007C0E03 /* E-45_REF 1.jpg */,
+				3C14A3512983D20C007C0E03 /* E-45-steel detail_2_col.jpg */,
+				3C14A3522983D20C007C0E03 /* E-45-nor_1.jpg */,
+				3C14A3532983D20C007C0E03 /* E 45 Aircraft_obj.obj */,
+				3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */,
+			);
+			path = "E-45-Aircraft";
+			sourceTree = "<group>";
+		};
+		3C14A3552983D20C007C0E03 /* fireplace_room */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3562983D20C007C0E03 /* picture8.png */,
+				3C14A3572983D20C007C0E03 /* fireplace_room.obj */,
+				3C14A3582983D20C007C0E03 /* wood.png */,
+				3C14A3592983D20C007C0E03 /* wood5.png */,
+				3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */,
+				3C14A35B2983D20C007C0E03 /* leaf.png */,
+			);
+			path = fireplace_room;
+			sourceTree = "<group>";
+		};
+		3C14A35E2983D20C007C0E03 /* Meshes */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A35F2983D20C007C0E03 /* Icosphere */,
+				3C14A3622983D20C007C0E03 /* Torus */,
+				3C14A3652983D20C007C0E03 /* Cube */,
+				3C14A3682983D20C007C0E03 /* Cone */,
+				3C14A36B2983D20C007C0E03 /* Sphere */,
+				3C14A36E2983D20C007C0E03 /* Plane */,
+				3C14A3712983D20C007C0E03 /* Monkey */,
+				3C14A3742983D20C007C0E03 /* Cylinder */,
+			);
+			path = Meshes;
+			sourceTree = "<group>";
+		};
+		3C14A35F2983D20C007C0E03 /* Icosphere */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3602983D20C007C0E03 /* Icosphere.mtl */,
+				3C14A3612983D20C007C0E03 /* Icosphere.obj */,
+			);
+			path = Icosphere;
+			sourceTree = "<group>";
+		};
+		3C14A3622983D20C007C0E03 /* Torus */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3632983D20C007C0E03 /* Torus.obj */,
+				3C14A3642983D20C007C0E03 /* Torus.mtl */,
+			);
+			path = Torus;
+			sourceTree = "<group>";
+		};
+		3C14A3652983D20C007C0E03 /* Cube */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3662983D20C007C0E03 /* Cube.obj */,
+				3C14A3672983D20C007C0E03 /* Cube.mtl */,
+			);
+			path = Cube;
+			sourceTree = "<group>";
+		};
+		3C14A3682983D20C007C0E03 /* Cone */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3692983D20C007C0E03 /* Cone.obj */,
+				3C14A36A2983D20C007C0E03 /* Cone.mtl */,
+			);
+			path = Cone;
+			sourceTree = "<group>";
+		};
+		3C14A36B2983D20C007C0E03 /* Sphere */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A36C2983D20C007C0E03 /* Sphere.obj */,
+				3C14A36D2983D20C007C0E03 /* Sphere.mtl */,
+			);
+			path = Sphere;
+			sourceTree = "<group>";
+		};
+		3C14A36E2983D20C007C0E03 /* Plane */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A36F2983D20C007C0E03 /* Plane.obj */,
+				3C14A3702983D20C007C0E03 /* Plane.mtl */,
+			);
+			path = Plane;
+			sourceTree = "<group>";
+		};
+		3C14A3712983D20C007C0E03 /* Monkey */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3722983D20C007C0E03 /* Monkey.mtl */,
+				3C14A3732983D20C007C0E03 /* Monkey.obj */,
+			);
+			path = Monkey;
+			sourceTree = "<group>";
+		};
+		3C14A3742983D20C007C0E03 /* Cylinder */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3752983D20C007C0E03 /* Cylinder.mtl */,
+				3C14A3762983D20C007C0E03 /* Cylinder.obj */,
+			);
+			path = Cylinder;
+			sourceTree = "<group>";
+		};
+		3C14A3792983D20C007C0E03 /* chest */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A37A2983D20C007C0E03 /* chest.obj */,
+				3C14A37B2983D20C007C0E03 /* chest_02_Base_Color.png */,
+				3C14A37C2983D20C007C0E03 /* chest_01_Roughness.png */,
+				3C14A37D2983D20C007C0E03 /* chest_02_Metallic.png */,
+				3C14A37E2983D20C007C0E03 /* chest_02_Roughness.png */,
+				3C14A37F2983D20C007C0E03 /* chest_01_Base_Color.png */,
+				3C14A3802983D20C007C0E03 /* chest_02_Mixed_AO.png */,
+				3C14A3812983D20C007C0E03 /* chest_01_Metallic.png */,
+				3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */,
+				3C14A3832983D20C007C0E03 /* chest.mtl */,
+			);
+			path = chest;
+			sourceTree = "<group>";
+		};
+		3C14A3842983D20C007C0E03 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3852983D20C007C0E03 /* Renderers */,
+				3C14A3892983D20C007C0E03 /* RenderManager.swift */,
+				3C14A38A2983D20C007C0E03 /* Renderer.swift */,
+			);
+			path = Renderer;
+			sourceTree = "<group>";
+		};
+		3C14A3852983D20C007C0E03 /* Renderers */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3862983D20C007C0E03 /* BasicRenderer.swift */,
+				3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */,
+				3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */,
+			);
+			path = Renderers;
+			sourceTree = "<group>";
+		};
+		3C14A38B2983D20C007C0E03 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A38C2983D20C007C0E03 /* Math.swift */,
+				3C14A38D2983D20C007C0E03 /* Mesh.swift */,
+				3C14A38E2983D20C007C0E03 /* Engine.swift */,
+				3C14A38F2983D20C007C0E03 /* Preferences.swift */,
+				3C14A3902983D20C007C0E03 /* Heap.swift */,
+				3C14A3912983D20C007C0E03 /* Types.swift */,
+				3C14A3922983D20C007C0E03 /* Node.swift */,
+				3C14A3932983D20C007C0E03 /* Solid.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		3C14A3942983D20C007C0E03 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3952983D20C007C0E03 /* KeyCodes.swift */,
+				3C14A3962983D20C007C0E03 /* Mouse.swift */,
+				3C14A3972983D20C007C0E03 /* Keyboard.swift */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		3C14A3982983D20C007C0E03 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3992983D20C007C0E03 /* CameraManager.swift */,
+				3C14A39A2983D20C007C0E03 /* Camera.swift */,
+				3C14A39B2983D20C007C0E03 /* DebugCamera.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		3C14A39C2983D20C007C0E03 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A39D2983D20C007C0E03 /* Skybox.swift */,
+				3C14A39E2983D20C007C0E03 /* RenderPipelineState.swift */,
+				3C14A39F2983D20C007C0E03 /* RenderPipelineDescriptor.swift */,
+				3C14A3A02983D20C007C0E03 /* MeshLibrary.swift */,
+				3C14A3A12983D20C007C0E03 /* ComputePipelineState.swift */,
+				3C14A3A22983D20C007C0E03 /* ComputePipelineDescriptor.swift */,
+				3C14A3A32983D20C007C0E03 /* VertexDescriptor.swift */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		3C14A3A42983D20C007C0E03 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3A52983D20C007C0E03 /* Transform.metal */,
+				3C14A3A62983D20C007C0E03 /* RayTracingShader.metal */,
+				3C14A3A72983D20C007C0E03 /* PhongShader.metal */,
+				3C14A40C2983D26F007C0E03 /* Blue4-Bridging-Header.h */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		3C14A3A82983D20C007C0E03 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3A92983D20C007C0E03 /* Scene.swift */,
+				3C14A3AA2983D20C007C0E03 /* Scenes */,
+				3C14A3AC2983D20C007C0E03 /* SceneManager.swift */,
+				3C14A3AD2983D20C007C0E03 /* DynamicScene.swift */,
+				3C14A3AE2983D20C007C0E03 /* StaticScene.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		3C14A3AA2983D20C007C0E03 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3AB2983D20C007C0E03 /* Sandbox.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		3C14A3FF2983D213007C0E03 /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A4032983D213007C0E03 /* GameViewController.swift */,
+				3C14A4062983D213007C0E03 /* GameView.swift */,
+				3C14A417298412C1007C0E03 /* Main.storyboard */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
+		3C14A41929842288007C0E03 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A41A298422C1007C0E03 /* ContentViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +660,7 @@
 				TargetAttributes = {
 					3C14A3132983D0E8007C0E03 = {
 						CreatedOnToolsVersion = 14.1;
+						LastSwiftMigration = 1410;
 					};
 					3C14A3292983D0E9007C0E03 = {
 						CreatedOnToolsVersion = 14.1;
@@ -239,8 +697,54 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C14A31F2983D0E9007C0E03 /* Preview Assets.xcassets in Resources */,
+				3C14A3B52983D20C007C0E03 /* E-45-steel detail_2_col.jpg in Resources */,
+				3C14A3CE2983D20C007C0E03 /* Monkey.obj in Resources */,
+				3C14A3D72983D20C007C0E03 /* chest_02_Roughness.png in Resources */,
+				3C14A3D62983D20C007C0E03 /* chest_02_Metallic.png in Resources */,
+				3C14A3C32983D20C007C0E03 /* Torus.obj in Resources */,
+				3C14A3D82983D20C007C0E03 /* chest_01_Base_Color.png in Resources */,
+				3C14A3C72983D20C007C0E03 /* Cone.obj in Resources */,
 				3C14A31C2983D0E9007C0E03 /* Assets.xcassets in Resources */,
+				3C14A3CC2983D20C007C0E03 /* Plane.mtl in Resources */,
+				3C14A3B72983D20C007C0E03 /* E 45 Aircraft_obj.obj in Resources */,
+				3C14A3B32983D20C007C0E03 /* E-45_glass_nor_.jpg in Resources */,
+				3C14A3BD2983D20C007C0E03 /* fireplace_room.mtl in Resources */,
+				3C14A3C82983D20C007C0E03 /* Cone.mtl in Resources */,
+				3C14A3B02983D20C007C0E03 /* E 45 Aircraft_obj.mtl in Resources */,
+				3C14A3C12983D20C007C0E03 /* Icosphere.mtl in Resources */,
+				3C14A3B22983D20C007C0E03 /* E-45_col_2.jpg in Resources */,
+				3C14A3CF2983D20C007C0E03 /* Cylinder.mtl in Resources */,
+				3C14A3CA2983D20C007C0E03 /* Sphere.mtl in Resources */,
+				3C14A3BF2983D20C007C0E03 /* SampleTexture.jpg in Resources */,
+				3C14A3C02983D20C007C0E03 /* Beach.jpeg in Resources */,
+				3C14A3BB2983D20C007C0E03 /* wood.png in Resources */,
+				3C14A3C42983D20C007C0E03 /* Torus.mtl in Resources */,
+				3C14A3D22983D20C007C0E03 /* Sky.jpg in Resources */,
+				3C14A3B82983D20C007C0E03 /* E-45 _col_3.jpg in Resources */,
+				3C14A3D02983D20C007C0E03 /* Cylinder.obj in Resources */,
+				3C14A3B92983D20C007C0E03 /* picture8.png in Resources */,
+				3C14A3B62983D20C007C0E03 /* E-45-nor_1.jpg in Resources */,
+				3C14A418298412C1007C0E03 /* Main.storyboard in Resources */,
+				3C14A3C92983D20C007C0E03 /* Sphere.obj in Resources */,
+				3C14A3C52983D20C007C0E03 /* Cube.obj in Resources */,
+				3C14A3C62983D20C007C0E03 /* Cube.mtl in Resources */,
+				3C14A3BE2983D20C007C0E03 /* leaf.png in Resources */,
+				3C14A3CD2983D20C007C0E03 /* Monkey.mtl in Resources */,
+				3C14A3D52983D20C007C0E03 /* chest_01_Roughness.png in Resources */,
+				3C14A3D92983D20C007C0E03 /* chest_02_Mixed_AO.png in Resources */,
+				3C14A3D32983D20C007C0E03 /* chest.obj in Resources */,
+				3C14A3BC2983D20C007C0E03 /* wood5.png in Resources */,
+				3C14A3CB2983D20C007C0E03 /* Plane.obj in Resources */,
+				3C14A3DA2983D20C007C0E03 /* chest_01_Metallic.png in Resources */,
+				3C14A3DB2983D20C007C0E03 /* chest_01_Mixed_AO.png in Resources */,
+				3C14A3DC2983D20C007C0E03 /* chest.mtl in Resources */,
+				3C14A3C22983D20C007C0E03 /* Icosphere.obj in Resources */,
+				3C14A3BA2983D20C007C0E03 /* fireplace_room.obj in Resources */,
+				3C14A3AF2983D20C007C0E03 /* NightCity.jpg in Resources */,
+				3C14A3B12983D20C007C0E03 /* E-45_col.jpg in Resources */,
+				3C14A3D12983D20C007C0E03 /* Jungle.jpg in Resources */,
+				3C14A3B42983D20C007C0E03 /* E-45_REF 1.jpg in Resources */,
+				3C14A3D42983D20C007C0E03 /* chest_02_Base_Color.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,10 +769,49 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C14A3212983D0E9007C0E03 /* Persistence.swift in Sources */,
+				3C14A3E12983D20C007C0E03 /* Renderer.swift in Sources */,
+				3C14A3EB2983D20C007C0E03 /* Mouse.swift in Sources */,
+				3C14A3F22983D20C007C0E03 /* RenderPipelineDescriptor.swift in Sources */,
+				3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */,
+				3C14A3E92983D20C007C0E03 /* Solid.swift in Sources */,
+				3C14A4092983D213007C0E03 /* GameViewController.swift in Sources */,
+				3C14A3E62983D20C007C0E03 /* Heap.swift in Sources */,
+				3C14A3F92983D20C007C0E03 /* PhongShader.metal in Sources */,
+				3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */,
+				3C14A3F02983D20C007C0E03 /* Skybox.swift in Sources */,
+				3C14A3EE2983D20C007C0E03 /* Camera.swift in Sources */,
+				3C14A3F82983D20C007C0E03 /* RayTracingShader.metal in Sources */,
+				3C14A3EF2983D20C007C0E03 /* DebugCamera.swift in Sources */,
+				3C14A3E72983D20C007C0E03 /* Types.swift in Sources */,
+				3C14A3F32983D20C007C0E03 /* MeshLibrary.swift in Sources */,
+				3C14A40A2983D213007C0E03 /* GameView.swift in Sources */,
+				3C14A3EA2983D20C007C0E03 /* KeyCodes.swift in Sources */,
+				3C14A3E52983D20C007C0E03 /* Preferences.swift in Sources */,
+				3C14A3E22983D20C007C0E03 /* Math.swift in Sources */,
+				3C14A3F62983D20C007C0E03 /* VertexDescriptor.swift in Sources */,
+				3C14A3FE2983D20C007C0E03 /* StaticScene.swift in Sources */,
+				3C14A3FC2983D20C007C0E03 /* SceneManager.swift in Sources */,
+				3C14A3EC2983D20C007C0E03 /* Keyboard.swift in Sources */,
+				3C14A3F72983D20C007C0E03 /* Transform.metal in Sources */,
+				3C14A3FD2983D20C007C0E03 /* DynamicScene.swift in Sources */,
+				3C14A41B298422C1007C0E03 /* ContentViewModel.swift in Sources */,
+				3C14A3E82983D20C007C0E03 /* Node.swift in Sources */,
+				3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */,
+				3C14A3E32983D20C007C0E03 /* Mesh.swift in Sources */,
+				3C14A41D29842CD5007C0E03 /* TabButton.swift in Sources */,
+				3C14A41F2984376E007C0E03 /* BlurView.swift in Sources */,
 				3C14A31A2983D0E8007C0E03 /* ContentView.swift in Sources */,
+				3C14A3ED2983D20C007C0E03 /* CameraManager.swift in Sources */,
+				3C14A3F42983D20C007C0E03 /* ComputePipelineState.swift in Sources */,
+				3C14A3DE2983D20C007C0E03 /* StaticRayTracingRenderer.swift in Sources */,
+				3C14A3F12983D20C007C0E03 /* RenderPipelineState.swift in Sources */,
+				3C14A3FB2983D20C007C0E03 /* Sandbox.swift in Sources */,
 				3C14A3242983D0E9007C0E03 /* Blue4.xcdatamodeld in Sources */,
+				3C14A3F52983D20C007C0E03 /* ComputePipelineDescriptor.swift in Sources */,
+				3C14A3E42983D20C007C0E03 /* Engine.swift in Sources */,
 				3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */,
+				3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */,
+				3C14A3FA2983D20C007C0E03 /* Scene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,11 +966,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue4/Blue4.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Blue4/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = FY686XT2YK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -441,6 +985,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Blue4/Engine/Shaders/Blue4-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -450,11 +996,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Blue4/Blue4.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Blue4/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = FY686XT2YK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -468,6 +1015,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Blue4/Engine/Shaders/Blue4-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
