@@ -40,6 +40,7 @@ class DynamicScene: Scene {
     var indexWrapperPipeline: MTLComputePipelineState!
     
     init() {
+        renderOptions.rayMaskOptions = .instance
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexWrapper).computePipelineState
         skyBox = Skyboxibrary.skybox(.Jungle)
         initialize()
@@ -183,9 +184,9 @@ class DynamicScene: Scene {
                 triangleAccelerationStructure.indexBufferOffset = indexBufferOffset
                 triangleAccelerationStructure.triangleCount = solid.mesh.indexBuffers[i].length / (3 * UInt32.stride)
                 
-                if solid.animated {
-                    triangleAccelerationStructure.usage = .refit
-                }
+//                if solid.animated {
+//                    triangleAccelerationStructure.usage = .refit
+//                }
                 
                 triangleAccelerationStructure.rebuild()
                 

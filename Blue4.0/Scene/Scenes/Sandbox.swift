@@ -1,7 +1,7 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class Sandbox: StaticScene {
+class Sandbox: DynamicScene {
     var camera = DebugCamera()
     var totalTime:Float = 0
     
@@ -10,7 +10,6 @@ class Sandbox: StaticScene {
     }
     
     override func buildScene() {
-        renderOptions.maxBounce = 3
         
         camera.position = SIMD3<Float>(0, 1, 3.38)
         addCamera(camera)
@@ -19,7 +18,7 @@ class Sandbox: StaticScene {
         transform.translate(direction: SIMD3<Float>(0, 1, 0))
         transform.scale(axis: SIMD3<Float>(0.5, 1.98, 0.5))
         
-        createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: uint(TRIANGLE_MASK_LIGHT))
+        createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: UInt32(TRIANGLE_MASK_LIGHT))
         
 //         Top, bottom, back
         transform = matrix_identity_float4x4
@@ -41,7 +40,7 @@ class Sandbox: StaticScene {
         monkey.setColor(SIMD4<Float>(0.2, 0.2, 0.8, 1.0))
         monkey.setRoughness(1.0)
         monkey.enableTexture(false)
-        monkey.animated = true
+//        monkey.animated = true
 
         addSolid(solid: monkey)
         

@@ -63,7 +63,7 @@ class RayTracingRenderer: Renderer {
         intersector = MPSRayIntersector(device: device)
         intersector.rayDataType = .originMaskDirectionMaxDistance
         intersector.rayStride = scene.renderOptions.rayStride
-        intersector.rayMaskOptions = .instance
+        intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
     }
 
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -181,7 +181,7 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.useHeap(scene.heap.heap)
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
         
-            var bounce = uint(i)
+            var bounce = UInt32(i)
             
             shadeEncoder.setBytes(&bounce, length: uint.size, index: buffers.count)
             shadeEncoder.setTexture(randomTexture, index: 0)
@@ -224,7 +224,7 @@ class RayTracingRenderer: Renderer {
 
         denoiseEncoder.setTexture(renderTarget, index: 0)
         denoiseEncoder.setTexture(accumulationTarget, index: 1)
-
+        
         denoiseEncoder.setComputePipelineState(accumulatePipeline)
         denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         denoiseEncoder.endEncoding()

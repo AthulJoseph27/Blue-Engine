@@ -22,6 +22,18 @@ extension Float {
     }
 }
 
+extension SIMD3<Float> {
+    func simd4(w: Float)->SIMD4<Float> {
+        return SIMD4<Float>(x, y, z, w)
+    }
+}
+
+extension SIMD4<Float> {
+    var xyz: SIMD3<Float> {
+        return SIMD3<Float>(x, y, z)
+    }
+}
+
 extension matrix_float4x4 {
     mutating func translate(direction: SIMD3<Float>) {
         var operation = matrix_identity_float4x4

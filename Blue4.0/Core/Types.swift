@@ -147,4 +147,5 @@ struct RenderOptions {
     var maxFramesInFlight = 3
     var alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
     var rayStride = 48
+    var rayMaskOptions = MPSRayMaskOptions.primitive
 }

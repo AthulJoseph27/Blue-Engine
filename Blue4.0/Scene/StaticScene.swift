@@ -9,7 +9,8 @@ class StaticScene: Scene {
     
     var cameraManager = CameraManager()
     
-    var masks: [uint]         = []
+    var masks: [UInt32]         = []
+    var rayMasks: [UInt32]    = []
     var materials: [Material] = []
     var textures: [Textures]  = []
     
@@ -23,6 +24,7 @@ class StaticScene: Scene {
     var verticesCountBuffer: MTLBuffer!
     var indiciesCountBuffer: MTLBuffer!
     var maskBuffer:          MTLBuffer!
+    var rayMaskBuffer:       MTLBuffer!
     var transformBuffer:     MTLBuffer!
     var uniformBuffer:       MTLBuffer!
     
@@ -61,10 +63,18 @@ class StaticScene: Scene {
             materials.append(solid.mesh.materials[i])
             textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
             
+            for _ in 0..<solid.mesh.indexBuffers[i].length / (3 * UInt32.stride) {
+                if solid.lightSource {
+                    rayMasks.append(UInt32(TRIANGLE_MASK_LIGHT))
+                } else {
+                    rayMasks.append(UInt32(TRIANGLE_MASK_GEOMETRY))
+                }
+            }
+            
             if solid.lightSource {
-                masks.append(uint(TRIANGLE_MASK_LIGHT))
+                masks.append(UInt32(TRIANGLE_MASK_LIGHT))
             } else {
-                masks.append(uint(TRIANGLE_MASK_GEOMETRY))
+                masks.append(UInt32(TRIANGLE_MASK_GEOMETRY))
             }
         }
     }
@@ -171,7 +181,8 @@ class StaticScene: Scene {
         let uniformBufferSize = renderOptions.alignedUniformsSize * renderOptions.maxFramesInFlight
         self.uniformBuffer = Engine.device.makeBuffer(length: uniformBufferSize, options: storageOptions)
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
-        self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: uint.stride(masks.count), options: storageOptions)
+        self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: UInt32.stride(masks.count), options: storageOptions)
+        self.rayMaskBuffer = Engine.device.makeBuffer(bytes: &rayMasks, length: UInt32.stride(rayMasks.count), options: storageOptions)
     }
     
     func createAcceleratedStructure() {
@@ -179,6 +190,7 @@ class StaticScene: Scene {
         accelerationStructure.vertexBuffer = vertexBuffer
         accelerationStructure.vertexStride = VertexIn.stride
         accelerationStructure.indexBuffer = indexBuffer
+        accelerationStructure.maskBuffer = rayMaskBuffer
         accelerationStructure.triangleCount = indexBuffer.length / (3 * UInt32.stride)
         accelerationStructure.rebuild()
     }
