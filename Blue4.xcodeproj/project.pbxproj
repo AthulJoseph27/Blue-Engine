@@ -1,0 +1,602 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3172983D0E8007C0E03 /* Blue4App.swift */; };
+		3C14A31A2983D0E8007C0E03 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3192983D0E8007C0E03 /* ContentView.swift */; };
+		3C14A31C2983D0E9007C0E03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A31B2983D0E9007C0E03 /* Assets.xcassets */; };
+		3C14A31F2983D0E9007C0E03 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */; };
+		3C14A3212983D0E9007C0E03 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3202983D0E9007C0E03 /* Persistence.swift */; };
+		3C14A3242983D0E9007C0E03 /* Blue4.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3222983D0E9007C0E03 /* Blue4.xcdatamodeld */; };
+		3C14A32F2983D0E9007C0E03 /* Blue4Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A32E2983D0E9007C0E03 /* Blue4Tests.swift */; };
+		3C14A3392983D0E9007C0E03 /* Blue4UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3382983D0E9007C0E03 /* Blue4UITests.swift */; };
+		3C14A33B2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3C14A32B2983D0E9007C0E03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C14A30C2983D0E8007C0E03 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C14A3132983D0E8007C0E03;
+			remoteInfo = Blue4;
+		};
+		3C14A3352983D0E9007C0E03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C14A30C2983D0E8007C0E03 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C14A3132983D0E8007C0E03;
+			remoteInfo = Blue4;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3C14A3142983D0E8007C0E03 /* Blue4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blue4.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C14A3172983D0E8007C0E03 /* Blue4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4App.swift; sourceTree = "<group>"; };
+		3C14A3192983D0E8007C0E03 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3C14A31B2983D0E9007C0E03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3C14A3202983D0E9007C0E03 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		3C14A3232983D0E9007C0E03 /* Blue4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Blue4.xcdatamodel; sourceTree = "<group>"; };
+		3C14A3252983D0E9007C0E03 /* Blue4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blue4.entitlements; sourceTree = "<group>"; };
+		3C14A32A2983D0E9007C0E03 /* Blue4Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blue4Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C14A32E2983D0E9007C0E03 /* Blue4Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4Tests.swift; sourceTree = "<group>"; };
+		3C14A3342983D0E9007C0E03 /* Blue4UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blue4UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C14A3382983D0E9007C0E03 /* Blue4UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4UITests.swift; sourceTree = "<group>"; };
+		3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blue4UITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3C14A3112983D0E8007C0E03 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3272983D0E9007C0E03 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3312983D0E9007C0E03 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3C14A30B2983D0E8007C0E03 = {
+			isa = PBXGroup;
+			children = (
+				3C14A3162983D0E8007C0E03 /* Blue4 */,
+				3C14A32D2983D0E9007C0E03 /* Blue4Tests */,
+				3C14A3372983D0E9007C0E03 /* Blue4UITests */,
+				3C14A3152983D0E8007C0E03 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3C14A3152983D0E8007C0E03 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3142983D0E8007C0E03 /* Blue4.app */,
+				3C14A32A2983D0E9007C0E03 /* Blue4Tests.xctest */,
+				3C14A3342983D0E9007C0E03 /* Blue4UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3C14A3162983D0E8007C0E03 /* Blue4 */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3172983D0E8007C0E03 /* Blue4App.swift */,
+				3C14A3192983D0E8007C0E03 /* ContentView.swift */,
+				3C14A31B2983D0E9007C0E03 /* Assets.xcassets */,
+				3C14A3202983D0E9007C0E03 /* Persistence.swift */,
+				3C14A3252983D0E9007C0E03 /* Blue4.entitlements */,
+				3C14A3222983D0E9007C0E03 /* Blue4.xcdatamodeld */,
+				3C14A31D2983D0E9007C0E03 /* Preview Content */,
+			);
+			path = Blue4;
+			sourceTree = "<group>";
+		};
+		3C14A31D2983D0E9007C0E03 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A31E2983D0E9007C0E03 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3C14A32D2983D0E9007C0E03 /* Blue4Tests */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A32E2983D0E9007C0E03 /* Blue4Tests.swift */,
+			);
+			path = Blue4Tests;
+			sourceTree = "<group>";
+		};
+		3C14A3372983D0E9007C0E03 /* Blue4UITests */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A3382983D0E9007C0E03 /* Blue4UITests.swift */,
+				3C14A33A2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift */,
+			);
+			path = Blue4UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3C14A3132983D0E8007C0E03 /* Blue4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C14A33E2983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4" */;
+			buildPhases = (
+				3C14A3102983D0E8007C0E03 /* Sources */,
+				3C14A3112983D0E8007C0E03 /* Frameworks */,
+				3C14A3122983D0E8007C0E03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blue4;
+			productName = Blue4;
+			productReference = 3C14A3142983D0E8007C0E03 /* Blue4.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3C14A3292983D0E9007C0E03 /* Blue4Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C14A3412983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4Tests" */;
+			buildPhases = (
+				3C14A3262983D0E9007C0E03 /* Sources */,
+				3C14A3272983D0E9007C0E03 /* Frameworks */,
+				3C14A3282983D0E9007C0E03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C14A32C2983D0E9007C0E03 /* PBXTargetDependency */,
+			);
+			name = Blue4Tests;
+			productName = Blue4Tests;
+			productReference = 3C14A32A2983D0E9007C0E03 /* Blue4Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3C14A3332983D0E9007C0E03 /* Blue4UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C14A3442983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4UITests" */;
+			buildPhases = (
+				3C14A3302983D0E9007C0E03 /* Sources */,
+				3C14A3312983D0E9007C0E03 /* Frameworks */,
+				3C14A3322983D0E9007C0E03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C14A3362983D0E9007C0E03 /* PBXTargetDependency */,
+			);
+			name = Blue4UITests;
+			productName = Blue4UITests;
+			productReference = 3C14A3342983D0E9007C0E03 /* Blue4UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3C14A30C2983D0E8007C0E03 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					3C14A3132983D0E8007C0E03 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					3C14A3292983D0E9007C0E03 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 3C14A3132983D0E8007C0E03;
+					};
+					3C14A3332983D0E9007C0E03 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 3C14A3132983D0E8007C0E03;
+					};
+				};
+			};
+			buildConfigurationList = 3C14A30F2983D0E8007C0E03 /* Build configuration list for PBXProject "Blue4" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3C14A30B2983D0E8007C0E03;
+			productRefGroup = 3C14A3152983D0E8007C0E03 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3C14A3132983D0E8007C0E03 /* Blue4 */,
+				3C14A3292983D0E9007C0E03 /* Blue4Tests */,
+				3C14A3332983D0E9007C0E03 /* Blue4UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3C14A3122983D0E8007C0E03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C14A31F2983D0E9007C0E03 /* Preview Assets.xcassets in Resources */,
+				3C14A31C2983D0E9007C0E03 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3282983D0E9007C0E03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3322983D0E9007C0E03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3C14A3102983D0E8007C0E03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C14A3212983D0E9007C0E03 /* Persistence.swift in Sources */,
+				3C14A31A2983D0E8007C0E03 /* ContentView.swift in Sources */,
+				3C14A3242983D0E9007C0E03 /* Blue4.xcdatamodeld in Sources */,
+				3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3262983D0E9007C0E03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C14A32F2983D0E9007C0E03 /* Blue4Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C14A3302983D0E9007C0E03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C14A3392983D0E9007C0E03 /* Blue4UITests.swift in Sources */,
+				3C14A33B2983D0E9007C0E03 /* Blue4UITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3C14A32C2983D0E9007C0E03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C14A3132983D0E8007C0E03 /* Blue4 */;
+			targetProxy = 3C14A32B2983D0E9007C0E03 /* PBXContainerItemProxy */;
+		};
+		3C14A3362983D0E9007C0E03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C14A3132983D0E8007C0E03 /* Blue4 */;
+			targetProxy = 3C14A3352983D0E9007C0E03 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3C14A33C2983D0E9007C0E03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3C14A33D2983D0E9007C0E03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		3C14A33F2983D0E9007C0E03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blue4/Blue4.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Blue4/Preview Content\"";
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3C14A3402983D0E9007C0E03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blue4/Blue4.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Blue4/Preview Content\"";
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3C14A3422983D0E9007C0E03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blue4.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Blue4";
+			};
+			name = Debug;
+		};
+		3C14A3432983D0E9007C0E03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blue4.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Blue4";
+			};
+			name = Release;
+		};
+		3C14A3452983D0E9007C0E03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Blue4;
+			};
+			name = Debug;
+		};
+		3C14A3462983D0E9007C0E03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY686XT2YK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AthulJoseph.Blue4UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Blue4;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3C14A30F2983D0E8007C0E03 /* Build configuration list for PBXProject "Blue4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C14A33C2983D0E9007C0E03 /* Debug */,
+				3C14A33D2983D0E9007C0E03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C14A33E2983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C14A33F2983D0E9007C0E03 /* Debug */,
+				3C14A3402983D0E9007C0E03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C14A3412983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C14A3422983D0E9007C0E03 /* Debug */,
+				3C14A3432983D0E9007C0E03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C14A3442983D0E9007C0E03 /* Build configuration list for PBXNativeTarget "Blue4UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C14A3452983D0E9007C0E03 /* Debug */,
+				3C14A3462983D0E9007C0E03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3C14A3222983D0E9007C0E03 /* Blue4.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3C14A3232983D0E9007C0E03 /* Blue4.xcdatamodel */,
+			);
+			currentVersion = 3C14A3232983D0E9007C0E03 /* Blue4.xcdatamodel */;
+			path = Blue4.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 3C14A30C2983D0E8007C0E03 /* Project object */;
+}
