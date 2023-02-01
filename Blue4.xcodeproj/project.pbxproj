@@ -61,7 +61,6 @@
 		3C14A3DB2983D20C007C0E03 /* chest_01_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */; };
 		3C14A3DC2983D20C007C0E03 /* chest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3832983D20C007C0E03 /* chest.mtl */; };
 		3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3862983D20C007C0E03 /* BasicRenderer.swift */; };
-		3C14A3DE2983D20C007C0E03 /* StaticRayTracingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */; };
 		3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */; };
 		3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3892983D20C007C0E03 /* RenderManager.swift */; };
 		3C14A3E12983D20C007C0E03 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38A2983D20C007C0E03 /* Renderer.swift */; };
@@ -101,6 +100,10 @@
 		3C14A41D29842CD5007C0E03 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41C29842CD5007C0E03 /* TabButton.swift */; };
 		3C14A41F2984376E007C0E03 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41E2984376E007C0E03 /* BlurView.swift */; };
 		3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A42029844C15007C0E03 /* Sidebar.swift */; };
+		3C34303029850A4D002F6A6E /* RenderImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34302F29850A4D002F6A6E /* RenderImageView.swift */; };
+		3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303229853A53002F6A6E /* RenderImageViewModel.swift */; };
+		3C34303529858369002F6A6E /* RendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303429858369002F6A6E /* RendererView.swift */; };
+		3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,7 +182,6 @@
 		3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Mixed_AO.png; sourceTree = "<group>"; };
 		3C14A3832983D20C007C0E03 /* chest.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chest.mtl; sourceTree = "<group>"; };
 		3C14A3862983D20C007C0E03 /* BasicRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicRenderer.swift; sourceTree = "<group>"; };
-		3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRayTracingRenderer.swift; sourceTree = "<group>"; };
 		3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayTracingRenderer.swift; sourceTree = "<group>"; };
 		3C14A3892983D20C007C0E03 /* RenderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderManager.swift; sourceTree = "<group>"; };
 		3C14A38A2983D20C007C0E03 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -220,6 +222,10 @@
 		3C14A41C29842CD5007C0E03 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		3C14A41E2984376E007C0E03 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3C14A42029844C15007C0E03 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
+		3C34302F29850A4D002F6A6E /* RenderImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageView.swift; sourceTree = "<group>"; };
+		3C34303229853A53002F6A6E /* RenderImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageViewModel.swift; sourceTree = "<group>"; };
+		3C34303429858369002F6A6E /* RendererView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererView.swift; sourceTree = "<group>"; };
+		3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPopUpWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,10 +307,10 @@
 		3C14A3472983D1B1007C0E03 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3C34303129853A36002F6A6E /* Widgets */,
 				3C14A3192983D0E8007C0E03 /* ContentView.swift */,
-				3C14A41C29842CD5007C0E03 /* TabButton.swift */,
-				3C14A41E2984376E007C0E03 /* BlurView.swift */,
-				3C14A42029844C15007C0E03 /* Sidebar.swift */,
+				3C34302F29850A4D002F6A6E /* RenderImageView.swift */,
+				3C34303429858369002F6A6E /* RendererView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -488,7 +494,6 @@
 			isa = PBXGroup;
 			children = (
 				3C14A3862983D20C007C0E03 /* BasicRenderer.swift */,
-				3C14A3872983D20C007C0E03 /* StaticRayTracingRenderer.swift */,
 				3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */,
 			);
 			path = Renderers;
@@ -588,8 +593,20 @@
 			isa = PBXGroup;
 			children = (
 				3C14A41A298422C1007C0E03 /* ContentViewModel.swift */,
+				3C34303229853A53002F6A6E /* RenderImageViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3C34303129853A36002F6A6E /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				3C14A41E2984376E007C0E03 /* BlurView.swift */,
+				3C14A41C29842CD5007C0E03 /* TabButton.swift */,
+				3C14A42029844C15007C0E03 /* Sidebar.swift */,
+				3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */,
+			);
+			path = Widgets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -774,12 +791,14 @@
 				3C14A3F22983D20C007C0E03 /* RenderPipelineDescriptor.swift in Sources */,
 				3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */,
 				3C14A3E92983D20C007C0E03 /* Solid.swift in Sources */,
+				3C34303529858369002F6A6E /* RendererView.swift in Sources */,
 				3C14A4092983D213007C0E03 /* GameViewController.swift in Sources */,
 				3C14A3E62983D20C007C0E03 /* Heap.swift in Sources */,
 				3C14A3F92983D20C007C0E03 /* PhongShader.metal in Sources */,
 				3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */,
 				3C14A3F02983D20C007C0E03 /* Skybox.swift in Sources */,
 				3C14A3EE2983D20C007C0E03 /* Camera.swift in Sources */,
+				3C34303029850A4D002F6A6E /* RenderImageView.swift in Sources */,
 				3C14A3F82983D20C007C0E03 /* RayTracingShader.metal in Sources */,
 				3C14A3EF2983D20C007C0E03 /* DebugCamera.swift in Sources */,
 				3C14A3E72983D20C007C0E03 /* Types.swift in Sources */,
@@ -803,14 +822,15 @@
 				3C14A31A2983D0E8007C0E03 /* ContentView.swift in Sources */,
 				3C14A3ED2983D20C007C0E03 /* CameraManager.swift in Sources */,
 				3C14A3F42983D20C007C0E03 /* ComputePipelineState.swift in Sources */,
-				3C14A3DE2983D20C007C0E03 /* StaticRayTracingRenderer.swift in Sources */,
 				3C14A3F12983D20C007C0E03 /* RenderPipelineState.swift in Sources */,
 				3C14A3FB2983D20C007C0E03 /* Sandbox.swift in Sources */,
 				3C14A3242983D0E9007C0E03 /* Blue4.xcdatamodeld in Sources */,
 				3C14A3F52983D20C007C0E03 /* ComputePipelineDescriptor.swift in Sources */,
 				3C14A3E42983D20C007C0E03 /* Engine.swift in Sources */,
 				3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */,
+				3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */,
 				3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */,
+				3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */,
 				3C14A3FA2983D20C007C0E03 /* Scene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -4,6 +4,11 @@ import simd
 import os
 
 class RayTracingRenderer: Renderer {
+    private static let qualityIterationCountMap: [RenderQuality: Int] = [
+        .high : 512,
+        .medium : 128,
+        .low : 8,
+    ]
     var intersector: MPSRayIntersector!
     
     var rayBuffer:          MTLBuffer!
@@ -17,7 +22,8 @@ class RayTracingRenderer: Renderer {
     var shadowPipeline: MTLComputePipelineState!
     var accumulatePipeline: MTLComputePipelineState!
     var copyPipeline: MTLRenderPipelineState!
-
+    var renderPipeline: MTLRenderPipelineState!
+    
     var renderTarget: MTLTexture!
     var accumulationTarget: MTLTexture!
     var randomTexture: MTLTexture!
@@ -27,12 +33,15 @@ class RayTracingRenderer: Renderer {
     
     var lastCheckPoint = Date()
     var timeIntervals: [CFTimeInterval] = []
+    
+    var iterationCount = 0
 
     
     override func initialize() {
         self.createScene()
         self.createPipelines()
         self.createIntersector()
+        self.createRenderToTexturePassDescriptor()
         
         semaphore = DispatchSemaphore(value: scene.renderOptions.maxFramesInFlight)
         
@@ -43,6 +52,10 @@ class RayTracingRenderer: Renderer {
         self.textureSampler = device.makeSamplerState(descriptor: sampleDescriptor)
     }
     
+    override func renderModeInitialize() {
+        iterationCount = 0
+    }
+    
     private func createPipelines() {
         self.rayPipeline = ComputePipelineStateLibrary.pipelineState(.GenerateRay).computePipelineState
         self.shadePipeline = ComputePipelineStateLibrary.pipelineState(.Shade).computePipelineState
@@ -50,6 +63,7 @@ class RayTracingRenderer: Renderer {
         self.accumulatePipeline = ComputePipelineStateLibrary.pipelineState(.Accumulate).computePipelineState
         
         self.copyPipeline = RenderPipelineStateLibrary.pipelineState(.RayTracing)
+        self.renderPipeline = RenderPipelineStateLibrary.pipelineState(.Rendering)
     }
     
     private func createScene() {
@@ -65,9 +79,19 @@ class RayTracingRenderer: Renderer {
         intersector.rayStride = scene.renderOptions.rayStride
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
     }
-
+    
+    private func createRenderToTexturePassDescriptor() {
+        renderPassDescriptor = MTLRenderPassDescriptor()
+        renderPassDescriptor.colorAttachments[0].texture = renderedTexture
+        renderPassDescriptor.colorAttachments[0].loadAction = .clear
+        renderPassDescriptor.colorAttachments[0].clearColor = Preferences.ClearColor
+        renderPassDescriptor.colorAttachments[0].storeAction = .store
+    }
+    
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         self.size = size
+        
+        print(renderMode)
         
         if size.width == 0 || size.height == 0 {
             return
@@ -89,13 +113,24 @@ class RayTracingRenderer: Renderer {
         renderTargetDescriptor.textureType = .type2D
         renderTargetDescriptor.width = Int(size.width)
         renderTargetDescriptor.height = Int(size.height)
-        renderTargetDescriptor.storageMode = .private
-        renderTargetDescriptor.usage = [.shaderRead, .shaderWrite]
+        renderTargetDescriptor.storageMode = .shared
+        renderTargetDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
         
         
         renderTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
-        
         accumulationTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
+        
+//        let offScreenRenderTargetDescriptor = MTLTextureDescriptor()
+//        offScreenRenderTargetDescriptor.pixelFormat = .rgba16Float
+//        offScreenRenderTargetDescriptor.pixelFormat = .rgba16Float
+//        offScreenRenderTargetDescriptor.textureType = .type2D
+//        offScreenRenderTargetDescriptor.width = Int(size.width)
+//        offScreenRenderTargetDescriptor.height = Int(size.height)
+//        offScreenRenderTargetDescriptor.storageMode = .shared
+//        offScreenRenderTargetDescriptor.usage = [.renderTarget, .shaderRead]
+//
+//        renderedTexture = device.makeTexture(descriptor: offScreenRenderTargetDescriptor)
+//        renderPassDescriptor.colorAttachments[0].texture = renderedTexture
         
         let randomTextureDescriptor = MTLTextureDescriptor()
         randomTextureDescriptor.pixelFormat = .r32Uint
@@ -125,16 +160,25 @@ class RayTracingRenderer: Renderer {
         semaphore.wait()
         
         // Rendering performance report
-        let now = Date()
-        let timePassed = now.timeIntervalSince(lastCheckPoint)
-        if timePassed > 1 {
-            let totalPixels = Int(size.width * size.height) * timeIntervals.count
-            let totalTime = timeIntervals.reduce(0, +)
-            DispatchQueue.main.async { [unowned self] in
-                self.display(Double(totalPixels) / totalTime)
+        if renderMode == .display {
+            let now = Date()
+            let timePassed = now.timeIntervalSince(lastCheckPoint)
+            if timePassed > 1 {
+                let totalPixels = Int(size.width * size.height) * timeIntervals.count
+                let totalTime = timeIntervals.reduce(0, +)
+                DispatchQueue.main.async { [unowned self] in
+                    self.display(Double(totalPixels) / totalTime)
+                }
+                timeIntervals.removeAll()
+                lastCheckPoint = now
             }
-            timeIntervals.removeAll()
-            lastCheckPoint = now
+        } else {
+            iterationCount += 1
+            
+            if iterationCount >= RayTracingRenderer.qualityIterationCountMap[renderQuality]! {
+                renderMode = .display
+                RendererManager.onRenderingComplete()
+            }
         }
         
         let desc = MTLCommandBufferDescriptor()
@@ -236,8 +280,7 @@ class RayTracingRenderer: Renderer {
         denoiseEncoder.setComputePipelineState(accumulatePipeline)
         denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         denoiseEncoder.endEncoding()
-
-
+        
         if let renderPassDescriptor = view.currentRenderPassDescriptor {
             guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else { return }
             renderEncoder.setRenderPipelineState(copyPipeline)
@@ -245,8 +288,13 @@ class RayTracingRenderer: Renderer {
             renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
             renderEncoder.endEncoding()
             guard let drawable = view.currentDrawable else { return }
+            if renderMode == .render {
+                self.renderedTexture = view.currentDrawable?.texture
+            }
             commandBuffer.present(drawable)
         }
+        
+        
         commandBuffer.commit()
         
         if let error = commandBuffer.error as NSError? {

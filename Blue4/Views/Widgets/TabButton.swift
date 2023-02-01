@@ -1,10 +1,3 @@
-//
-//  TabButton.swift
-//  Blue4
-//
-//  Created by Athul Joseph on 27/01/23.
-//
-
 import SwiftUI
 
 struct TabButton: View {
@@ -15,7 +8,11 @@ struct TabButton: View {
     
     var body: some View {
         
-        Button(action: {withAnimation{selectedTab = tab}}, label: {
+        Button(action: {
+            if RendererManager.currentRenderMode() != .render {
+                withAnimation{selectedTab = tab}
+            }
+        }, label: {
             
             VStack(spacing: 8) {
                 

@@ -2,47 +2,47 @@ import SwiftUI
 import CoreData
 import MetalKit
 
-
-struct MetalView: NSViewControllerRepresentable {
-    func makeNSViewController(context: Context) -> NSViewController {
-        let storyboard = NSStoryboard(name: "Main", bundle: Bundle.main)
-        let controller = storyboard.instantiateController(withIdentifier: "Content") as! NSViewController
-        return controller
-    }
-
-    func updateNSViewController(_ nsViewController: NSViewController, context: Context) {
-        // Update the view and controller here
-    }
-}
-
 var screen = NSScreen.main!.visibleFrame
+var gameViewController: NSViewController!
+var gameStoryboard: NSStoryboard!
 
 struct ContentView: View {
     @StateObject var contentData = ContentViewModel()
     
+    let metalView = RendererView.metalView
+    
     var body: some View {
-            
-            HStack {
 
                 ZStack {
                     
                     switch contentData.selectedTab {
                         
                     case .RayTracing:
-                        MetalView()
+                        metalView
                             .edgesIgnoringSafeArea(.all)
                         
                     case .VertexShader:
                         Text("Vertex Shader")
                         
                     case .RenderImage:
-                        Text("Render Image")
+                        RenderImage()
                         
                     case .RenderAnimation:
                         Color.green.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                         
                     case .Settings:
-                        Text("Settings")
+                        ZStack {
+                            Text("Settings")
+                        }
+                    }
+                    
+                    HStack() {
+                        Spacer()
+                        
+                        Sidebar(contentData: contentData)
+                            .frame(width: 100)
+                            .offset(x: contentData.showSideBar ? 0 : 120)
+                        
                     }
                     
                     HStack {
@@ -55,10 +55,16 @@ struct ContentView: View {
                                     
                                 Image(systemName: "sidebar.right")
                                 .font(.system(size: 16, weight: .semibold))
-                                .padding(.vertical, 8)
                                     
                             })
-                            .padding(.all, 8)
+                            .padding(.all, 12)
+                            .buttonStyle(PlainButtonStyle())
+                            .opacity((contentData.showDrawerButton || contentData.showSideBar) ? 1 : 0)
+                            .onHover{ hover in
+                                withAnimation {
+                                    contentData.showDrawerButton = hover
+                                }
+                            }
                             
                             Spacer()
                         }
@@ -66,15 +72,16 @@ struct ContentView: View {
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Sidebar(contentData: contentData)
-                    .frame(width: contentData.showSideBar ? 100 : 0)
-                    .opacity(contentData.showSideBar ? 1 : 0)
-                
+                .ignoresSafeArea(.all, edges: .all)
+                .onChange(of: contentData.selectedTab) { value in
+                    if contentData.selectedTab != .RayTracing && contentData.selectedTab != .VertexShader {
+                        RendererManager.pauseRenderingLoop()
+                    } else {
+                        RendererManager.resumeRenderingLoop()
+                    }
+                    
+                }
                 
             }
-            .ignoresSafeArea(.all, edges: .all)
-            
-        }
     
 }

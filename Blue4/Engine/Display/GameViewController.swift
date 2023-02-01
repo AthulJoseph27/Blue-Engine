@@ -42,16 +42,14 @@ class GameViewController: NSViewController {
         }
 
         mtkView.device = defaultDevice
-
-        counterView = NSLabel(frame: NSRect(x: 10, y: 10, width: 150, height: 50))
-        counterView.stringValue = ""
-        counterView.textColor = .white
-        mtkView.addSubview(counterView)
         
-        RendererManager.initialize(view: mtkView){ [unowned self] value in
-            self.counterView.stringValue = String(format: "MRays/s: %.3f", value / 1_000_000)
+        RendererManager.initialize(view: mtkView)
+        
+        if RendererManager.currentRenderer() == nil {
+            RendererManager.setRenderer(.RayTracing)
+        } else {
+            RendererManager.updateRenderer()
         }
-        RendererManager.setRenderer(.RayTracing)
         
     }
 }

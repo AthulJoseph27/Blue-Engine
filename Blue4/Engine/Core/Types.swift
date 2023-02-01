@@ -1,4 +1,5 @@
 import simd
+import CoreImage
 import MetalPerformanceShaders
 
 protocol sizeable {}
@@ -148,4 +149,29 @@ struct RenderOptions {
     var alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
     var rayStride = 48
     var rayMaskOptions = MPSRayMaskOptions.primitive
+}
+
+extension MTLTexture {
+    func toCGImage() -> CGImage? {
+        guard let ciImage = CIImage(mtlTexture: self, options: nil) else { return nil }
+        let flippedImage = ciImage.oriented(.left).oriented(.left).oriented(.upMirrored)
+        let context = CIContext(options: nil)
+        return context.createCGImage(flippedImage, from: CGRect(x: 0, y: 0, width: width, height: height))
+     }
+}
+
+enum RenderMode {
+    case display
+    case render
+}
+
+enum RenderQuality {
+    case low
+    case medium
+    case high
+}
+
+enum RendererType {
+    case RayTracing
+    case VertexShader
 }

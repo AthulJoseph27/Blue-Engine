@@ -3,6 +3,7 @@ import MetalKit
 enum RenderPipelineStateTypes {
     case Basic
     case RayTracing
+    case Rendering
 }
 
 class RenderPipelineStateLibrary {
@@ -15,6 +16,7 @@ class RenderPipelineStateLibrary {
     public static func createRenderPipelineState() {
         renderPipelineStates.updateValue(Basic_RenderPipelineState(), forKey: .Basic)
         renderPipelineStates.updateValue(RayTracing_RenderPipelineState(), forKey: .RayTracing)
+        renderPipelineStates.updateValue(OffScreen_RenderPipelineState(), forKey: .Rendering)
     }
     
     public static func addRenderPipelineState(_ renderPipeLineState: RenderPipelineState, renderPipelineStateType: RenderPipelineStateTypes) {
@@ -51,6 +53,19 @@ public struct RayTracing_RenderPipelineState: RenderPipelineState {
     init() {
         do{
             renderPipelineState = try Engine.device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.descriptor(.RayTracing))
+        }catch let error as NSError{
+            print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
+        }
+    }
+}
+
+public struct OffScreen_RenderPipelineState: RenderPipelineState {
+    var name: String = "OffScreen Render Pipeline State"
+    var renderPipelineState: MTLRenderPipelineState!
+    
+    init() {
+        do{
+            renderPipelineState = try Engine.device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.descriptor(.Rendering))
         }catch let error as NSError{
             print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
         }

@@ -10,5 +10,6 @@ enum ViewTab {
 
 class ContentViewModel: ObservableObject {
     @Published var selectedTab = ViewTab.RayTracing
+    @Published var showDrawerButton = false
     @Published var showSideBar = true
 }

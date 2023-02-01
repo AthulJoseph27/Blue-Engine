@@ -3,6 +3,7 @@ import MetalKit
 enum RenderPipelineDescriptorTypes {
     case Basic
     case RayTracing
+    case Rendering
 }
 
 class RenderPipelineDescriptorLibrary {
@@ -15,6 +16,7 @@ class RenderPipelineDescriptorLibrary {
     public static func createRenderPipelineDescriptor() {
         renderPipelineDescriptors.updateValue(Basic_RenderPipelineDescriptor(), forKey: .Basic)
         renderPipelineDescriptors.updateValue(RayTracing_RenderPipelineDescriptor(), forKey: .RayTracing)
+        renderPipelineDescriptors.updateValue(OffScreen_RenderPipelineDescriptor(), forKey: .Rendering)
     }
     
     public static func addRenderPipelineDescriptor(_ renderPipelineDescriptor: RenderPipelineDescriptor, renderPipelineType: RenderPipelineDescriptorTypes) {
@@ -59,5 +61,14 @@ public struct RayTracing_RenderPipelineDescriptor: RenderPipelineDescriptor {
     }
 }
 
-
-
+public struct OffScreen_RenderPipelineDescriptor: RenderPipelineDescriptor {
+    var name: String = "OffScreen Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    
+    init() {
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = Preferences.MainPixelFormat
+        renderPipelineDescriptor.vertexFunction = Engine.defaultLibrary.makeFunction(name: "copyVertex")
+        renderPipelineDescriptor.fragmentFunction = Engine.defaultLibrary.makeFunction(name: "copyFragment")
+    }
+}
