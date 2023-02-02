@@ -15,7 +15,6 @@ class NSLabel: NSTextField {
     }
 }
 
-// Our macOS specific view controller
 class GameViewController: NSViewController {
 
     var mtkView: MTKView!

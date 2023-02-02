@@ -1,0 +1,3 @@
+class PhongRenderer: Renderer {
+    
+}

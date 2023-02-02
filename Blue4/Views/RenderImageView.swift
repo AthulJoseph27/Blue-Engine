@@ -57,20 +57,20 @@ struct RenderImage: View {
                     
                     model.rendering = true
                     let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: model.resolution.x, height: model.resolution.y),
-                                          styleMask: [.titled, .closable],
+                                          styleMask: [.titled, .miniaturizable],
                                                       backing: .buffered,
                                                       defer: false)
                     window.center()
+                    window.title = "Rendering"
                     window.contentView = NSHostingView(rootView: RenderPopUpWindow())
 
                     let windowController = NSWindowController(window: window)
                     windowController.showWindow(nil)
-                    RendererManager.setRenderMode {
+                    RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
                         model.saveRenderImage()
                         model.rendering = false
                         window.close()
                     }
-//                        model.saveRenderImage()
                 }) {
                     Text("Render")
                 }

@@ -60,7 +60,7 @@
 		3C14A3DA2983D20C007C0E03 /* chest_01_Metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3812983D20C007C0E03 /* chest_01_Metallic.png */; };
 		3C14A3DB2983D20C007C0E03 /* chest_01_Mixed_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */; };
 		3C14A3DC2983D20C007C0E03 /* chest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3832983D20C007C0E03 /* chest.mtl */; };
-		3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3862983D20C007C0E03 /* BasicRenderer.swift */; };
+		3C14A3DD2983D20C007C0E03 /* PhongRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3862983D20C007C0E03 /* PhongRenderer.swift */; };
 		3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */; };
 		3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3892983D20C007C0E03 /* RenderManager.swift */; };
 		3C14A3E12983D20C007C0E03 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A38A2983D20C007C0E03 /* Renderer.swift */; };
@@ -104,6 +104,9 @@
 		3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303229853A53002F6A6E /* RenderImageViewModel.swift */; };
 		3C34303529858369002F6A6E /* RendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303429858369002F6A6E /* RendererView.swift */; };
 		3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */; };
+		3CF39CD7298BA7AE00E4F399 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */; };
+		3CF39CD9298BE87B00E4F399 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */; };
+		3CF39CDD298C503B00E4F399 /* DynamicSandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CDC298C503B00E4F399 /* DynamicSandbox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,7 +184,7 @@
 		3C14A3812983D20C007C0E03 /* chest_01_Metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Metallic.png; sourceTree = "<group>"; };
 		3C14A3822983D20C007C0E03 /* chest_01_Mixed_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chest_01_Mixed_AO.png; sourceTree = "<group>"; };
 		3C14A3832983D20C007C0E03 /* chest.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chest.mtl; sourceTree = "<group>"; };
-		3C14A3862983D20C007C0E03 /* BasicRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicRenderer.swift; sourceTree = "<group>"; };
+		3C14A3862983D20C007C0E03 /* PhongRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhongRenderer.swift; sourceTree = "<group>"; };
 		3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayTracingRenderer.swift; sourceTree = "<group>"; };
 		3C14A3892983D20C007C0E03 /* RenderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderManager.swift; sourceTree = "<group>"; };
 		3C14A38A2983D20C007C0E03 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -226,6 +229,9 @@
 		3C34303229853A53002F6A6E /* RenderImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageViewModel.swift; sourceTree = "<group>"; };
 		3C34303429858369002F6A6E /* RendererView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererView.swift; sourceTree = "<group>"; };
 		3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPopUpWindow.swift; sourceTree = "<group>"; };
+		3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		3CF39CDC298C503B00E4F399 /* DynamicSandbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicSandbox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +317,7 @@
 				3C14A3192983D0E8007C0E03 /* ContentView.swift */,
 				3C34302F29850A4D002F6A6E /* RenderImageView.swift */,
 				3C34303429858369002F6A6E /* RendererView.swift */,
+				3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -493,7 +500,7 @@
 		3C14A3852983D20C007C0E03 /* Renderers */ = {
 			isa = PBXGroup;
 			children = (
-				3C14A3862983D20C007C0E03 /* BasicRenderer.swift */,
+				3C14A3862983D20C007C0E03 /* PhongRenderer.swift */,
 				3C14A3882983D20C007C0E03 /* RayTracingRenderer.swift */,
 			);
 			path = Renderers;
@@ -575,6 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				3C14A3AB2983D20C007C0E03 /* Sandbox.swift */,
+				3CF39CDC298C503B00E4F399 /* DynamicSandbox.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -594,6 +602,7 @@
 			children = (
 				3C14A41A298422C1007C0E03 /* ContentViewModel.swift */,
 				3C34303229853A53002F6A6E /* RenderImageViewModel.swift */,
+				3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -796,6 +805,7 @@
 				3C14A3E62983D20C007C0E03 /* Heap.swift in Sources */,
 				3C14A3F92983D20C007C0E03 /* PhongShader.metal in Sources */,
 				3C14A3E02983D20C007C0E03 /* RenderManager.swift in Sources */,
+				3CF39CDD298C503B00E4F399 /* DynamicSandbox.swift in Sources */,
 				3C14A3F02983D20C007C0E03 /* Skybox.swift in Sources */,
 				3C14A3EE2983D20C007C0E03 /* Camera.swift in Sources */,
 				3C34303029850A4D002F6A6E /* RenderImageView.swift in Sources */,
@@ -813,6 +823,7 @@
 				3C14A3EC2983D20C007C0E03 /* Keyboard.swift in Sources */,
 				3C14A3F72983D20C007C0E03 /* Transform.metal in Sources */,
 				3C14A3FD2983D20C007C0E03 /* DynamicScene.swift in Sources */,
+				3CF39CD7298BA7AE00E4F399 /* SettingsView.swift in Sources */,
 				3C14A41B298422C1007C0E03 /* ContentViewModel.swift in Sources */,
 				3C14A3E82983D20C007C0E03 /* Node.swift in Sources */,
 				3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */,
@@ -829,9 +840,10 @@
 				3C14A3E42983D20C007C0E03 /* Engine.swift in Sources */,
 				3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */,
 				3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */,
-				3C14A3DD2983D20C007C0E03 /* BasicRenderer.swift in Sources */,
+				3C14A3DD2983D20C007C0E03 /* PhongRenderer.swift in Sources */,
 				3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */,
 				3C14A3FA2983D20C007C0E03 /* Scene.swift in Sources */,
+				3CF39CD9298BE87B00E4F399 /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

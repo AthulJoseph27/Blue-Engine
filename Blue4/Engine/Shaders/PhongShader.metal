@@ -131,13 +131,3 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
     
     return half4(color.r, color.g, color.b, color.a);
 }
-
-//fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], const device Material* materials [[ buffer(0) ]], const device PrimitiveData* primitiveData [[ buffer(1) ]], array<texture2d<float>, 20> textures [[ texture(0) ]]){
-//    float4 color = materials[rd.materialId].color;
-//
-//    if(!is_null_texture(primitiveData[rd.textureId].texture)){
-//        color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
-//    }
-//
-//    return half4(color.r, color.g, color.b, color.a);
-//}

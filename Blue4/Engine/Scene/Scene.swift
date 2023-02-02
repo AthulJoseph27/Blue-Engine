@@ -3,7 +3,7 @@ import MetalPerformanceShaders
 
 protocol GameScene {
     
-    var renderOptions: RenderOptions { get set }
+    var renderOptions: RayTracingRenderOptions { get set }
     
     var cameraManager: CameraManager { get set }
     

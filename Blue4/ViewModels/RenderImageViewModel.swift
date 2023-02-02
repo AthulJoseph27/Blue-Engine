@@ -8,6 +8,14 @@ class RenderImageViewModel: ObservableObject {
     @Published var saveLocation = "/Users/athuljoseph/Downloads/"
     @Published var rendering = false
     
+    func getRenderingSettings() -> RenderingSettings {
+        if renderer == .RayTracing {
+            return RayTracingSettings(maxBounce: maxBounce)
+        } else {
+            return VertexShadingSettings()
+        }
+    }
+    
     func saveRenderImage() {
         guard let texture = RendererManager.getRenderedTexture() else { return }
 

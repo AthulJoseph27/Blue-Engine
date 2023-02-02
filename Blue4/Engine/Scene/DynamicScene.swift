@@ -5,7 +5,7 @@ class DynamicScene: GameScene {
 
     var heap = Heap()
     
-    var renderOptions = RenderOptions()
+    var renderOptions = RayTracingRenderOptions()
     
     var cameraManager = CameraManager()
     
@@ -40,6 +40,7 @@ class DynamicScene: GameScene {
     var indexWrapperPipeline: MTLComputePipelineState!
     
     init() {
+        renderOptions = RayTracingRenderOptions()
         renderOptions.rayMaskOptions = .instance
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexWrapper).computePipelineState
         skyBox = Skyboxibrary.skybox(.Jungle)

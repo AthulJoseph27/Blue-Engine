@@ -141,14 +141,19 @@ class Masks {
     public static let TRIANGLE_MASK_LIGHT: uint = 2
 }
 
-struct RenderOptions {
+protocol RenderOptions { }
+
+struct RayTracingRenderOptions: RenderOptions {
     var intersectionStride = MemoryLayout<MPSIntersectionDistancePrimitiveIndexInstanceIndexCoordinates>.size
     var intersectionDataType = MPSIntersectionDataType.distancePrimitiveIndexInstanceIndexCoordinates
-    var maxBounce = 1
     var maxFramesInFlight = 3
     var alignedUniformsSize = (MemoryLayout<Uniforms>.stride + 255) & ~255
     var rayStride = 48
     var rayMaskOptions = MPSRayMaskOptions.primitive
+}
+
+struct VertexShaderRenderOptions: RenderOptions {
+    
 }
 
 extension MTLTexture {
@@ -158,6 +163,18 @@ extension MTLTexture {
         let context = CIContext(options: nil)
         return context.createCGImage(flippedImage, from: CGRect(x: 0, y: 0, width: width, height: height))
      }
+}
+
+protocol RenderingSettings {
+    
+}
+
+struct RayTracingSettings: RenderingSettings {
+    var maxBounce: Int
+}
+
+struct VertexShadingSettings: RenderingSettings {
+    
 }
 
 enum RenderMode {
@@ -174,4 +191,9 @@ enum RenderQuality {
 enum RendererType {
     case RayTracing
     case VertexShader
+}
+
+enum SceneType: String {
+    case DynamicSanbox = "Dynamic Sandbox"
+    case StaticSandbox = "Sandbox"
 }

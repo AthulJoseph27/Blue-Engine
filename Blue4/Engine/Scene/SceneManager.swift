@@ -1,11 +1,5 @@
 import MetalKit
 
-enum SceneTypes {
-    case BasicScene
-    case Sandbox
-    case RefractionScene
-}
-
 class SceneManager {
     public static var initialized: Bool = false
     private static var _currentScene: GameScene!
@@ -16,18 +10,16 @@ class SceneManager {
         }
     }
     
-    public static func initialize(sceneType: SceneTypes, drawableSize: CGSize) {
+    public static func initialize(sceneType: SceneType, drawableSize: CGSize) {
         setScene(sceneType, drawableSize)
     }
     
-    public static func setScene(_ sceneType: SceneTypes, _ drawableSize: CGSize){
+    public static func setScene(_ sceneType: SceneType, _ drawableSize: CGSize){
         switch sceneType {
-        case .BasicScene:
+        case .StaticSandbox:
             _currentScene = Sandbox(drawableSize: drawableSize)
-        case .Sandbox:
-            _currentScene = Sandbox(drawableSize: drawableSize)
-        case .RefractionScene:
-            _currentScene = Sandbox(drawableSize: drawableSize)
+        case .DynamicSanbox:
+            _currentScene = DynamicSandbox(drawableSize: drawableSize)
         }
     }
         

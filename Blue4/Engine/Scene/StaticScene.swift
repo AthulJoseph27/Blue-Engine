@@ -5,7 +5,7 @@ class StaticScene: GameScene {
 
     var heap = Heap()
     
-    var renderOptions = RenderOptions()
+    var renderOptions = RayTracingRenderOptions()
     
     var cameraManager = CameraManager()
     

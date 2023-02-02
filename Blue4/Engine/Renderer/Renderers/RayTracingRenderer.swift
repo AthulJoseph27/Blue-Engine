@@ -17,16 +17,16 @@ class RayTracingRenderer: Renderer {
     
     var textureSampler : MTLSamplerState!
     
-    var rayPipeline: MTLComputePipelineState!
-    var shadePipeline: MTLComputePipelineState!
-    var shadowPipeline: MTLComputePipelineState!
+    var rayPipeline:        MTLComputePipelineState!
+    var shadePipeline:      MTLComputePipelineState!
+    var shadowPipeline:     MTLComputePipelineState!
     var accumulatePipeline: MTLComputePipelineState!
-    var copyPipeline: MTLRenderPipelineState!
-    var renderPipeline: MTLRenderPipelineState!
+    var copyPipeline:       MTLRenderPipelineState!
+    var renderPipeline:     MTLRenderPipelineState!
     
-    var renderTarget: MTLTexture!
+    var renderTarget:       MTLTexture!
     var accumulationTarget: MTLTexture!
-    var randomTexture: MTLTexture!
+    var randomTexture:      MTLTexture!
     
     var semaphore: DispatchSemaphore!
     var size: CGSize!
@@ -41,7 +41,6 @@ class RayTracingRenderer: Renderer {
         self.createScene()
         self.createPipelines()
         self.createIntersector()
-        self.createRenderToTexturePassDescriptor()
         
         semaphore = DispatchSemaphore(value: scene.renderOptions.maxFramesInFlight)
         
@@ -67,7 +66,7 @@ class RayTracingRenderer: Renderer {
     }
     
     private func createScene() {
-        SceneManager.setScene(.Sandbox, view.drawableSize)
+        SceneManager.setScene(.StaticSandbox, view.drawableSize)
         scene = SceneManager.currentScene
         scene.skyBox = Skyboxibrary.skybox(.Sky)
         scene.postBuildScene()
@@ -80,18 +79,8 @@ class RayTracingRenderer: Renderer {
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
     }
     
-    private func createRenderToTexturePassDescriptor() {
-        renderPassDescriptor = MTLRenderPassDescriptor()
-        renderPassDescriptor.colorAttachments[0].texture = renderedTexture
-        renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].clearColor = Preferences.ClearColor
-        renderPassDescriptor.colorAttachments[0].storeAction = .store
-    }
-    
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         self.size = size
-        
-        print(renderMode)
         
         if size.width == 0 || size.height == 0 {
             return
@@ -111,7 +100,7 @@ class RayTracingRenderer: Renderer {
         let renderTargetDescriptor = MTLTextureDescriptor()
         renderTargetDescriptor.pixelFormat = .rgba32Float
         renderTargetDescriptor.textureType = .type2D
-        renderTargetDescriptor.width = Int(size.width)
+        renderTargetDescriptor.width =  Int(size.width)
         renderTargetDescriptor.height = Int(size.height)
         renderTargetDescriptor.storageMode = .shared
         renderTargetDescriptor.usage = [.shaderRead, .shaderWrite, .renderTarget]
@@ -120,22 +109,10 @@ class RayTracingRenderer: Renderer {
         renderTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
         accumulationTarget = device.makeTexture(descriptor: renderTargetDescriptor)!
         
-//        let offScreenRenderTargetDescriptor = MTLTextureDescriptor()
-//        offScreenRenderTargetDescriptor.pixelFormat = .rgba16Float
-//        offScreenRenderTargetDescriptor.pixelFormat = .rgba16Float
-//        offScreenRenderTargetDescriptor.textureType = .type2D
-//        offScreenRenderTargetDescriptor.width = Int(size.width)
-//        offScreenRenderTargetDescriptor.height = Int(size.height)
-//        offScreenRenderTargetDescriptor.storageMode = .shared
-//        offScreenRenderTargetDescriptor.usage = [.renderTarget, .shaderRead]
-//
-//        renderedTexture = device.makeTexture(descriptor: offScreenRenderTargetDescriptor)
-//        renderPassDescriptor.colorAttachments[0].texture = renderedTexture
-        
         let randomTextureDescriptor = MTLTextureDescriptor()
         randomTextureDescriptor.pixelFormat = .r32Uint
         randomTextureDescriptor.textureType = .type2D
-        randomTextureDescriptor.width = Int(size.width)
+        randomTextureDescriptor.width =  Int(size.width)
         randomTextureDescriptor.height = Int(size.height)
         randomTextureDescriptor.usage = .shaderRead
         
@@ -215,7 +192,9 @@ class RayTracingRenderer: Renderer {
         computeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
 
         computeEncoder.endEncoding()
-        for i in 0..<scene.renderOptions.maxBounce {
+        
+        let maxBounce = (renderingSettings as? RayTracingSettings)?.maxBounce ?? 1
+        for i in 0..<maxBounce {
             intersector.intersectionDataType = scene.renderOptions.intersectionDataType
             intersector.encodeIntersection(commandBuffer: commandBuffer,
                                            intersectionType: .nearest,
