@@ -6,14 +6,14 @@ class Renderer: NSObject, MTKViewDelegate {
     public var renderedTexture: MTLTexture?
     public var renderMode: RenderMode
     public var renderQuality: RenderQuality
-    internal var renderingSettings: RenderingSettings?
-    internal let view: MTKView
-    internal let device: MTLDevice
-    internal let queue: MTLCommandQueue
-    internal let library: MTLLibrary
-    internal var scene: GameScene!
-    internal var renderPassDescriptor: MTLRenderPassDescriptor!
+//    private var renderingSettings: RenderingSettings?
+    private let view: MTKView
+    private let queue: MTLCommandQueue
+    private let library: MTLLibrary
+    private var renderPassDescriptor: MTLRenderPassDescriptor!
+    
     internal let display: (Double) -> Void
+    internal let device: MTLDevice
     
     init(withMetalKitView view: MTKView, displayCounter: @escaping (Double) -> Void) throws {
         display = displayCounter
@@ -39,33 +39,29 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func renderModeInitialize() {}
     
-    func updateScene(sceneType: SceneType) {
-        SceneManager.setScene(sceneType, view.drawableSize)
-        scene = SceneManager.currentScene
-        scene.skyBox = Skyboxibrary.skybox(.Sky)
-        scene.postBuildScene()
+    func updateViewPort() {}
+    
+    func updateScene(sceneType: GameScenes) {
+        updateViewPort()
     }
     
     func switchToRenderMode(settings: RenderingSettings) {
         view.isPaused = true
-        renderingSettings = settings
+        updateRenderSettings(settings: settings)
         renderMode = .render
-        scene.cameraManager.lockCamera()
+        CameraManager.lockCamera()
         renderModeInitialize()
         view.isPaused = false
     }
     
     func switchToDisplayMode(settings: RenderingSettings) {
-        view.isPaused = true
-        renderingSettings = settings
+//        view.isPaused = true
+        updateRenderSettings(settings: settings)
         renderMode = .display
-        scene.cameraManager.unlockCamera()
-        view.isPaused = false
+        CameraManager.unlockCamera()
     }
     
-    func updateRenderSettings(settings: RenderingSettings) {
-        renderingSettings = settings
-    }
+    func updateRenderSettings(settings: RenderingSettings) {}
     
     func updateScreenSize(view: MTKView) {
         Renderer.screenSize = SIMD2<Float>(Float(view.bounds.width),Float(view.bounds.height))

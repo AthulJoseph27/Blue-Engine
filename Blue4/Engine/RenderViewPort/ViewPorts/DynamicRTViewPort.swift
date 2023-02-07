@@ -1,13 +1,11 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class DynamicScene: GameScene {
+class DynamicRTViewPort: RTViewPort {
 
     var heap = Heap()
     
-    var renderOptions = RayTracingRenderOptions()
-    
-    var cameraManager = CameraManager()
+    var renderOptions: RTRenderOptions
     
     var masks: [uint]         = []
     var materials: [Material] = []
@@ -39,19 +37,28 @@ class DynamicScene: GameScene {
     
     var indexWrapperPipeline: MTLComputePipelineState!
     
-    init() {
-        renderOptions = RayTracingRenderOptions()
+    init(scene: GameScene) {
+
+        renderOptions = RTRenderOptions()
         renderOptions.rayMaskOptions = .instance
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexWrapper).computePipelineState
-        skyBox = Skyboxibrary.skybox(.Jungle)
-        initialize()
-        buildScene()
+        skyBox = Skyboxibrary.skybox(.Sky)
+        
+        buildScene(scene: scene)
+        postBuildScene()
     }
     
-    func initialize() {
+    private func buildScene(scene: GameScene) {
+        for solid in scene.solids {
+            addSolid(solid: solid)
+        }
     }
     
-    func buildScene() {}
+    private func postBuildScene() {
+        createBuffers()
+        createAccelerationStructures()
+        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
+    }
     
     func getAccelerationStructure()->MPSAccelerationStructure {
         return instanceAccelerationStructures[Int(frameIndex) % renderOptions.maxFramesInFlight]
@@ -70,26 +77,6 @@ class DynamicScene: GameScene {
                 masks.append(uint(TRIANGLE_MASK_GEOMETRY))
             }
         }
-    }
-    
-    func check() {
-        let vertexPointer = customIndexBuffer.contents().assumingMemoryBound(to: VertexIndex.self)
-        let vertexCount = customIndexBuffer.length / MemoryLayout<VertexIndex>.stride
-
-//            Iterate through the vertex and index data
-           for i in 0..<vertexCount {
-               let vertex = vertexPointer[i]
-               print("Vertex \(i+1) :")
-               print("\t submeshId: (\(vertex.submeshId))")
-               print("\t index: (\(vertex.index))")
-           }
-    }
-    
-    func postBuildScene() {
-        createBuffers()
-//        check()
-        createAccelerationStructures()
-        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
     }
     
     func createBuffers() {
@@ -134,11 +121,6 @@ class DynamicScene: GameScene {
         }
         
         verticesCount.append(cummulativeVertexCount)
-        
-//        print(verticesCount)
-//        print(indiciesCount)
-        
-//        assert(verticesCount.count == indiciesCount.count)
         
         self.vertexBuffer = mergeBuffers(buffers: vertexBuffers, blitEncoder: blitEncoder)
         self.indexBuffer = mergeBuffers(buffers: indexBuffers, blitEncoder: blitEncoder)
@@ -198,10 +180,6 @@ class DynamicScene: GameScene {
             }
             vertexBufferOffset += solid.mesh.vertexBuffer.length
         }
-        
-//        print("Instance count \(instanceCount)")
-//        print("No of vertices \(vertexBuffer.length / VertexIn.stride)")
-//        print("No of indicies \(indexBuffer.length / UInt32.stride)")
         
         instanceAccelerationStructures = []
         

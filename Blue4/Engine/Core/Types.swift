@@ -141,9 +141,7 @@ class Masks {
     public static let TRIANGLE_MASK_LIGHT: uint = 2
 }
 
-protocol RenderOptions { }
-
-struct RayTracingRenderOptions: RenderOptions {
+struct RTRenderOptions {
     var intersectionStride = MemoryLayout<MPSIntersectionDistancePrimitiveIndexInstanceIndexCoordinates>.size
     var intersectionDataType = MPSIntersectionDataType.distancePrimitiveIndexInstanceIndexCoordinates
     var maxFramesInFlight = 3
@@ -152,7 +150,7 @@ struct RayTracingRenderOptions: RenderOptions {
     var rayMaskOptions = MPSRayMaskOptions.primitive
 }
 
-struct VertexShaderRenderOptions: RenderOptions {
+struct PSRenderOptions {
     
 }
 
@@ -193,7 +191,13 @@ enum RendererType {
     case VertexShader
 }
 
-enum SceneType: String {
-    case DynamicSanbox = "Dynamic Sandbox"
-    case StaticSandbox = "Sandbox"
+enum GameScenes: String {
+    case Sandbox = "Sandbox"
+    case TestScene = "Test Scene"
+}
+
+enum RenderViewPortType : CaseIterable {
+    case StaticRT
+    case DynamicRT
+    case VertexShader
 }

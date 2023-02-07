@@ -7,38 +7,148 @@ class RendererManager {
     private static var display = { (value: Double) -> Void in
         counterView.stringValue = String(format: "MRays/s: %.3f", value / 1_000_000)
     }
-    private static var mtkView: MTKView!
-    private static var sceneType: SceneType?
-    private static var renderer: Renderer?
+    private static var storyboards: [RenderViewPortType : NSStoryboard] = [:]
+    private static var gameViewControllers: [RenderViewPortType : GameViewController] = [:]
+    private static var mtkViews: [RenderViewPortType : MTKView] = [:]
+    private static var renderers: [RenderViewPortType: Renderer] = [:]
+    
+    private static var sceneType: GameScenes = .Sandbox
+    private static var viewPortType: RenderViewPortType = .StaticRT
     private static var renderMode: RenderMode = .display
-    private static var viewPortSettings: [RendererType : RenderingSettings] = [
-        .RayTracing : RayTracingSettings(maxBounce: 1),
+    private static var viewPortSettings: [RenderViewPortType : RenderingSettings] = [
+        .StaticRT : RayTracingSettings(maxBounce: 4),
+        .DynamicRT : RayTracingSettings(maxBounce: 4),
         .VertexShader : VertexShadingSettings()
     ]
-//    private static var renderers: [RendererType : Renderer] = [:]
     private static var postRenderingCallback: (() -> Void)?
     
-    public static func initialize(view: MTKView) {
-        self.mtkView = view
-        if sceneType == nil {
-            sceneType = .StaticSandbox
-        }
-        SceneManager.initialize(sceneType: sceneType!, drawableSize: view.drawableSize)
+    public static func initialize() {
+        sceneType = .Sandbox
+        SceneManager.initialize(scene: sceneType)
+        
+        viewPortType = .StaticRT
+        RenderViewPortManager.setViewPort(viewPortType)
+        
+        setupDefaultCamera()
+        
         counterView.stringValue = ""
         counterView.textColor = .white
-        mtkView.addSubview(counterView)
+        
+        for viewPortType in RenderViewPortType.allCases {
+            initializeViewPort(viewPortType)
+        }
+        
+        mtkViews[.StaticRT]!.isPaused = false
     }
     
-    public static func setRenderer(_ rendererType: RendererType) {
-        switch rendererType {
+    public static func getStoryboard(_ viewPortType: RenderViewPortType) -> NSStoryboard {
+        return storyboards[viewPortType]!
+    }
+    
+    public static func getGameViewController(_ viewPortType: RenderViewPortType) -> GameViewController {
+        return gameViewControllers[viewPortType]!
+    }
+    
+    public static func currentRenderer() -> Renderer? {
+        return renderers[viewPortType]
+    }
+    
+    public static func pauseAllRenderingLoop() {
+        for vp in RenderViewPortType.allCases {
+            mtkViews[vp]!.isPaused = true
+        }
+    }
+    
+    public static func resumeRenderingLoop(viewPortType: RenderViewPortType) {
+        mtkViews[viewPortType]!.isPaused = false
+    }
+    
+    public static func resumeRenderingLoop() {
+        mtkViews[viewPortType]!.isPaused = false
+    }
+    
+    public static func getRenderedTexture()->MTLTexture? {
+        return renderers[viewPortType]!.renderedTexture
+    }
+    
+    public static func currentRenderMode() -> RenderMode {
+        return renderMode
+    }
+    
+    public static func setRenderMode(settings: RenderingSettings, postRenderingCallback: @escaping () -> Void) {
+        renderMode = .render
+        renderers[viewPortType]!.switchToRenderMode(settings: settings)
+        self.postRenderingCallback = postRenderingCallback
+    }
+    
+    public static func onRenderingComplete() {
+        postRenderingCallback!()
+        setDisplayMode(settings: viewPortSettings[viewPortType]!)
+    }
+    
+    public static func setDisplayMode(settings: RenderingSettings) {
+        renderMode = .display
+        renderers[viewPortType]!.switchToDisplayMode(settings: viewPortSettings[viewPortType]!)
+//        mtkViews[viewPortType]!.isPaused = false
+//        self.postRenderingCallback = nil
+    }
+    
+    public static func updateViewPortSettings(viewPortType: RenderViewPortType, settings: RenderingSettings) {
+        viewPortSettings[viewPortType] = settings
+        renderers[viewPortType]!.updateRenderSettings(settings: settings)
+    }
+    
+    public static func updateCurrentScene(scene: GameScenes) {
+        sceneType = scene
+        SceneManager.setScene(scene)
+        RenderViewPortManager.setViewPort(viewPortType)
+        renderers[viewPortType]!.updateScene(sceneType: sceneType)
+    }
+    
+    public static func updateViewPort(viewPortType: RenderViewPortType) {
+        if self.viewPortType == viewPortType {
+            return
+        }
+        
+        self.viewPortType = viewPortType
+        
+        pauseAllRenderingLoop()
+        RenderViewPortManager.setViewPort(viewPortType)
+        resumeRenderingLoop(viewPortType: viewPortType)
+    }
+    
+    private static func setupDefaultCamera() {
+        let camera = DebugCamera()
+        camera.position = SIMD3<Float>(0, 1, 3.38)
+        CameraManager.registerCamera(camera: camera)
+        CameraManager.setCamera(.Debug)
+    }
+    
+    private static func initializeViewPort(_ viewPortType: RenderViewPortType) {
+        let storyboard = NSStoryboard(name: "Main", bundle: Bundle.main)
+        let gameViewController = storyboard.instantiateController(withIdentifier: "Content") as! GameViewController
+        
+        mtkViews[viewPortType] = (gameViewController.view as! MTKView)
+        mtkViews[viewPortType]!.isPaused = true
+        storyboards[viewPortType] = storyboard
+        gameViewControllers[viewPortType] = gameViewController
+        setRenderer(mtkView: mtkViews[viewPortType]!, viewPortType: viewPortType)
+        renderers[viewPortType]!.updateRenderSettings(settings: viewPortSettings[viewPortType]!)
+//            mtkViews[viewPortType]!.addSubview(counterView)
+    }
+    
+    private static func setRenderer(mtkView: MTKView, viewPortType: RenderViewPortType) {
+        var renderer: Renderer!
+        
+        switch viewPortType {
         case .VertexShader:
-            do{
+            do {
                 renderer = try PhongRenderer(withMetalKitView: mtkView, displayCounter: display)
-            }catch let error as NSError {
+            } catch let error as NSError {
                 print("ERROR::CREATE::VERTEX_RENERER__::\(error)")
             }
-        case .RayTracing:
-            do{
+        default:
+            do {
                 renderer = try RayTracingRenderer(withMetalKitView: mtkView, displayCounter: display)
             } catch let error as NSError {
                 print("ERROR::CREATE::RAY_TRACING_RENERER__::\(error)")
@@ -49,71 +159,9 @@ class RendererManager {
             return
         }
         
-        renderer?.updateScene(sceneType: sceneType ?? .StaticSandbox)
+        renderers[viewPortType] = renderer!
+        renderer!.updateScene(sceneType: sceneType)
         mtkView.delegate = renderer!
         renderer!.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
-    }
-    
-    public static func updateRenderer() {
-        renderer?.updateScene(sceneType: sceneType ?? .StaticSandbox)
-        mtkView.delegate = renderer!
-        renderer!.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
-    }
-    
-    public static func currentRenderer()->Renderer? {
-        return renderer
-    }
-    
-    public static func pauseRenderingLoop() {
-        mtkView.isPaused = true
-    }
-    
-    public static func resumeRenderingLoop() {
-        mtkView.isPaused = false
-    }
-    
-    public static func getRenderedTexture()->MTLTexture? {
-        return renderer?.renderedTexture
-    }
-    
-    public static func currentRenderMode() -> RenderMode {
-        return renderMode
-    }
-    
-    public static func setRenderMode(settings: RenderingSettings, postRenderingCallback: @escaping () -> Void) {
-        renderMode = .render
-        renderer?.switchToRenderMode(settings: settings)
-        self.postRenderingCallback = postRenderingCallback
-    }
-    
-    public static func onRenderingComplete() {
-        postRenderingCallback!()
-        setDisplayMode(settings: viewPortSettings[getCurrentRendererType()]!)
-    }
-    
-    public static func setDisplayMode(settings: RenderingSettings) {
-        renderMode = .display
-        renderer?.switchToDisplayMode(settings: settings)
-    }
-    
-    public static func updateViewPortSettings(rendererType: RendererType, settings: RenderingSettings) {
-        viewPortSettings[rendererType] = settings
-        if getCurrentRendererType() == rendererType {
-            renderer?.renderingSettings = settings
-        }
-    }
-    
-    public static func updateCurrentScene(scene: SceneType) {
-        print("hello from update current scene \(scene)")
-        sceneType = scene
-        renderer?.updateScene(sceneType: sceneType ?? .StaticSandbox)
-    }
-    
-    private static func getCurrentRendererType() -> RendererType {
-        if renderer is RayTracingRenderer {
-            return .RayTracing
-        } else {
-            return .VertexShader
-        }
     }
 }

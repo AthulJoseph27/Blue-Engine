@@ -1,13 +1,11 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class StaticScene: GameScene {
-
+class StaticRTViewPort: RTViewPort {
+    
     var heap = Heap()
     
-    var renderOptions = RayTracingRenderOptions()
-    
-    var cameraManager = CameraManager()
+    var renderOptions: RTRenderOptions = RTRenderOptions()
     
     var masks: [UInt32]         = []
     var rayMasks: [UInt32]    = []
@@ -38,19 +36,25 @@ class StaticScene: GameScene {
     var uniformBufferOffset: Int!
     var uniformBufferIndex: Int = 0
     
-    init() {
-        skyBox = Skyboxibrary.skybox(.Jungle)
+    init(scene: GameScene) {
+        skyBox = Skyboxibrary.skybox(.Sky)
         transformPipeline = ComputePipelineStateLibrary.pipelineState(.Transform).computePipelineState
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexGenerator).computePipelineState
-        initialize()
-        buildScene()
+        buildScene(scene: scene)
+        postBuildScene()
     }
     
-    func initialize() {}
+    private func buildScene(scene: GameScene) {
+        for solid in scene.solids {
+            addSolid(solid: solid)
+        }
+    }
     
-    func buildScene() {}
-    
-    func updateObjects(deltaTime: Float) {}
+    private func postBuildScene() {
+        createBuffers()
+        createAcceleratedStructure()
+        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
+    }
     
     func getAccelerationStructure()->MPSAccelerationStructure {
         return accelerationStructure
@@ -77,26 +81,6 @@ class StaticScene: GameScene {
                 masks.append(UInt32(TRIANGLE_MASK_GEOMETRY))
             }
         }
-    }
-    
-    func check() {
-        let vertexBufferPointer = vertexBuffer.contents()
-        let vertexBufferData = vertexBufferPointer.bindMemory(to: VertexIn.self, capacity: vertexBuffer.length)
-        for i in 0..<vertexBuffer.length/MemoryLayout<VertexIn>.stride {
-            print("Vertex attribute position: \(vertexBufferData[i].position)")
-        }
-
-        let indexBufferPointer = indexBuffer.contents()
-        let indexBufferData = indexBufferPointer.bindMemory(to: UInt32.self, capacity: indexBuffer.length)
-        for i in 0..<indexBuffer.length/MemoryLayout<UInt32>.stride {
-                print("Index \(i): \(indexBufferData[i])")
-            }
-    }
-    
-    func postBuildScene() {
-        createBuffers()
-        createAcceleratedStructure()
-        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
     }
     
     func transformSolid(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer, transform: matrix_float4x4)->MTLBuffer {
@@ -194,4 +178,8 @@ class StaticScene: GameScene {
         accelerationStructure.triangleCount = indexBuffer.length / (3 * UInt32.stride)
         accelerationStructure.rebuild()
     }
+    
+    func updateObjects(deltaTime: Float) {}
+    
+    func updateScene(deltaTime: Float) {}
 }

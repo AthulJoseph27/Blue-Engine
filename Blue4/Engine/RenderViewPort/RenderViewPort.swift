@@ -1,45 +1,16 @@
 import MetalKit
 import MetalPerformanceShaders
 
-protocol GameScene {
-    
-    var renderOptions: RayTracingRenderOptions { get set }
-    
-    var cameraManager: CameraManager { get set }
+protocol RenderViewPort {
     
     var heap: Heap   { get set }
     
-    var masks:        [uint]     { get set }
-    var materials:    [Material] { get set }
-    var textures:     [Textures] { get set }
-    
     var objects: [Solid]         { get set }
     
-    var vertexBuffer:        MTLBuffer! { get set }
-    var indexBuffer:         MTLBuffer! { get set }
-    var customIndexBuffer:   MTLBuffer! { get set }
-    var textureBuffer:       MTLBuffer! { get set }
     var materialBuffer:      MTLBuffer! { get set }
-    var verticesCountBuffer: MTLBuffer! { get set }
-    var indiciesCountBuffer: MTLBuffer! { get set }
-    var maskBuffer:          MTLBuffer! { get set }
-    
-    var uniformBuffer:       MTLBuffer! { get set }
-    var transformBuffer:     MTLBuffer! { get set }
+    var textureBuffer:       MTLBuffer! { get set }
     
     var skyBox: MTLTexture!    { get set }
-    
-    var frameIndex: uint            { get set }
-    var uniformBufferOffset: Int!   { get set }
-    var uniformBufferIndex: Int     { get set }
-    
-    var indexWrapperPipeline:       MTLComputePipelineState! { get set }
-    
-    func initialize()
-    
-    func buildScene()
-    
-    func postBuildScene()
     
     func updateObjects(deltaTime: Float)
     
@@ -47,49 +18,43 @@ protocol GameScene {
     
     func addSolid(solid: Solid)
     
-    func getAccelerationStructure()->MPSAccelerationStructure
+    func updateScene(deltaTime: Float)
 }
 
-extension GameScene {
-    
-    func addCamera(_ camera: SceneCamera, _ setAsCurrentCamera: Bool = true) {
-        cameraManager.registerCamera(camera: camera)
-        if(setAsCurrentCamera) {
-            cameraManager.setCamera(camera.cameraType)
-        }
-    }
-
+extension RenderViewPort {
     func updateCameras(deltaTime: Float) {
-        cameraManager.update(deltaTime: deltaTime)
+        CameraManager.update(deltaTime: deltaTime)
     }
+}
+
+protocol RTViewPort: RenderViewPort {
+    var renderOptions: RTRenderOptions { get set }
     
-    func mergeBuffers(buffers: [MTLBuffer], blitEncoder: MTLBlitCommandEncoder?)->MTLBuffer? {
-        
-        var length = 0
-        
-        for buffer in buffers {
-            length += buffer.length
-        }
-        
-        let mergedBuffer = Engine.device.makeBuffer(length: length, options: .storageModeShared)
-        
-        if mergedBuffer == nil {
-            print("Failed to create new buffer ⚠️⚠️⚠️")
-            return nil
-        }
-        
-        var destinationOffset = 0
-        
-        for buffer in buffers {
-            blitEncoder?.copy(from: buffer, sourceOffset: 0, to: mergedBuffer!, destinationOffset: destinationOffset, size: buffer.length)
-            destinationOffset += buffer.length
-        }
-        
-        return mergedBuffer
-    }
+    var masks:        [uint]     { get set }
+    var materials:    [Material] { get set }
+    var textures:     [Textures] { get set }
     
-    func updateScene(deltaTime: Float) {
-    }
+    var vertexBuffer:        MTLBuffer! { get set }
+    var indexBuffer:         MTLBuffer! { get set }
+    var customIndexBuffer:   MTLBuffer! { get set }
+    var verticesCountBuffer: MTLBuffer! { get set }
+    var indiciesCountBuffer: MTLBuffer! { get set }
+    var maskBuffer:          MTLBuffer! { get set }
+    
+    var uniformBuffer:       MTLBuffer! { get set }
+    var transformBuffer:     MTLBuffer! { get set }
+    
+    var uniformBufferOffset: Int!   { get set }
+    var uniformBufferIndex: Int     { get set }
+    
+    var indexWrapperPipeline:       MTLComputePipelineState! { get set }
+    
+    func getAccelerationStructure()->MPSAccelerationStructure
+    
+    var frameIndex: uint    { get set }
+}
+
+extension RTViewPort {
     
     mutating func updateUniforms(size: CGSize) {
         uniformBufferOffset = renderOptions.alignedUniformsSize * uniformBufferIndex
@@ -97,14 +62,14 @@ extension GameScene {
         let uniformsPointer = uniformBuffer.contents().advanced(by: uniformBufferOffset)
         let uniforms = uniformsPointer.bindMemory(to: Uniforms.self, capacity: 1)
         
-        let currentCam = cameraManager.currentCamera!
+        let currentCam = CameraManager.currentCamera!
         uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition
         
         if  abs(currentCam.deltaPosition.x) > 0 ||
             abs(currentCam.deltaPosition.y) > 0 ||
             abs(currentCam.deltaPosition.z) > 0 {
-            cameraManager.currentCamera!.position += currentCam.deltaPosition
-            cameraManager.currentCamera!.deltaPosition = SIMD3<Float>(repeating: 0)
+            CameraManager.currentCamera!.position += currentCam.deltaPosition
+            CameraManager.currentCamera!.deltaPosition = SIMD3<Float>(repeating: 0)
             frameIndex = 0
         }
         
@@ -116,8 +81,8 @@ extension GameScene {
         if  abs(currentCam.deltaRotation.x) > 0 ||
             abs(currentCam.deltaRotation.y) > 0 ||
             abs(currentCam.deltaRotation.z) > 0 {
-            cameraManager.currentCamera!.rotation += currentCam.deltaRotation
-            cameraManager.currentCamera!.deltaRotation = SIMD3<Float>(repeating: 0)
+            CameraManager.currentCamera!.rotation += currentCam.deltaRotation
+            CameraManager.currentCamera!.deltaRotation = SIMD3<Float>(repeating: 0)
             frameIndex = 0
         }
         
@@ -152,6 +117,10 @@ extension GameScene {
         frameIndex += 1
 
         uniformBufferIndex = (uniformBufferIndex + 1) % renderOptions.maxFramesInFlight
+    }
+    
+    mutating func setTexture(index: Int, texture: Textures) {
+        textures[index] = texture
     }
     
     func wrapIndexBuffer(indexBuffer: inout MTLBuffer, keepOriginalIndex: Bool = false, indexOffset: UInt32, submeshId: UInt32)->MTLBuffer {
@@ -197,14 +166,28 @@ extension GameScene {
         return newIndexBuffer!
     }
     
-    mutating func setTexture(index: Int, texture: Textures) {
-        textures[index] = texture
-    }
-    
-    func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {
-        let e1: SIMD3<Float> = normalize(v1 - v0);
-        let e2: SIMD3<Float> = normalize(v2 - v0);
+    func mergeBuffers(buffers: [MTLBuffer], blitEncoder: MTLBlitCommandEncoder?)->MTLBuffer? {
         
-        return cross(e1, e2);
+        var length = 0
+        
+        for buffer in buffers {
+            length += buffer.length
+        }
+        
+        let mergedBuffer = Engine.device.makeBuffer(length: length, options: .storageModeShared)
+        
+        if mergedBuffer == nil {
+            print("Failed to create new buffer ⚠️⚠️⚠️")
+            return nil
+        }
+        
+        var destinationOffset = 0
+        
+        for buffer in buffers {
+            blitEncoder?.copy(from: buffer, sourceOffset: 0, to: mergedBuffer!, destinationOffset: destinationOffset, size: buffer.length)
+            destinationOffset += buffer.length
+        }
+        
+        return mergedBuffer
     }
 }

@@ -9,7 +9,8 @@ var gameStoryboard: NSStoryboard!
 struct ContentView: View {
     @StateObject var contentData = ContentViewModel()
     
-    let metalView = RendererView.metalView
+    let RTView = MetalView(.StaticRT)
+    let PSView = MetalView(.VertexShader)
     
     var body: some View {
 
@@ -18,11 +19,12 @@ struct ContentView: View {
                     switch contentData.selectedTab {
                         
                     case .RayTracing:
-                        metalView
+                        RTView
                             .edgesIgnoringSafeArea(.all)
                         
                     case .VertexShader:
-                        Text("Vertex Shader")
+                        PSView
+                            .edgesIgnoringSafeArea(.all)
                         
                     case .RenderImage:
                         RenderImage()
@@ -73,11 +75,16 @@ struct ContentView: View {
                 .ignoresSafeArea(.all, edges: .all)
                 .onChange(of: contentData.selectedTab) { value in
                     if contentData.selectedTab != .RayTracing && contentData.selectedTab != .VertexShader {
-                        RendererManager.pauseRenderingLoop()
+                        RendererManager.pauseAllRenderingLoop()
                     } else {
                         RendererManager.resumeRenderingLoop()
                     }
                     
+                    if contentData.selectedTab == .RayTracing {
+                        RendererManager.updateViewPort(viewPortType: .StaticRT)
+                    } else if contentData.selectedTab == .VertexShader{
+                        RendererManager.updateViewPort(viewPortType: .VertexShader)
+                    }
                 }
                 
             }

@@ -27,7 +27,7 @@ struct SettingsView: View {
                 Text("Ray Tracing").frame(alignment: .center).font(.title)
                 Spacer()
                 Picker(selection: $model.currentScene, label: Text("scene").frame(width: 100, alignment: .trailing).padding(.trailing, 8)) {
-                    ForEach(SettingsViewModel.rayTracingScenes, id: \.self) { scene in
+                    ForEach(SettingsViewModel.scenes, id: \.self) { scene in
                         Text(scene.rawValue).tag(scene)
                     }.onChange(of: model.currentScene, perform: model.updateCurrentScene)
                     

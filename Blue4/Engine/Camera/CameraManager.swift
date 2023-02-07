@@ -1,25 +1,25 @@
 class CameraManager {
-    private var _cameras: [CameraTypes : SceneCamera] = [:]
-    private var locked = false
-    public var currentCamera: SceneCamera!
+    private static var _cameras: [CameraTypes : SceneCamera] = [:]
+    private static var locked = false
+    public static var currentCamera: SceneCamera!
     
-    public func registerCamera(camera: SceneCamera) {
-        self._cameras.updateValue(camera, forKey: camera.cameraType)
+    public static func registerCamera(camera: SceneCamera) {
+        _cameras.updateValue(camera, forKey: camera.cameraType)
     }
     
-    public func setCamera(_ cameraType: CameraTypes) {
-        self.currentCamera = _cameras[cameraType]
+    public static func setCamera(_ cameraType: CameraTypes) {
+        currentCamera = _cameras[cameraType]
     }
     
-    public func lockCamera() {
+    public static func lockCamera() {
         locked = true
     }
     
-    public func unlockCamera() {
+    public static func unlockCamera() {
         locked = false
     }
     
-    internal func update(deltaTime: Float) {
+    internal static func update(deltaTime: Float) {
         if !locked {
             for camera in _cameras.values {
                 camera.update(deltaTime: deltaTime)

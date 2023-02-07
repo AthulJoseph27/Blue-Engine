@@ -65,6 +65,7 @@ class DebugCamera: SceneCamera {
         transform.rotate(angle: rotation.z, axis: Z_AXIS)
         
         deltaPosition = (transform * _deltaPosition.simd4(w: 1)).xyz
+        position += deltaPosition
         
         self.deltaRotationAboutOrigin.x = Mouse.getDWheelX()
         self.deltaRotationAboutOrigin.y = Mouse.getDWheelY()

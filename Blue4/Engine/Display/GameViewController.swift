@@ -42,13 +42,15 @@ class GameViewController: NSViewController {
 
         mtkView.device = defaultDevice
         
-        RendererManager.initialize(view: mtkView)
-        
-        if RendererManager.currentRenderer() == nil {
-            RendererManager.setRenderer(.RayTracing)
-        } else {
-            RendererManager.updateRenderer()
-        }
+        print("Current Renderer \(RendererManager.currentRenderer())")
+        print(mtkView)
+//        RendererManager.initialize(view: mtkView)
+//
+//        if RendererManager.currentRenderer() == nil {
+//            RendererManager.setRenderer(.RayTracing)
+//        } else {
+//            RendererManager.updateRenderer()
+//        }
         
     }
 }

@@ -25,7 +25,7 @@ class RenderImageViewModel: ObservableObject {
         let pngData = bitmap.representation(using: .png, properties: [:])
         
         do {
-            try pngData?.write(to: URL(filePath: "\(saveLocation)image.png"))
+            try pngData?.write(to: URL(filePath: "\(saveLocation)\(Int(Date().timeIntervalSince1970)).png"))
         } catch {
             print("\(error)")
         }

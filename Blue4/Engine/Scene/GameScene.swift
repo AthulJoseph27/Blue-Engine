@@ -1,81 +1,14 @@
 import MetalKit
-import MetalPerformanceShaders
 
-class DynamicSandbox: DynamicScene {
-    var camera = DebugCamera()
-    var totalTime:Float = 0
+class GameScene {
+    var solids: [Solid] = []
+    var cameraManager = CameraManager()
     
-    init(drawableSize: CGSize) {
-        super.init()
+    init() {
+        buildScene()
     }
     
-    override func buildScene() {
-        
-        camera.position = SIMD3<Float>(0, 1, 3.38)
-        addCamera(camera)
-        
-        var transform = matrix_identity_float4x4
-        transform.translate(direction: SIMD3<Float>(0, 1, 0))
-        transform.scale(axis: SIMD3<Float>(0.5, 1.98, 0.5))
-        
-        createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: UInt32(TRIANGLE_MASK_LIGHT))
-        
-//         Top, bottom, back
-        transform = matrix_identity_float4x4
-        transform.translate(direction: SIMD3<Float>(0, 1, 0))
-        transform.scale(axis: SIMD3<Float>(2, 2, 2))
-        createCube(faceMask: Masks.FACE_MASK_NEGATIVE_Y | Masks.FACE_MASK_POSITIVE_Y | Masks.FACE_MASK_NEGATIVE_Z, color: SIMD3<Float>([0.725, 0.71, 0.68]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: uint(TRIANGLE_MASK_GEOMETRY))
-
-        // Left wall
-        createCube(faceMask: Masks.FACE_MASK_NEGATIVE_X, color: SIMD3<Float>([0.63, 0.065, 0.05]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: uint(TRIANGLE_MASK_GEOMETRY))
-
-//        // Right wall
-        createCube(faceMask: Masks.FACE_MASK_POSITIVE_X, color: SIMD3<Float>([0.14, 0.45, 0.091]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: uint(TRIANGLE_MASK_GEOMETRY))
-        
-//         Short box
-        let monkey = Solid(.Icosphere)
-        monkey.position = SIMD3<Float>(0.3275, 0.3, 0.3725)
-        monkey.rotation = SIMD3<Float>(0, -0.3, 0)
-        monkey.scale = SIMD3<Float>(0.3, 0.3, 0.3)
-        monkey.setColor(SIMD4<Float>(0.2, 0.2, 0.8, 1.0))
-        monkey.setRoughness(1.0)
-        monkey.enableTexture(false)
-//        monkey.animated = true
-
-        addSolid(solid: monkey)
-        
-//         Tall box
-        let chest = Solid(.Chest)
-        chest.position = SIMD3<Float>(-0.375, 0.5, -0.29)
-        chest.rotation = SIMD3<Float>(0, 0.3, 0)
-        chest.scale = SIMD3<Float>(0.008, 0.008, 0.008)
-        addSolid(solid: chest)
-        
-    }
-    
-//    override func updateObjects(deltaTime: Float) {
-//        totalTime += deltaTime
-//
-//        let transformsData = transformBuffer.contents()
-//        var pointer = transformsData.bindMemory(to: matrix_float4x4.self, capacity: 1)
-//
-//        let instanceAccelerationStructure = (getAccelerationStructure() as! MPSInstanceAccelerationStructure)
-//        for i in 0..<objects.count {
-//            let solid = objects[i]
-//            if i == (objects.count - 2) {
-//                solid.position.y = 0.3 + sin(totalTime) / 10
-//            }
-//            for _ in 0..<solid.mesh.submeshCount {
-//                if solid.animated {
-//                    pointer.pointee = solid.modelMatrix
-//                }
-//                pointer = pointer.advanced(by: 1)
-//            }
-//        }
-//
-//        instanceAccelerationStructure.transformBuffer = transformBuffer
-//        instanceAccelerationStructure.rebuild()
-//    }
+    func buildScene() {}
     
     func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: Material, triangleMaks: UInt32) {
         let solid = Solid(.None)
@@ -104,7 +37,7 @@ class DynamicSandbox: DynamicScene {
         
         solid.mesh.materials = [material]
         
-        addSolid(solid: solid)
+        solids.append(solid)
     }
     
     func createCubeFace(_ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
@@ -177,5 +110,12 @@ class DynamicSandbox: DynamicScene {
         if ((faceMask & Masks.FACE_MASK_POSITIVE_Z) != 0) {
             createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 4, 5, 7, 6, inwardNormals, triangleMask)
         }
+    }
+    
+    func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {
+        let e1: SIMD3<Float> = normalize(v1 - v0);
+        let e2: SIMD3<Float> = normalize(v2 - v0);
+        
+        return cross(e1, e2);
     }
 }

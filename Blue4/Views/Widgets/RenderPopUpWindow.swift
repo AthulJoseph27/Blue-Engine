@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct RenderPopUpWindow: View {
-    let metalView = RendererView.metalView
+    let metalView = MetalView(.StaticRT)
     
     var body: some View {
         metalView

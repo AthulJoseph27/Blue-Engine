@@ -367,9 +367,10 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
                                    lightColor, lightDistance);
+                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
 //                   sampleSpotLight(r, intersectionPoint, lightDirection,
 //                                   lightColor, lightDistance);
-                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
+//                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
 
                    if(material.isTextureEnabled){
                        objectColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord).xyz;
@@ -389,7 +390,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    float refractiveIndex = 0;
 
                    if(material.opacity < 1.0) {
-                       refractiveIndex = material.opticalDensity + 1;
+                       refractiveIndex = material.opticalDensity;
                        if(refractiveIndex < 1.0) {
                            refractiveIndex = 1.0 / refractiveIndex;
                        }
@@ -408,7 +409,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        ray.direction = refractRay(ray, surfaceNormal, 1.0 / refractiveIndex);
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
                        ray.color = color;
-                       ray.mask = RAY_MASK_PRIMARY;
+                       ray.mask = RAY_MASK_SECONDARY;
                        ray.maxDistance = INFINITY;
                    }else if(reflectivity > 0.0f){
                        // Reflect ray
@@ -416,7 +417,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
                        ray.color = color;
                        ray.mask = RAY_MASK_SECONDARY;
-                       //                       ray.maxDistance = INFINITY;
+                       ray.maxDistance = INFINITY;
                    }else{
                        r = float2(halton(offset + uniforms.frameIndex, bounce + 1),
                                   halton(offset + uniforms.frameIndex, bounce + 3));
@@ -465,6 +466,10 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
         
         if (shadowRay.maxDistance >= 0.0f && intersectionDistance < 0.0f) {
             color += shadowRay.color;
+        }
+        
+        if (shadowRay.maxDistance == -1.0f) {
+            color += shadowRay.color; // Skybox color
         }
         
         dstTex.write(float4(color, 1.0f), tid);

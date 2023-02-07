@@ -2,19 +2,18 @@ import SwiftUI
 
 class SettingsViewModel: ObservableObject {
     static let model = SettingsViewModel()
-    static let rayTracingScenes: [SceneType] = [
-        .StaticSandbox,
-        .DynamicSanbox
+    static let scenes: [GameScenes] = [
+        .Sandbox,
+        .TestScene
     ]
-    static let vertexShaderScenes: [SceneType] = []
-    @Published var maxBounce = 1
-    @Published var currentScene: SceneType = .StaticSandbox
+    @Published var maxBounce = 4
+    @Published var currentScene: GameScenes = .Sandbox
     
     func updateMaxBounce(bounce: Int) {
-        RendererManager.updateViewPortSettings(rendererType: .RayTracing, settings: RayTracingSettings(maxBounce: bounce))
+        RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(maxBounce: bounce))
     }
     
-    func updateCurrentScene(scene: SceneType) {
+    func updateCurrentScene(scene: GameScenes) {
         RendererManager.updateCurrentScene(scene: scene)
     }
 }
