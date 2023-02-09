@@ -2,7 +2,7 @@ import MetalKit
 
 class PhongRenderer: Renderer {
     var renderPipeline: MTLRenderPipelineState!
-    var viewPort: RenderViewPort!
+    var scene: PhongShadingScene?
     var size: CGSize!
     
     override func initialize() {
@@ -11,7 +11,7 @@ class PhongRenderer: Renderer {
     }
     
     override func updateViewPort() {
-        viewPort = RenderViewPortManager.currentViewPort
+        scene = (SceneManager.currentRenderableScene as? PhongShadingScene)
     }
     
     private func createPipeline() {
@@ -33,14 +33,22 @@ class PhongRenderer: Renderer {
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderEncoder?.setRenderPipelineState(renderPipeline)
         
-        RenderViewPortManager.tickScene(deltaTime: 1/Float(view.preferredFramesPerSecond))
+        SceneManager.tickScene(deltaTime: 1/Float(view.preferredFramesPerSecond))
         
         if renderEncoder != nil {
-            (RenderViewPortManager.currentViewPort as? PhongShadingViewPort)?.drawSolids(renderEncoder: renderEncoder!)
+            scene?.drawSolids(renderEncoder: renderEncoder!)
         }
         
         renderEncoder?.endEncoding()
         commandBuffer?.present(drawable)
         commandBuffer?.commit()
+        
+        if renderMode == .render {
+            commandBuffer?.addCompletedHandler { value in
+                self.renderedTexture = view.currentDrawable?.texture
+                self.renderMode = .display
+                RendererManager.onRenderingComplete()
+            }
+        }
     }
 }

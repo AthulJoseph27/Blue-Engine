@@ -88,11 +88,11 @@
 		3C14A3F72983D20C007C0E03 /* Transform.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A52983D20C007C0E03 /* Transform.metal */; };
 		3C14A3F82983D20C007C0E03 /* RayTracingShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A62983D20C007C0E03 /* RayTracingShader.metal */; };
 		3C14A3F92983D20C007C0E03 /* PhongShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A72983D20C007C0E03 /* PhongShader.metal */; };
-		3C14A3FA2983D20C007C0E03 /* RenderViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A92983D20C007C0E03 /* RenderViewPort.swift */; };
+		3C14A3FA2983D20C007C0E03 /* RenderableScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3A92983D20C007C0E03 /* RenderableScene.swift */; };
 		3C14A3FB2983D20C007C0E03 /* Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AB2983D20C007C0E03 /* Sandbox.swift */; };
 		3C14A3FC2983D20C007C0E03 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AC2983D20C007C0E03 /* SceneManager.swift */; };
-		3C14A3FD2983D20C007C0E03 /* DynamicRTViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AD2983D20C007C0E03 /* DynamicRTViewPort.swift */; };
-		3C14A3FE2983D20C007C0E03 /* StaticRTViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AE2983D20C007C0E03 /* StaticRTViewPort.swift */; };
+		3C14A3FD2983D20C007C0E03 /* DynamicRTScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AD2983D20C007C0E03 /* DynamicRTScene.swift */; };
+		3C14A3FE2983D20C007C0E03 /* StaticRTScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A3AE2983D20C007C0E03 /* StaticRTScene.swift */; };
 		3C14A4092983D213007C0E03 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A4032983D213007C0E03 /* GameViewController.swift */; };
 		3C14A40A2983D213007C0E03 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A4062983D213007C0E03 /* GameView.swift */; };
 		3C14A418298412C1007C0E03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A417298412C1007C0E03 /* Main.storyboard */; };
@@ -104,13 +104,11 @@
 		3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303229853A53002F6A6E /* RenderImageViewModel.swift */; };
 		3C34303529858369002F6A6E /* RendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303429858369002F6A6E /* RendererView.swift */; };
 		3C4510EC299026B100A53BA2 /* DepthStencilStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4510EB299026B100A53BA2 /* DepthStencilStateLibrary.swift */; };
-		3C4510EE2990277200A53BA2 /* PhongShadingViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4510ED2990277200A53BA2 /* PhongShadingViewPort.swift */; };
-		3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */; };
+		3C4510EE2990277200A53BA2 /* PhongShadingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4510ED2990277200A53BA2 /* PhongShadingScene.swift */; };
 		3CDE610A2990D31A009E2C77 /* TestScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDE61092990D31A009E2C77 /* TestScene.swift */; };
 		3CF39CD7298BA7AE00E4F399 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */; };
 		3CF39CD9298BE87B00E4F399 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */; };
 		3CF39CDF298D517700E4F399 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CDE298D517700E4F399 /* GameScene.swift */; };
-		3CF39CE5298D5A7000E4F399 /* RenderViewPortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CE4298D5A7000E4F399 /* RenderViewPortManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,11 +214,11 @@
 		3C14A3A52983D20C007C0E03 /* Transform.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Transform.metal; sourceTree = "<group>"; };
 		3C14A3A62983D20C007C0E03 /* RayTracingShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = RayTracingShader.metal; sourceTree = "<group>"; };
 		3C14A3A72983D20C007C0E03 /* PhongShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = PhongShader.metal; sourceTree = "<group>"; };
-		3C14A3A92983D20C007C0E03 /* RenderViewPort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderViewPort.swift; sourceTree = "<group>"; };
+		3C14A3A92983D20C007C0E03 /* RenderableScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderableScene.swift; sourceTree = "<group>"; };
 		3C14A3AB2983D20C007C0E03 /* Sandbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sandbox.swift; sourceTree = "<group>"; };
 		3C14A3AC2983D20C007C0E03 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
-		3C14A3AD2983D20C007C0E03 /* DynamicRTViewPort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicRTViewPort.swift; sourceTree = "<group>"; };
-		3C14A3AE2983D20C007C0E03 /* StaticRTViewPort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRTViewPort.swift; sourceTree = "<group>"; };
+		3C14A3AD2983D20C007C0E03 /* DynamicRTScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicRTScene.swift; sourceTree = "<group>"; };
+		3C14A3AE2983D20C007C0E03 /* StaticRTScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticRTScene.swift; sourceTree = "<group>"; };
 		3C14A4032983D213007C0E03 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		3C14A4062983D213007C0E03 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		3C14A40C2983D26F007C0E03 /* Blue4-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blue4-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -233,13 +231,11 @@
 		3C34303229853A53002F6A6E /* RenderImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageViewModel.swift; sourceTree = "<group>"; };
 		3C34303429858369002F6A6E /* RendererView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererView.swift; sourceTree = "<group>"; };
 		3C4510EB299026B100A53BA2 /* DepthStencilStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthStencilStateLibrary.swift; sourceTree = "<group>"; };
-		3C4510ED2990277200A53BA2 /* PhongShadingViewPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhongShadingViewPort.swift; sourceTree = "<group>"; };
-		3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPopUpWindow.swift; sourceTree = "<group>"; };
+		3C4510ED2990277200A53BA2 /* PhongShadingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhongShadingScene.swift; sourceTree = "<group>"; };
 		3CDE61092990D31A009E2C77 /* TestScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestScene.swift; sourceTree = "<group>"; };
 		3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		3CF39CDE298D517700E4F399 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		3CF39CE4298D5A7000E4F399 /* RenderViewPortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderViewPortManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -338,7 +334,6 @@
 				3C14A3982983D20C007C0E03 /* Camera */,
 				3C14A39C2983D20C007C0E03 /* Libraries */,
 				3C14A3A42983D20C007C0E03 /* Shaders */,
-				3CF39CE2298D59C500E4F399 /* RenderViewPort */,
 				3C14A3A82983D20C007C0E03 /* Scene */,
 				3C14A3842983D20C007C0E03 /* Renderer */,
 				3C14A3FF2983D213007C0E03 /* Display */,
@@ -578,6 +573,7 @@
 		3C14A3A82983D20C007C0E03 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				3CF39CE2298D59C500E4F399 /* RenderableScene */,
 				3C14A3AA2983D20C007C0E03 /* Scenes */,
 				3C14A3AC2983D20C007C0E03 /* SceneManager.swift */,
 				3CF39CDE298D517700E4F399 /* GameScene.swift */,
@@ -621,29 +617,27 @@
 				3C14A41E2984376E007C0E03 /* BlurView.swift */,
 				3C14A41C29842CD5007C0E03 /* TabButton.swift */,
 				3C14A42029844C15007C0E03 /* Sidebar.swift */,
-				3CC24406298A26CA009D629E /* RenderPopUpWindow.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
 		};
-		3CF39CE2298D59C500E4F399 /* RenderViewPort */ = {
+		3CF39CE2298D59C500E4F399 /* RenderableScene */ = {
 			isa = PBXGroup;
 			children = (
-				3C14A3A92983D20C007C0E03 /* RenderViewPort.swift */,
-				3CF39CE3298D59F700E4F399 /* ViewPorts */,
-				3CF39CE4298D5A7000E4F399 /* RenderViewPortManager.swift */,
+				3C14A3A92983D20C007C0E03 /* RenderableScene.swift */,
+				3CF39CE3298D59F700E4F399 /* RenderableScenes */,
 			);
-			path = RenderViewPort;
+			path = RenderableScene;
 			sourceTree = "<group>";
 		};
-		3CF39CE3298D59F700E4F399 /* ViewPorts */ = {
+		3CF39CE3298D59F700E4F399 /* RenderableScenes */ = {
 			isa = PBXGroup;
 			children = (
-				3C14A3AE2983D20C007C0E03 /* StaticRTViewPort.swift */,
-				3C14A3AD2983D20C007C0E03 /* DynamicRTViewPort.swift */,
-				3C4510ED2990277200A53BA2 /* PhongShadingViewPort.swift */,
+				3C14A3AE2983D20C007C0E03 /* StaticRTScene.swift */,
+				3C14A3AD2983D20C007C0E03 /* DynamicRTScene.swift */,
+				3C4510ED2990277200A53BA2 /* PhongShadingScene.swift */,
 			);
-			path = ViewPorts;
+			path = RenderableScenes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -826,7 +820,7 @@
 				3C14A3E12983D20C007C0E03 /* Renderer.swift in Sources */,
 				3C14A3EB2983D20C007C0E03 /* Mouse.swift in Sources */,
 				3C14A3F22983D20C007C0E03 /* RenderPipelineDescriptor.swift in Sources */,
-				3C4510EE2990277200A53BA2 /* PhongShadingViewPort.swift in Sources */,
+				3C4510EE2990277200A53BA2 /* PhongShadingScene.swift in Sources */,
 				3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */,
 				3C14A3E92983D20C007C0E03 /* Solid.swift in Sources */,
 				3C34303529858369002F6A6E /* RendererView.swift in Sources */,
@@ -846,14 +840,13 @@
 				3C14A40A2983D213007C0E03 /* GameView.swift in Sources */,
 				3C14A3EA2983D20C007C0E03 /* KeyCodes.swift in Sources */,
 				3C14A3E52983D20C007C0E03 /* Preferences.swift in Sources */,
-				3CF39CE5298D5A7000E4F399 /* RenderViewPortManager.swift in Sources */,
 				3C14A3E22983D20C007C0E03 /* Math.swift in Sources */,
 				3C14A3F62983D20C007C0E03 /* VertexDescriptor.swift in Sources */,
-				3C14A3FE2983D20C007C0E03 /* StaticRTViewPort.swift in Sources */,
+				3C14A3FE2983D20C007C0E03 /* StaticRTScene.swift in Sources */,
 				3C14A3FC2983D20C007C0E03 /* SceneManager.swift in Sources */,
 				3C14A3EC2983D20C007C0E03 /* Keyboard.swift in Sources */,
 				3C14A3F72983D20C007C0E03 /* Transform.metal in Sources */,
-				3C14A3FD2983D20C007C0E03 /* DynamicRTViewPort.swift in Sources */,
+				3C14A3FD2983D20C007C0E03 /* DynamicRTScene.swift in Sources */,
 				3CF39CD7298BA7AE00E4F399 /* SettingsView.swift in Sources */,
 				3C14A41B298422C1007C0E03 /* ContentViewModel.swift in Sources */,
 				3C14A3E82983D20C007C0E03 /* Node.swift in Sources */,
@@ -872,8 +865,7 @@
 				3C14A3182983D0E8007C0E03 /* Blue4App.swift in Sources */,
 				3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */,
 				3C14A3DD2983D20C007C0E03 /* PhongRenderer.swift in Sources */,
-				3CC24407298A26CA009D629E /* RenderPopUpWindow.swift in Sources */,
-				3C14A3FA2983D20C007C0E03 /* RenderViewPort.swift in Sources */,
+				3C14A3FA2983D20C007C0E03 /* RenderableScene.swift in Sources */,
 				3CF39CD9298BE87B00E4F399 /* SettingsViewModel.swift in Sources */,
 				3CDE610A2990D31A009E2C77 /* TestScene.swift in Sources */,
 			);

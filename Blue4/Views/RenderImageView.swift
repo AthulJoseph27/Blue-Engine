@@ -8,8 +8,8 @@ struct RenderImage: View {
             
             VStack() {
                 Picker(selection: $model.renderer, label: Text("Renderer").frame(width: 100, alignment: .trailing).padding(.trailing, 8)) {
-                    Text("Ray Tracing").tag(RendererType.RayTracing)
-                    Text("Vertex Shader").tag(RendererType.VertexShader)
+                    Text("Ray Tracing").tag(RendererType.StaticRT)
+                    Text("Vertex Shader").tag(RendererType.PhongShader)
                 }
                 
                 Picker(selection: $model.quality, label: Text("Quality").frame(width: 100, alignment: .trailing).padding(.trailing, 8)) {
@@ -38,7 +38,7 @@ struct RenderImage: View {
                     HStack {
                         TextField("", value: $model.maxBounce, formatter: NumberFormatter())
                             .frame(width: 80)
-                            .disabled(model.renderer != .RayTracing)
+                            .disabled(model.renderer == .PhongShader)
                         Spacer()
                     }
                     .frame(width: 492)
@@ -62,7 +62,7 @@ struct RenderImage: View {
                                                       defer: false)
                     window.center()
                     window.title = "Rendering"
-                    window.contentView = NSHostingView(rootView: RenderPopUpWindow())
+                    window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: model.renderer, settings: model.getRenderingSettings()))
 
                     let windowController = NSWindowController(window: window)
                     windowController.showWindow(nil)

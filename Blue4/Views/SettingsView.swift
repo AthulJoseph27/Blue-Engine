@@ -31,7 +31,7 @@ struct SettingsView: View {
                         Text(scene.rawValue).tag(scene)
                     }.onChange(of: model.currentScene, perform: model.updateCurrentScene)
                     
-                    Text("Vertex Shader").tag(RendererType.VertexShader)
+                    Text("Vertex Shader").tag(RendererType.PhongShader)
                 }
                 Spacer()
                 Text("Vertex Shader").frame(alignment: .center).font(.title)

@@ -45,11 +45,12 @@ class Renderer: NSObject, MTKViewDelegate {
         updateViewPort()
     }
     
+    func onResume() {}
+    
     func switchToRenderMode(settings: RenderingSettings) {
         view.isPaused = true
         updateRenderSettings(settings: settings)
         renderMode = .render
-        CameraManager.lockCamera()
         renderModeInitialize()
         view.isPaused = false
     }

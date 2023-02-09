@@ -1,7 +1,7 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class PhongShadingViewPort: RenderViewPort {
+class PhongShadingScene: RenderableScene {
 
     var renderOptions: PSRenderOptions = PSRenderOptions()
     

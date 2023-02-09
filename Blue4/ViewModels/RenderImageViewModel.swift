@@ -1,7 +1,7 @@
 import SwiftUI
 
 class RenderImageViewModel: ObservableObject {
-    @Published var renderer: RendererType = .RayTracing
+    @Published var renderer: RendererType = .StaticRT
     @Published var quality: RenderQuality = .medium
     @Published var resolution = SIMD2<Int>(1080, 720)
     @Published var maxBounce = 6
@@ -9,10 +9,10 @@ class RenderImageViewModel: ObservableObject {
     @Published var rendering = false
     
     func getRenderingSettings() -> RenderingSettings {
-        if renderer == .RayTracing {
-            return RayTracingSettings(maxBounce: maxBounce)
-        } else {
+        if renderer == .PhongShader {
             return VertexShadingSettings()
+        } else {
+            return RayTracingSettings(maxBounce: maxBounce)
         }
     }
     

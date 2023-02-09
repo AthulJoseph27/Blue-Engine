@@ -1,7 +1,7 @@
 import MetalKit
 import MetalPerformanceShaders
 
-protocol RenderViewPort {
+protocol RenderableScene {
     
     var heap: Heap   { get set }
     
@@ -21,13 +21,13 @@ protocol RenderViewPort {
     func updateScene(deltaTime: Float)
 }
 
-extension RenderViewPort {
+extension RenderableScene {
     func updateCameras(deltaTime: Float) {
         CameraManager.update(deltaTime: deltaTime)
     }
 }
 
-protocol RTViewPort: RenderViewPort {
+protocol RTScene: RenderableScene {
     var renderOptions: RTRenderOptions { get set }
     
     var masks:        [uint]     { get set }
@@ -54,7 +54,7 @@ protocol RTViewPort: RenderViewPort {
     var frameIndex: uint    { get set }
 }
 
-extension RTViewPort {
+extension RTScene {
     
     mutating func updateUniforms(size: CGSize) {
         uniformBufferOffset = renderOptions.alignedUniformsSize * uniformBufferIndex

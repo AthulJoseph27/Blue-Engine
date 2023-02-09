@@ -1,7 +1,7 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class StaticRTViewPort: RTViewPort {
+class StaticRTScene: RTScene {
     
     var heap = Heap()
     

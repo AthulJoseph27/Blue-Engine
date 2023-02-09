@@ -36,7 +36,7 @@ class RayTracingRenderer: Renderer {
     
     var iterationCount = 0
     
-    var viewPort: RTViewPort!
+    var scene: RTScene!
     private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4)
     
     override func initialize() {
@@ -45,7 +45,7 @@ class RayTracingRenderer: Renderer {
         self.createPipelines()
         self.createIntersector()
         
-        semaphore = DispatchSemaphore(value: viewPort.renderOptions.maxFramesInFlight)
+        semaphore = DispatchSemaphore(value: scene.renderOptions.maxFramesInFlight)
         
         let sampleDescriptor = MTLSamplerDescriptor()
         sampleDescriptor.minFilter = .linear
@@ -54,17 +54,21 @@ class RayTracingRenderer: Renderer {
         self.textureSampler = device.makeSamplerState(descriptor: sampleDescriptor)
     }
     
+    override func onResume() {
+        scene.frameIndex = 0
+    }
+    
     override func updateRenderSettings(settings: RenderingSettings) {
-        viewPort.frameIndex = 0
+        scene.frameIndex = 0
         _renderSettings = (settings as? RayTracingSettings) ?? _renderSettings
     }
     
     override func updateViewPort() {
-        if !(RenderViewPortManager.currentViewPort is RTViewPort) {
+        if !(SceneManager.currentRenderableScene is RTScene) {
             fatalError("Renderer and ViewPort mismatch!")
         }
         
-        viewPort = (RenderViewPortManager.currentViewPort as! RTViewPort)
+        scene = (SceneManager.currentRenderableScene as! RTScene)
     }
     
     override func renderModeInitialize() {
@@ -88,8 +92,8 @@ class RayTracingRenderer: Renderer {
     private func createIntersector() {
         intersector = MPSRayIntersector(device: device)
         intersector.rayDataType = .originMaskDirectionMaxDistance
-        intersector.rayStride = viewPort.renderOptions.rayStride
-        intersector.rayMaskOptions = viewPort.renderOptions.rayMaskOptions
+        intersector.rayStride = scene.renderOptions.rayStride
+        intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
     }
     
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -105,9 +109,9 @@ class RayTracingRenderer: Renderer {
 
         let rayCount = Int(size.width * size.height)
 
-        rayBuffer = device.makeBuffer(length: viewPort.renderOptions.rayStride * rayCount, options: .storageModePrivate)
-        shadowRayBuffer = device.makeBuffer(length: viewPort.renderOptions.rayStride * rayCount, options: .storageModePrivate)
-        intersectionBuffer = device.makeBuffer(length: viewPort.renderOptions.intersectionStride * rayCount, options: .storageModePrivate)
+        rayBuffer = device.makeBuffer(length: scene.renderOptions.rayStride * rayCount, options: .storageModePrivate)
+        shadowRayBuffer = device.makeBuffer(length: scene.renderOptions.rayStride * rayCount, options: .storageModePrivate)
+        intersectionBuffer = device.makeBuffer(length: scene.renderOptions.intersectionStride * rayCount, options: .storageModePrivate)
 
         let renderTargetDescriptor = MTLTextureDescriptor()
         renderTargetDescriptor.pixelFormat = .rgba32Float
@@ -138,7 +142,7 @@ class RayTracingRenderer: Renderer {
         
         randomTexture.replace(region: MTLRegionMake2D(0, 0, Int(size.width), Int(size.height)), mipmapLevel: 0, withBytes: randomValues, bytesPerRow: MemoryLayout<__uint32_t>.size * Int(size.width))
         
-        viewPort.frameIndex = 0
+        scene.frameIndex = 0
     }
 
     override func draw(in view: MTKView) {
@@ -181,8 +185,8 @@ class RayTracingRenderer: Renderer {
             self.semaphore.signal()
         }
 
-        RenderViewPortManager.tickScene(deltaTime: 1.0/Float(view.preferredFramesPerSecond))
-        viewPort.updateUniforms(size: view.drawableSize)
+        SceneManager.tickScene(deltaTime: 1.0/Float(view.preferredFramesPerSecond))
+        scene.updateUniforms(size: view.drawableSize)
 
         let width = Int(size.width)
         let height = Int(size.height)
@@ -193,7 +197,7 @@ class RayTracingRenderer: Renderer {
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
 
-        computeEncoder.setBuffer(viewPort.uniformBuffer, offset: viewPort.uniformBufferOffset, index: 0)
+        computeEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
         computeEncoder.setBuffer(rayBuffer, offset: 0, index: 1)
 
         computeEncoder.setTexture(randomTexture, index: 0)
@@ -208,7 +212,7 @@ class RayTracingRenderer: Renderer {
         
         let maxBounce = _renderSettings.maxBounce
         for i in 0..<maxBounce {
-            intersector.intersectionDataType = viewPort.renderOptions.intersectionDataType
+            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
             intersector.encodeIntersection(commandBuffer: commandBuffer,
                                            intersectionType: .nearest,
                                            rayBuffer: rayBuffer,
@@ -216,13 +220,13 @@ class RayTracingRenderer: Renderer {
                                            intersectionBuffer: intersectionBuffer,
                                            intersectionBufferOffset: 0,
                                            rayCount: width * height,
-                                           accelerationStructure: viewPort.getAccelerationStructure())
+                                           accelerationStructure: scene.getAccelerationStructure())
             guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
             
-            let buffers = [viewPort.uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, viewPort.vertexBuffer, viewPort.customIndexBuffer, viewPort.verticesCountBuffer, viewPort.indiciesCountBuffer, viewPort.maskBuffer, viewPort.materialBuffer, viewPort.textureBuffer]
-            let offsets: [Int] = [viewPort.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            let buffers = [scene.uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, scene.vertexBuffer, scene.customIndexBuffer, scene.verticesCountBuffer, scene.indiciesCountBuffer, scene.maskBuffer, scene.materialBuffer, scene.textureBuffer]
+            let offsets: [Int] = [scene.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             
-            shadeEncoder.useHeap(viewPort.heap.heap)
+            shadeEncoder.useHeap(scene.heap.heap)
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
         
             var bounce = UInt32(i)
@@ -230,15 +234,15 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.setBytes(&bounce, length: uint.size, index: buffers.count)
             shadeEncoder.setTexture(randomTexture, index: 0)
             shadeEncoder.setTexture(renderTarget, index: 1)
-            shadeEncoder.setTexture(viewPort.skyBox, index: 2)
+            shadeEncoder.setTexture(scene.skyBox, index: 2)
             
             shadeEncoder.setSamplerState(textureSampler, index: 0)
             shadeEncoder.setComputePipelineState(shadePipeline)
             shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             shadeEncoder.endEncoding()
             
-            intersector.intersectionDataType = viewPort.renderOptions.intersectionDataType
-            intersector.encodeIntersection(commandBuffer: commandBuffer, intersectionType: .any, rayBuffer: shadowRayBuffer, rayBufferOffset: 0, intersectionBuffer: intersectionBuffer, intersectionBufferOffset: 0, rayCount: width * height, accelerationStructure: viewPort.getAccelerationStructure())
+            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
+            intersector.encodeIntersection(commandBuffer: commandBuffer, intersectionType: .any, rayBuffer: shadowRayBuffer, rayBufferOffset: 0, intersectionBuffer: intersectionBuffer, intersectionBufferOffset: 0, rayCount: width * height, accelerationStructure: scene.getAccelerationStructure())
             
             
             intersector.intersectionDataType = .distance
@@ -249,10 +253,10 @@ class RayTracingRenderer: Renderer {
                                            intersectionBuffer: intersectionBuffer,
                                            intersectionBufferOffset: 0,
                                            rayCount: width * height,
-                                           accelerationStructure: viewPort.getAccelerationStructure())
+                                           accelerationStructure: scene.getAccelerationStructure())
 
             guard let colorEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
-            colorEncoder.setBuffer(viewPort.uniformBuffer, offset: viewPort.uniformBufferOffset, index: 0)
+            colorEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
             colorEncoder.setBuffer(shadowRayBuffer, offset: 0, index: 1)
             colorEncoder.setBuffer(intersectionBuffer, offset: 0, index: 2)
 
@@ -264,7 +268,7 @@ class RayTracingRenderer: Renderer {
         }
         
         guard let denoiseEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
-        denoiseEncoder.setBuffer(viewPort.uniformBuffer, offset: viewPort.uniformBufferOffset, index: 0)
+        denoiseEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
 
         denoiseEncoder.setTexture(renderTarget, index: 0)
         denoiseEncoder.setTexture(accumulationTarget, index: 1)

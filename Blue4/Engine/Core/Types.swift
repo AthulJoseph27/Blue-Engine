@@ -186,9 +186,10 @@ enum RenderQuality {
     case high
 }
 
-enum RendererType {
-    case RayTracing
-    case VertexShader
+enum RendererType : CaseIterable {
+    case StaticRT
+    case DynamicRT
+    case PhongShader
 }
 
 enum GameScenes: String {
@@ -196,8 +197,9 @@ enum GameScenes: String {
     case TestScene = "Test Scene"
 }
 
-enum RenderViewPortType : CaseIterable {
+enum RenderViewPortType : String, CaseIterable {
     case StaticRT
     case DynamicRT
-    case VertexShader
+    case PhongShader
+    case Render
 }

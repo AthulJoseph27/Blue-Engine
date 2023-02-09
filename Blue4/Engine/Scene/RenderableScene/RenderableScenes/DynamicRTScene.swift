@@ -1,7 +1,7 @@
 import MetalKit
 import MetalPerformanceShaders
 
-class DynamicRTViewPort: RTViewPort {
+class DynamicRTScene: RTScene {
 
     var heap = Heap()
     
