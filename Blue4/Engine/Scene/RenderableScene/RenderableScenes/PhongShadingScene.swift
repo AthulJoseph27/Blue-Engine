@@ -53,10 +53,16 @@ class PhongShadingScene: RenderableScene {
         objects.append(solid)
     }
     
-    func createBuffers() {}
+    func createBuffers() {
+        let storageOptions: MTLResourceOptions
+        storageOptions = .storageModeShared
+        
+        self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
+    }
     
     func drawSolids(renderEncoder: MTLRenderCommandEncoder) {
         var currentCamera = CameraManager.currentCamera!
+//        currentCamera.deltaRotation *= -1
         
         sceneConstants.viewMatrix = currentCamera.viewMatrix
         sceneConstants.projectionMatrix = currentCamera.projectionMatrix
@@ -66,24 +72,41 @@ class PhongShadingScene: RenderableScene {
         currentCamera.deltaRotation = SIMD3<Float>(repeating: 0)
         currentCamera.deltaPosition = SIMD3<Float>(repeating: 0)
         
-        renderEncoder.setDepthStencilState(DepthStencilLibrary.depthStencilState(.Less ))
+        renderEncoder.setDepthStencilState(DepthStencilLibrary.depthStencilState(.Less))
+        
+        renderEncoder.setFragmentSamplerState(sampler, index: 0)
+        
+        renderEncoder.useHeap(heap.heap, stages: .fragment)
+        renderEncoder.setFragmentBuffer(textureBuffer, offset: 0, index: 1)
+        
+        var textureId: UInt32 = 0
         
         for solid in objects {
             renderEncoder.setVertexBuffer(solid.mesh.vertexBuffer, offset: 0, index: 0)
+            
             var modelConstants = ModelConstants(modelMatrix: solid.modelMatrix)
             renderEncoder.setVertexBytes(&modelConstants, length: ModelConstants.stride, index: 2)
-            for indexBuffer in solid.mesh.indexBuffers {
+            
+            
+            for i in 0..<solid.mesh.indexBuffers.count {
+                
+                let indexBuffer = solid.mesh.indexBuffers[i]
                 let indexCount = indexBuffer.length / UInt32.stride
+                
+                renderEncoder.setFragmentBytes(&solid.mesh.materials[i], length: Material.stride, index: 0)
+                
+                renderEncoder.setFragmentBytes(&textureId, length: UInt32.stride, index: 2)
+                
                 renderEncoder.drawIndexedPrimitives(type: .triangle, indexCount: indexCount, indexType: .uint32, indexBuffer: indexBuffer, indexBufferOffset: 0)
+                
+                textureId += 1
             }
         }
-        
-        renderEncoder.setFragmentSamplerState(sampler, index: 0)
+
     }
     
     func updateObjects(deltaTime: Float) {}
     
-    func updateScene(deltaTime: Float) {
-    }
+    func updateScene(deltaTime: Float) {}
     
 }

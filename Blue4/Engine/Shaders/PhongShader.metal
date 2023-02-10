@@ -3,20 +3,15 @@ using namespace metal;
 
 struct VertexIn {
     float3 position        [[ attribute(0) ]];
-    float3 color           [[ attribute(1) ]];
-    float2 uvCoordinate    [[ attribute(2) ]];
-    uint textureId         [[ attribute(3) ]];
-    uint materialId        [[ attribute(4) ]];
-    uint modelConstantId   [[ attribute(5) ]];
-    float3 normal          [[ attribute(6) ]];
+    float2 uvCoordinate    [[ attribute(1) ]];
+    float3 normal          [[ attribute(2) ]];
+    float3 tangent         [[ attribute(3) ]];
+    float3 bitangent       [[ attribute(4) ]];
 };
 
 struct RasterizerData {
     float4 position [[ position ]];
-    float4 color;
     float2 uvCoordinate;
-    uint textureId  [[ id(0) ]];
-    uint materialId [[ id(1) ]];
     
     float3 worldPosition;
     float3 surfaceNormal;
@@ -71,10 +66,7 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     float4 worldPosition = modelConstants.modelMatrix * float4(vertexIn.position, 1);
     
     rd.position = sceneConstants.projectionMatrix * sceneConstants.viewMatrix * worldPosition;
-    rd.color = float4(vertexIn.color, 1);
     rd.uvCoordinate = vertexIn.uvCoordinate;
-    rd.textureId = vertexIn.textureId;
-    rd.materialId = vertexIn.materialId;
     
     rd.worldPosition = worldPosition.xyz;
     rd.surfaceNormal = (modelConstants.modelMatrix * float4(vertexIn.normal, 1)).xyz;
@@ -84,14 +76,16 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     return rd;
 }
 
-fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], const device Material* materials [[ buffer(0) ]], const device PrimitiveData* primitiveData [[ buffer(1) ]]){
-//    float4 color = materials[rd.materialId].color;
-//
-//    if(materials[rd.materialId].isTextureEnabled){
-//        color = primitiveData[rd.textureId].texture.sample(sampler2d, rd.uvCoordinate);
-//    }
-//
-//    if(materials[rd.materialId].isLit) {
+fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], constant Material &material [[ buffer(0) ]], const device PrimitiveData *primitiveData [[ buffer(1) ]],
+                                      constant unsigned int &textureId [[ buffer(2) ]]){
+    
+    float4 color = material.color;
+
+    if(material.isTextureEnabled){
+        color = primitiveData[textureId].texture.sample(sampler2d, rd.uvCoordinate);
+    }
+
+//    if(material.isLit) {
 //        float3 unitNormal = normalize(rd.surfaceNormal);
 //        float3 unitToCameraVector = normalize(rd.toCameraVector);
 //
@@ -105,20 +99,20 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
 //            float3 unitToLightVector = normalize(lightData.position - rd.worldPosition);
 //            float3 unitReflectionVector = normalize(reflect(-unitToLightVector, unitNormal));
 //            //Ambient
-//            float3 ambientness = materials[rd.materialId].ambient * lightData.ambientIntensity;
+//            float3 ambientness = material.ambient * lightData.ambientIntensity;
 //            float3 ambientColor = ambientness * lightData.color;
 //            totalAmbient += ambientColor;
 //
 //            // Diffuse
-//            float3 diffuseness = materials[rd.materialId].diffuse * lightData.diffuseIntensity;
+//            float3 diffuseness = material.diffuse * lightData.diffuseIntensity;
 //            float nDotL = max(dot(unitNormal, unitToLightVector), 0.0);
 //            float3 diffuseColor = clamp(diffuseness * nDotL * lightData.color, 0.0, 1.0);
 //            totalDiffuse += diffuseColor;
 //
 //            // Specular
-//            float3 specularness = materials[rd.materialId].specular * lightData.specularIntensity;
+//            float3 specularness = material.specular * lightData.specularIntensity;
 //            float rDotV = max(dot(unitReflectionVector , unitToCameraVector), 0.0);
-//            float specularExp = pow(rDotV, materials[rd.materialId].shininess);
+//            float specularExp = pow(rDotV, material.shininess);
 //            float3 specularColor = clamp(specularness * specularExp * lightData.color * lightData.brightness, 0.0, 1.0);
 //            totalSpecular+=specularColor;
 //        }
@@ -127,7 +121,7 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
 //
 //        color *= float4(phongIntensity, 1.0);
 //    }
-//
-    float4 color = float4(1, 1, 1, 1);
+
+//    float4 color = float4(1, 1, 1, 1);
     return half4(color.r, color.g, color.b, color.a);
 }

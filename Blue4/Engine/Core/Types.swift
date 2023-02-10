@@ -44,13 +44,13 @@ struct VertexIn: sizeable{
     var bitangent: SIMD3<Float>
 }
 
-struct VertexOut: sizeable{
-    var position: SIMD3<Float>
-    var uvCoordinate: SIMD2<Float>
-    var normal: SIMD3<Float>
-    var tangent: SIMD3<Float>
-    var bitangent: SIMD3<Float>
-}
+//struct VertexOut: sizeable{
+//    var position: SIMD3<Float>
+//    var uvCoordinate: SIMD2<Float>
+//    var normal: SIMD3<Float>
+//    var tangent: SIMD3<Float>
+//    var bitangent: SIMD3<Float>
+//}
 
 struct PrimitiveData: sizeable {
     var texture: MTLTexture?

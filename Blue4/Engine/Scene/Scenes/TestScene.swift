@@ -5,15 +5,11 @@ class TestScene: GameScene {
     
     override func buildScene() {
         
-        let monkey = Solid(.Monkey)
-        monkey.position = SIMD3<Float>(0.3275, 0.3, 0.3725)
-        monkey.rotation = SIMD3<Float>(0, -0.3, 0)
-        monkey.scale = SIMD3<Float>(0.3, 0.3, 0.3)
-        monkey.setColor(SIMD4<Float>(0.2, 0.2, 0.8, 1.0))
-        monkey.setOpticalDensity(1.1)
-        monkey.enableTexture(false)
-        
-        solids.append(monkey)
+        let chest = Solid(.Chest)
+        chest.position = SIMD3<Float>(-0.375, 0.5, -0.29)
+        chest.rotation = SIMD3<Float>(0.0, -0.3, 0)
+        chest.scale = SIMD3<Float>(0.008, 0.008, 0.008)
+        solids.append(chest)
     }
 }
     

@@ -7,7 +7,6 @@ protocol RenderableScene {
     
     var objects: [Solid]         { get set }
     
-    var materialBuffer:      MTLBuffer! { get set }
     var textureBuffer:       MTLBuffer! { get set }
     
     var skyBox: MTLTexture!    { get set }
@@ -41,6 +40,7 @@ protocol RTScene: RenderableScene {
     var indiciesCountBuffer: MTLBuffer! { get set }
     var maskBuffer:          MTLBuffer! { get set }
     
+    var materialBuffer:      MTLBuffer! { get set }
     var uniformBuffer:       MTLBuffer! { get set }
     var transformBuffer:     MTLBuffer! { get set }
     

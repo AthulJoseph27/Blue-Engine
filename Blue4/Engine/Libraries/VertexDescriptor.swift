@@ -30,42 +30,45 @@ public struct Basic_VertexDescriptor: VertexDescriptor{
     init(){
         vertexDescriptor = MTLVertexDescriptor()
         
+        var size: Int = 0
+        
         //Position
         vertexDescriptor.attributes[0].format = .float3
         vertexDescriptor.attributes[0].bufferIndex = 0
-        vertexDescriptor.attributes[0].offset = 0
-        
-        //Color
-        vertexDescriptor.attributes[1].format = .float4
-        vertexDescriptor.attributes[1].bufferIndex = 0
-        vertexDescriptor.attributes[1].offset = SIMD3<Float>.size
+        vertexDescriptor.attributes[0].offset = size
+        size += SIMD3<Float>.size
         
         //UV Coords
-        vertexDescriptor.attributes[2].format = .float2
-        vertexDescriptor.attributes[2].bufferIndex = 0
-        vertexDescriptor.attributes[2].offset = SIMD3<Float>.size + SIMD4<Float>.size
+        vertexDescriptor.attributes[1].format = .float2
+        vertexDescriptor.attributes[1].bufferIndex = 0
+        vertexDescriptor.attributes[1].offset = size
+        size += SIMD2<Float>.size
         
-        //TextureId
-        vertexDescriptor.attributes[3].format = .uint
-        vertexDescriptor.attributes[3].bufferIndex = 0
-        vertexDescriptor.attributes[3].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size
-        
-        //MaterialId
-        vertexDescriptor.attributes[4].format = .uint
-        vertexDescriptor.attributes[4].bufferIndex = 0
-        vertexDescriptor.attributes[4].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size + uint.size
-        
-        //ModelConstantId
-        vertexDescriptor.attributes[5].format = .uint
-        vertexDescriptor.attributes[5].bufferIndex = 0
-        vertexDescriptor.attributes[5].offset = SIMD3<Float>.size + SIMD4<Float>.size + SIMD2<Float>.size + uint.size
+//        //Texture Id
+//        vertexDescriptor.attributes[2].format = .uint
+//        vertexDescriptor.attributes[2].bufferIndex = 0
+//        vertexDescriptor.attributes[2].offset = size
+//        size += UInt32.size
         
         //Normal
-        vertexDescriptor.attributes[6].format = .float3
-        vertexDescriptor.attributes[6].bufferIndex = 0
-        vertexDescriptor.attributes[6].offset = SIMD3<Float>.size + SIMD3<Float>.size
+        vertexDescriptor.attributes[2].format = .float3
+        vertexDescriptor.attributes[2].bufferIndex = 0
+        vertexDescriptor.attributes[2].offset = size
+        size += SIMD3<Float>.size
         
-        vertexDescriptor.layouts[0].stride = VertexOut.stride
+        //Tangent
+        vertexDescriptor.attributes[3].format = .float3
+        vertexDescriptor.attributes[3].bufferIndex = 0
+        vertexDescriptor.attributes[3].offset = size
+        size += SIMD3<Float>.size
+        
+        //Bitangent
+        vertexDescriptor.attributes[4].format = .float3
+        vertexDescriptor.attributes[4].bufferIndex = 0
+        vertexDescriptor.attributes[4].offset = size
+        size += SIMD3<Float>.size
+        
+        vertexDescriptor.layouts[0].stride = VertexIn.stride
     }
 }
 
@@ -82,25 +85,25 @@ public struct Read_VertexDescriptor: VertexDescriptor{
         vertexDescriptor.attributes[0].format = .float3
         vertexDescriptor.attributes[0].bufferIndex = 0
         vertexDescriptor.attributes[0].offset = size
-        size+=SIMD3<Float>.size
+        size += SIMD3<Float>.size
         
         //UV Coords
         vertexDescriptor.attributes[1].format = .float2
         vertexDescriptor.attributes[1].bufferIndex = 0
         vertexDescriptor.attributes[1].offset = size
-        size+=SIMD3<Float>.size
+        size += SIMD3<Float>.size
         
         //Normal
         vertexDescriptor.attributes[2].format = .float3
         vertexDescriptor.attributes[2].bufferIndex = 0
         vertexDescriptor.attributes[2].offset = size
-        size+=SIMD3<Float>.size
+        size += SIMD3<Float>.size
         
         //Tangent
         vertexDescriptor.attributes[3].format = .float3
         vertexDescriptor.attributes[3].bufferIndex = 0
         vertexDescriptor.attributes[3].offset = size
-        size+=SIMD3<Float>.size
+        size += SIMD3<Float>.size
         
         //Bitangent
         vertexDescriptor.attributes[4].format = .float3
