@@ -68,8 +68,10 @@ struct RenderImage: View {
                     windowController.showWindow(nil)
                     RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
                         model.saveRenderImage()
-                        model.rendering = false
-                        window.close()
+                        DispatchQueue.main.async {
+                            model.rendering = false
+                            window.close()
+                        }
                     }
                 }) {
                     Text("Render")

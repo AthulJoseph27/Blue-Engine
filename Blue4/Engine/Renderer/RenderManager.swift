@@ -75,28 +75,12 @@ class RendererManager {
         gameViewControllers[viewPortType] = gameViewController
     }
     
-//    public static func currentRenderer() -> Renderer? {
-//        return renderers[viewPortType]
-//    }
-    
     public static func pauseAllRenderingLoop() {
         let viewPorts = RenderViewPortType.allCases
         
         for i in 0..<rendererCount {
             mtkViews[viewPorts[i]]!.isPaused = true
         }
-    }
-    
-    public static func resumeRenderingLoop(viewPortType: RenderViewPortType) {
-        renderers[viewPortType]!.onResume()
-        renderers[viewPortType]!.updateViewPort()
-        mtkViews[viewPortType]!.isPaused = false
-    }
-    
-    public static func resumeRenderingLoop() {
-        renderers[viewPortType]!.onResume()
-        renderers[viewPortType]!.updateViewPort()
-        mtkViews[viewPortType]!.isPaused = false
     }
     
     public static func getRenderedTexture()->MTLTexture? {
@@ -114,8 +98,9 @@ class RendererManager {
     }
     
     public static func onRenderingComplete() {
-        postRenderingCallback!()
+        postRenderingCallback?()
         setDisplayMode(settings: viewPortSettings[viewPortType]!)
+        self.postRenderingCallback = nil
     }
     
     public static func setDisplayMode(settings: RenderingSettings) {
@@ -138,6 +123,7 @@ class RendererManager {
     
     public static func updateViewPort(viewPortType: RenderViewPortType) {
         if self.viewPortType == viewPortType {
+            resumeRenderingLoop(viewPortType: viewPortType)
             return
         }
         
@@ -146,6 +132,12 @@ class RendererManager {
         pauseAllRenderingLoop()
         SceneManager.updateRenderableScene(viewPortToRendererMap[viewPortType]!)
         resumeRenderingLoop(viewPortType: viewPortType)
+    }
+    
+    private static func resumeRenderingLoop(viewPortType: RenderViewPortType) {
+        renderers[viewPortType]!.onResume()
+        renderers[viewPortType]!.updateViewPort()
+        mtkViews[viewPortType]!.isPaused = false
     }
     
     private static func setupDefaultCamera() {

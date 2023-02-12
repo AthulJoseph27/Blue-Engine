@@ -10,7 +10,7 @@ class GameScene {
     
     func buildScene() {}
     
-    func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: Material, triangleMaks: UInt32) {
+    func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: inout Material, triangleMaks: UInt32) {
         let solid = Solid(.None)
         
         solid.mesh.submeshCount = 1
@@ -21,6 +21,7 @@ class GameScene {
         
         if triangleMaks == TRIANGLE_MASK_LIGHT {
             solid.lightSource = true
+            material.isLit = true
         }
         
         var vertices: [VertexIn] = []
@@ -59,10 +60,10 @@ class GameScene {
         if refractiveIndex >= 1.0 {
             opacity = 0
         }
-        let material = Material(color: SIMD4<Float>(color, 1), isLit: true, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
+        var material = Material(color: SIMD4<Float>(color, 1), isLit: true, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
         
-        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: material, triangleMaks: triangleMask)
-        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: material, triangleMaks: triangleMask)
+        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: &material, triangleMaks: triangleMask)
+        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: &material, triangleMaks: triangleMask)
     }
     
     func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {

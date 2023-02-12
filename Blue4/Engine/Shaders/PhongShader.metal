@@ -1,4 +1,6 @@
 #include <metal_stdlib>
+#import "Blue4-Bridging-Header.h"
+
 using namespace metal;
 
 struct VertexIn {
@@ -59,6 +61,55 @@ struct Light {
     float specularIntensity     [[ attribute(5) ]];
 };
 
+constant unsigned int primes2[] = {
+    2,   3,  5,  7,
+    11, 13, 17, 19,
+    23, 29, 31, 37,
+    41, 43, 47, 53,
+};
+
+float halton2(unsigned int i, unsigned int d) {
+    unsigned int b = primes2[d];
+    
+    float f = 1.0f;
+    float invB = 1.0f / b;
+    
+    float r = 0;
+    
+    while (i > 0) {
+        f = f * invB;
+        r = r + f * (i % b);
+        i = i / b;
+    }
+    
+    return r;
+}
+
+inline float3 sampleAreaLight2(constant AreaLight & light,
+                            float2 u,
+                            float3 position)
+{
+    u = u * 2.0f - 1.0f;
+
+    float3 samplePosition = light.position +
+                            light.right * u.x +
+                            light.up * u.y;
+
+    float3 lightDirection = samplePosition - position;
+
+    float lightDistance = length(lightDirection);
+
+    float inverseLightDistance = 1.0f / max(lightDistance, 1e-3f);
+
+    lightDirection *= inverseLightDistance;
+    
+    float3 lightColor = light.color;
+    lightColor *= (inverseLightDistance * inverseLightDistance);
+    lightColor *= saturate(dot(-lightDirection, light.forward));
+    
+    return lightColor;
+}
+
 vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]], constant SceneConstants &sceneConstants [[ buffer(1) ]], constant ModelConstants &modelConstants [[ buffer(2) ]]) {
     
     RasterizerData rd;
@@ -77,7 +128,7 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
 }
 
 fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], constant Material &material [[ buffer(0) ]], const device PrimitiveData *primitiveData [[ buffer(1) ]],
-                                      constant unsigned int &textureId [[ buffer(2) ]]){
+                                      constant unsigned int &textureId [[ buffer(2) ]], constant AreaLight &light [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
     
     float4 color = material.color;
 
@@ -85,43 +136,34 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
         color = primitiveData[textureId].texture.sample(sampler2d, rd.uvCoordinate);
     }
 
-//    if(material.isLit) {
+    if(material.isLit) {
+        color = material.color;
+    } else {
 //        float3 unitNormal = normalize(rd.surfaceNormal);
 //        float3 unitToCameraVector = normalize(rd.toCameraVector);
-//
-//        float3 totalAmbient = float3(0, 0, 0);
-//        float3 totalDiffuse = float3(0, 0, 0);
-//        float3 totalSpecular = float3(0, 0, 0);
-//
-//        for(int i = 0 ; i < lightCount ; i++ ) {
-//            Light lightData = lightDatas[i];
-//
-//            float3 unitToLightVector = normalize(lightData.position - rd.worldPosition);
-//            float3 unitReflectionVector = normalize(reflect(-unitToLightVector, unitNormal));
-//            //Ambient
-//            float3 ambientness = material.ambient * lightData.ambientIntensity;
-//            float3 ambientColor = ambientness * lightData.color;
-//            totalAmbient += ambientColor;
-//
-//            // Diffuse
-//            float3 diffuseness = material.diffuse * lightData.diffuseIntensity;
-//            float nDotL = max(dot(unitNormal, unitToLightVector), 0.0);
-//            float3 diffuseColor = clamp(diffuseness * nDotL * lightData.color, 0.0, 1.0);
-//            totalDiffuse += diffuseColor;
-//
-//            // Specular
-//            float3 specularness = material.specular * lightData.specularIntensity;
-//            float rDotV = max(dot(unitReflectionVector , unitToCameraVector), 0.0);
-//            float specularExp = pow(rDotV, material.shininess);
-//            float3 specularColor = clamp(specularness * specularExp * lightData.color * lightData.brightness, 0.0, 1.0);
-//            totalSpecular+=specularColor;
-//        }
-//
-//        float3 phongIntensity = totalAmbient + totalDiffuse + totalSpecular;
-//
-//        color *= float4(phongIntensity, 1.0);
-//    }
 
-//    float4 color = float4(1, 1, 1, 1);
+        float3 totalAmbient = float3(0, 0, 0);
+        float3 totalDiffuse = float3(0, 0, 0);
+        float3 totalSpecular = float3(0, 0, 0);
+        
+        float2 r = float2(halton2(randomOffset, 0),
+                          halton2(randomOffset, 1));
+
+//        for(int i = 0 ; i < lightCount ; i++ ) {
+        constant AreaLight &lightData = light;
+        
+        // Ambinet
+        totalAmbient += material.ambient;
+        
+        // Diffuse
+        totalDiffuse += sampleAreaLight2(lightData, r, rd.worldPosition);
+            
+//        }
+
+        float3 phongIntensity = totalAmbient + totalDiffuse + totalSpecular;
+
+        color *= float4(phongIntensity, 1.0);
+    }
+    
     return half4(color.r, color.g, color.b, color.a);
 }

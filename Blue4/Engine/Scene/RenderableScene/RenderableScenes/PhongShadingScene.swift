@@ -6,10 +6,11 @@ class PhongShadingScene: RenderableScene {
     var renderOptions: PSRenderOptions = PSRenderOptions()
     
     var heap = Heap()
-    var textures:  [Textures] = []
+    var textures: [Textures] = []
     var materials: [Material] = []
     var objects: [Solid] = []
-    
+    var lights: [AreaLight] = []
+    var randomValues: [UInt32] = []
     
     var materialBuffer: MTLBuffer!
     var textureBuffer: MTLBuffer!
@@ -28,9 +29,16 @@ class PhongShadingScene: RenderableScene {
         buildScene(scene: scene)
         createBuffers()
         heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
+        fillRandomValues()
     }
     
-    func createSampler() {
+    private func fillRandomValues() {
+        for _ in 0..<1024 {
+            randomValues.append(arc4random() % 1024)
+        }
+    }
+    
+    private func createSampler() {
         let sampleDescriptor = MTLSamplerDescriptor()
         sampleDescriptor.minFilter = .linear
         sampleDescriptor.magFilter = .linear
@@ -38,10 +46,19 @@ class PhongShadingScene: RenderableScene {
         sampler = Engine.device.makeSamplerState(descriptor: sampleDescriptor)
     }
     
-    func buildScene(scene: GameScene) {
+    private func buildScene(scene: GameScene) {
         for solid in scene.solids {
             addSolid(solid: solid)
         }
+    }
+    
+    func createBuffers() {
+        let storageOptions: MTLResourceOptions
+        storageOptions = .storageModeShared
+        
+        self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
+        
+        lights = [AreaLight(position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(4, 4, 4))]
     }
     
     func addSolid(solid: Solid) {
@@ -51,13 +68,6 @@ class PhongShadingScene: RenderableScene {
         }
         
         objects.append(solid)
-    }
-    
-    func createBuffers() {
-        let storageOptions: MTLResourceOptions
-        storageOptions = .storageModeShared
-        
-        self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
     }
     
     func drawSolids(renderEncoder: MTLRenderCommandEncoder) {
@@ -76,10 +86,13 @@ class PhongShadingScene: RenderableScene {
         
         renderEncoder.setFragmentSamplerState(sampler, index: 0)
         
+        renderEncoder.setFragmentBytes(&lights[0], length: AreaLight.stride, index: 3)
+        
         renderEncoder.useHeap(heap.heap, stages: .fragment)
         renderEncoder.setFragmentBuffer(textureBuffer, offset: 0, index: 1)
         
         var textureId: UInt32 = 0
+        var id = 0
         
         for solid in objects {
             renderEncoder.setVertexBuffer(solid.mesh.vertexBuffer, offset: 0, index: 0)
@@ -94,12 +107,14 @@ class PhongShadingScene: RenderableScene {
                 let indexCount = indexBuffer.length / UInt32.stride
                 
                 renderEncoder.setFragmentBytes(&solid.mesh.materials[i], length: Material.stride, index: 0)
-                
                 renderEncoder.setFragmentBytes(&textureId, length: UInt32.stride, index: 2)
                 
+                var randomOffset = randomValues[id % 1024]
+                renderEncoder.setFragmentBytes(&randomOffset, length: UInt32.stride, index: 4)
                 renderEncoder.drawIndexedPrimitives(type: .triangle, indexCount: indexCount, indexType: .uint32, indexBuffer: indexBuffer, indexBufferOffset: 0)
                 
                 textureId += 1
+                id += 1
             }
         }
 

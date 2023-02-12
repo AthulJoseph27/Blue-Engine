@@ -1,6 +1,7 @@
 #include <metal_stdlib>
 #include <simd/simd.h>
 
+#import "CommonFunctions.h"
 #import "Blue4-Bridging-Header.h"
 
 using namespace metal;
@@ -82,6 +83,31 @@ float halton(unsigned int i, unsigned int d) {
     }
     
     return r;
+}
+
+inline void sampleAreaLight(constant AreaLight & light,
+                            float2 u,
+                            float3 position,
+                            thread float3 & lightDirection,
+                            thread float3 & lightColor,
+                            thread float & lightDistance)
+{
+    u = u * 2.0f - 1.0f;
+
+    float3 samplePosition = light.position +
+                            light.right * u.x +
+                            light.up * u.y;
+
+    lightDirection = samplePosition - position;
+
+    lightDistance = length(lightDirection);
+
+    float inverseLightDistance = 1.0f / max(lightDistance, 1e-3f);
+
+    lightDirection *= inverseLightDistance;
+    lightColor = light.color;
+    lightColor *= (inverseLightDistance * inverseLightDistance);
+    lightColor *= saturate(dot(-lightDirection, light.forward));
 }
 
 kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
@@ -194,31 +220,6 @@ inline float3 interpolateVertexBiTangent(device Vertex *vertices, device VertexI
     float3 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].bitangent;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
-}
-
-inline void sampleAreaLight(constant AreaLight & light,
-                            float2 u,
-                            float3 position,
-                            thread float3 & lightDirection,
-                            thread float3 & lightColor,
-                            thread float & lightDistance)
-{
-    u = u * 2.0f - 1.0f;
-    
-    float3 samplePosition = light.position +
-                            light.right * u.x +
-                            light.up * u.y;
-    
-    lightDirection = samplePosition - position;
-    
-    lightDistance = length(lightDirection);
-    
-    float inverseLightDistance = 1.0f / max(lightDistance, 1e-3f);
-    
-    lightDirection *= inverseLightDistance;
-    lightColor = light.color;
-    lightColor *= (inverseLightDistance * inverseLightDistance);
-    lightColor *= saturate(dot(-lightDirection, light.forward));
 }
 
 inline void sampleSpotLight(float2 u,

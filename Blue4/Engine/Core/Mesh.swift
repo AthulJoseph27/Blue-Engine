@@ -44,7 +44,7 @@ class Mesh {
         }
     
     private func getMaterial(_ mdlMaterial: MDLMaterial?)->Material {
-        var _material = Material(isLit: true)
+        var _material = Material(isLit: false)
         
         if mdlMaterial == nil {
             return _material

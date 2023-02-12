@@ -77,7 +77,7 @@ struct LightData: sizeable {
 
 struct Material: sizeable {
     var color = SIMD4<Float>(0.6, 0.6, 0.6, 1.0)
-    var isLit: Bool = true
+    var isLit: Bool = false
     
     var ambient = SIMD3<Float>(0.1, 0.1, 0.1)
     var diffuse = SIMD3<Float>(1, 1, 1)

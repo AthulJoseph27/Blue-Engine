@@ -44,11 +44,9 @@ class PhongRenderer: Renderer {
         commandBuffer?.commit()
         
         if renderMode == .render {
-            commandBuffer?.addCompletedHandler { value in
-                self.renderedTexture = view.currentDrawable?.texture
-                self.renderMode = .display
-                RendererManager.onRenderingComplete()
-            }
+            self.renderedTexture = drawable.texture
+            self.renderMode = .display
+            RendererManager.onRenderingComplete()
         }
     }
 }

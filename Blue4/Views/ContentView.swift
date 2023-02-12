@@ -76,8 +76,6 @@ struct ContentView: View {
         .onChange(of: contentData.selectedTab) { value in
             if contentData.selectedTab != .RayTracing && contentData.selectedTab != .VertexShader {
                 RendererManager.pauseAllRenderingLoop()
-            } else {
-                RendererManager.resumeRenderingLoop()
             }
             
             if contentData.selectedTab == .RayTracing {
