@@ -56,7 +56,8 @@ struct PrimitiveData: sizeable {
     var texture: MTLTexture?
 }
 
-struct AreaLight: sizeable {
+struct Light: sizeable {
+    var type: UInt32
     var position: SIMD3<Float>
     var forward: SIMD3<Float>
     var right: SIMD3<Float>
@@ -194,6 +195,7 @@ enum RendererType : CaseIterable {
 
 enum GameScenes: String {
     case Sandbox = "Sandbox"
+    case Sponza = "Sponze"
     case TestScene = "Test Scene"
 }
 

@@ -10,6 +10,10 @@
 #define RAY_MASK_SHADOW    1
 #define RAY_MASK_SECONDARY 1
 
+#define LIGHT_TYPE_AREA   0
+#define LIGHT_TYPE_SPOT   1
+#define LIGHT_TYPE_SUN    2
+
 struct Camera {
     vector_float3 position;
     vector_float3 right;
@@ -17,7 +21,8 @@ struct Camera {
     vector_float3 forward;
 };
 
-struct AreaLight {
+struct Light {
+    unsigned int type;
     vector_float3 position;
     vector_float3 forward;
     vector_float3 right;
@@ -32,7 +37,7 @@ struct Uniforms
     unsigned int blocksWide;
     unsigned int frameIndex;
     struct Camera camera;
-    struct AreaLight light;
+    struct Light light;
 };
 
 #endif /* ShaderTypes_h */

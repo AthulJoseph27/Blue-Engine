@@ -85,7 +85,7 @@ float halton(unsigned int i, unsigned int d) {
     return r;
 }
 
-inline void sampleAreaLight(constant AreaLight & light,
+inline void sampleAreaLight(constant Light & light,
                             float2 u,
                             float3 position,
                             thread float3 & lightDirection,
@@ -229,7 +229,7 @@ inline void sampleSpotLight(float2 u,
                             thread float & lightDistance)
 {
     float radius = 10000;
-    float3 center = float3(radius * 100, radius * 100, radius * 100);
+    float3 center = float3(0, radius * 100, radius * 100);
     u = u * 2.0f - 1.0f;
     
     center.x += radius * u.x;
@@ -390,19 +390,19 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    float refractiveIndex = 0;
 
-                   if(material.opacity < 1.0) {
-                       refractiveIndex = material.opticalDensity;
-                       if(refractiveIndex < 1.0) {
-                           refractiveIndex = 1.0 / refractiveIndex;
-                       }
-                   }
+//                   if(material.opacity < 1.0) {
+//                       refractiveIndex = material.opticalDensity;
+//                       if(refractiveIndex < 1.0) {
+//                           refractiveIndex = 1.0 / refractiveIndex;
+//                       }
+//                   }
 
                    float reflectivity = 1.0 - material.roughness;
 
                    if(material.isMetallicMapEnabled) {
                        reflectivity = primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
                    } else if(material.isRoughnessMapEnabled) {
-                       reflectivity = 1.0 - primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
+                       reflectivity = 1.0 - primitiveData[submeshId].roughnessMap.sample(sampler2d, uvCoord).x;
                    }
 
                    if(refractiveIndex >= 1.0f){

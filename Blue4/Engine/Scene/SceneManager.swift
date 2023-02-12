@@ -25,6 +25,8 @@ class SceneManager {
         switch scene {
         case .Sandbox:
             _currentScene = Sandbox()
+        case .Sponza:
+            _currentScene = Sponza()
         case .TestScene:
             _currentScene = TestScene()
         }

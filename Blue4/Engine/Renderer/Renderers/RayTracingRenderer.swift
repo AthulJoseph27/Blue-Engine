@@ -5,8 +5,8 @@ import os
 
 class RayTracingRenderer: Renderer {
     private static let qualityIterationCountMap: [RenderQuality: Int] = [
-        .high : 512,
-        .medium : 128,
+        .high : 1024,
+        .medium : 256,
         .low : 8,
     ]
     var intersector: MPSRayIntersector!
@@ -41,7 +41,6 @@ class RayTracingRenderer: Renderer {
     
     override func initialize() {
         self.updateViewPort()
-//        self.createScene()
         self.createPipelines()
         self.createIntersector()
         
@@ -84,10 +83,6 @@ class RayTracingRenderer: Renderer {
         self.copyPipeline = RenderPipelineStateLibrary.pipelineState(.RayTracing)
         self.renderPipeline = RenderPipelineStateLibrary.pipelineState(.Rendering)
     }
-    
-//    private func createScene() {
-//        viewPort = RenderViewPortManager.currentViewPort
-//    }
     
     private func createIntersector() {
         intersector = MPSRayIntersector(device: device)

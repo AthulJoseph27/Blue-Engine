@@ -51,16 +51,6 @@ struct PrimitiveData {
     texture2d<float> roughnessMap   [[ id(3) ]];
 };
 
-struct Light {
-    float3 position             [[ attribute(0) ]];
-    float3 color                [[ attribute(1) ]];
-    
-    float brightness            [[ attribute(2) ]];
-    float ambientIntensity      [[ attribute(3) ]];
-    float diffuseIntensity      [[ attribute(4) ]];
-    float specularIntensity     [[ attribute(5) ]];
-};
-
 constant unsigned int primes2[] = {
     2,   3,  5,  7,
     11, 13, 17, 19,
@@ -85,7 +75,7 @@ float halton2(unsigned int i, unsigned int d) {
     return r;
 }
 
-inline float3 sampleAreaLight2(constant AreaLight & light,
+inline float3 sampleAreaLight2(constant Light & light,
                             float2 u,
                             float3 position)
 {
@@ -128,7 +118,7 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
 }
 
 fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], constant Material &material [[ buffer(0) ]], const device PrimitiveData *primitiveData [[ buffer(1) ]],
-                                      constant unsigned int &textureId [[ buffer(2) ]], constant AreaLight &light [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
+                                      constant unsigned int &textureId [[ buffer(2) ]], constant Light &light [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
     
     float4 color = material.color;
 
@@ -150,7 +140,7 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
                           halton2(randomOffset, 1));
 
 //        for(int i = 0 ; i < lightCount ; i++ ) {
-        constant AreaLight &lightData = light;
+        constant Light &lightData = light;
         
         // Ambinet
         totalAmbient += material.ambient;
