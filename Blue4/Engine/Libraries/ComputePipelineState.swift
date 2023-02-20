@@ -120,7 +120,15 @@ public struct Shadow_ComputePipelineState: ComputePipelineState {
     init() {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.RayTracing).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadowKernel")
-            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.RayTracing), options: [], reflection: nil)
+            
+            let descriptor = ComputePipelineDescriptorLibrary.descriptor(.RayTracing)
+            let functions = [Engine.defaultLibrary.makeFunction(name: "alphaTestIntersection")!]
+            let linkedFunctions = MTLLinkedFunctions()
+            linkedFunctions.functions = functions
+            
+            descriptor.linkedFunctions = linkedFunctions
+            
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: descriptor, options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
             return;

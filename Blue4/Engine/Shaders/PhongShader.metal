@@ -118,7 +118,7 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
 }
 
 fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], constant Material &material [[ buffer(0) ]], const device PrimitiveData *primitiveData [[ buffer(1) ]],
-                                      constant unsigned int &textureId [[ buffer(2) ]], constant Light &light [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
+                                      constant unsigned int &textureId [[ buffer(2) ]], constant PSLight &psLight [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
     
     float4 color = material.color;
 
@@ -140,10 +140,10 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
                           halton2(randomOffset, 1));
 
 //        for(int i = 0 ; i < lightCount ; i++ ) {
-        constant Light &lightData = light;
+        constant Light &lightData = psLight.light;
         
         // Ambinet
-        totalAmbient += material.ambient;
+        totalAmbient += material.ambient + 0.1;
         
         // Diffuse
         totalDiffuse += sampleAreaLight2(lightData, r, rd.worldPosition);
@@ -153,6 +153,10 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
         float3 phongIntensity = totalAmbient + totalDiffuse + totalSpecular;
 
         color *= float4(phongIntensity, 1.0);
+    }
+    
+    if(color.a < 0.1) {
+        discard_fragment(); // Find a better way, because this has performance hit.
     }
     
     return half4(color.r, color.g, color.b, color.a);

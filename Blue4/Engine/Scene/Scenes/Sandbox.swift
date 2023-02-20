@@ -9,7 +9,7 @@ class Sandbox: GameScene {
         transform.translate(direction: SIMD3<Float>(0, 1, 0))
         transform.scale(axis: SIMD3<Float>(0.5, 1.98, 0.5))
         
-//        createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: UInt32(TRIANGLE_MASK_LIGHT))
+        createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: UInt32(TRIANGLE_MASK_LIGHT))
         
         //         Top, bottom, back
         transform = matrix_identity_float4x4

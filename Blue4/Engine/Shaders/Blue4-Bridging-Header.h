@@ -30,6 +30,13 @@ struct Light {
     vector_float3 color;
 };
 
+struct PSLight {
+    struct Light light;
+    float ambient;
+    float diffuse;
+    float specular;
+};
+
 struct Uniforms
 {
     unsigned int width;

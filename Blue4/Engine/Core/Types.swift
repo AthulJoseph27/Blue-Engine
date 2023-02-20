@@ -56,14 +56,19 @@ struct PrimitiveData: sizeable {
     var texture: MTLTexture?
 }
 
-struct Light: sizeable {
-    var type: UInt32
-    var position: SIMD3<Float>
-    var forward: SIMD3<Float>
-    var right: SIMD3<Float>
-    var up: SIMD3<Float>
-    var color: SIMD3<Float>
+struct AlphaTestingPrimitiveData: sizeable {
+    var texture: MTLTexture?
+    var uvCoordinates: [SIMD2<Float>] = Array(repeating: SIMD2(repeating: 0), count: 3)
 }
+
+//struct Light: sizeable {
+//    var type: UInt32
+//    var position: SIMD3<Float>
+//    var forward: SIMD3<Float>
+//    var right: SIMD3<Float>
+//    var up: SIMD3<Float>
+//    var color: SIMD3<Float>
+//}
 
 struct LightData: sizeable {
     var position = SIMD3<Float>(repeating: 0)

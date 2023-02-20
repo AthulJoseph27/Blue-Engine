@@ -18,6 +18,7 @@ class StaticRTScene: RTScene {
     var indexBuffer:         MTLBuffer!
     var customIndexBuffer:   MTLBuffer!
     var textureBuffer:       MTLBuffer!
+    var primitiveDataBuffer: MTLBuffer!
     var materialBuffer:      MTLBuffer!
     var verticesCountBuffer: MTLBuffer!
     var indiciesCountBuffer: MTLBuffer!
@@ -167,9 +168,18 @@ class StaticRTScene: RTScene {
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: UInt32.stride(masks.count), options: storageOptions)
         self.rayMaskBuffer = Engine.device.makeBuffer(bytes: &rayMasks, length: UInt32.stride(rayMasks.count), options: storageOptions)
+        
+        var primitiveDatas = getPrimitiveDatas()
+        primitiveDataBuffer = Engine.device.makeBuffer(bytes: &primitiveDatas, length: AlphaTestingPrimitiveData.stride(primitiveDatas.count), options: storageOptions)
     }
     
     func createAcceleratedStructure() {
+        let geometryDescriptor = MTLAccelerationStructureGeometryDescriptor()
+        geometryDescriptor.primitiveDataBuffer = primitiveDataBuffer
+        geometryDescriptor.primitiveDataBufferOffset = 0
+        geometryDescriptor.primitiveDataElementSize = AlphaTestingPrimitiveData.stride
+        geometryDescriptor.primitiveDataStride = AlphaTestingPrimitiveData.stride
+        
         accelerationStructure = MPSTriangleAccelerationStructure(device: Engine.device)
         accelerationStructure.vertexBuffer = vertexBuffer
         accelerationStructure.vertexStride = VertexIn.stride
@@ -182,4 +192,19 @@ class StaticRTScene: RTScene {
     func updateObjects(deltaTime: Float) {}
     
     func updateScene(deltaTime: Float) {}
+    
+    private func getPrimitiveDatas() -> [AlphaTestingPrimitiveData] {
+        var primitiveDatas: [AlphaTestingPrimitiveData] = []
+        
+        let count = customIndexBuffer.length / VertexIndex.stride
+        let indicies = customIndexBuffer.contents().bindMemory(to: VertexIndex.self, capacity: count)
+        let vertices = vertexBuffer.contents().bindMemory(to: VertexIn.self, capacity: vertexBuffer.length / VertexIn.stride)
+        
+        for i in 0..<(count/3) {
+            let index = Int(indicies[3 * i].index)
+            primitiveDatas.append(AlphaTestingPrimitiveData(texture: textures[Int(indicies[i].submeshId)].baseColor, uvCoordinates: [vertices[index].uvCoordinate, vertices[index + 1].uvCoordinate, vertices[index + 2].uvCoordinate]))
+        }
+        
+        return primitiveDatas
+    }
 }

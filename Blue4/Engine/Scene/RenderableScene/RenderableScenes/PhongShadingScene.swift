@@ -9,7 +9,7 @@ class PhongShadingScene: RenderableScene {
     var textures: [Textures] = []
     var materials: [Material] = []
     var objects: [Solid] = []
-    var lights: [Light] = []
+    var lights: [PSLight] = []
     var randomValues: [UInt32] = []
     
     var materialBuffer: MTLBuffer!
@@ -58,7 +58,9 @@ class PhongShadingScene: RenderableScene {
         
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         
-        lights = [Light(type: UInt32(LIGHT_TYPE_SUN), position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(4, 4, 4))]
+        let light = Light(type: UInt32(LIGHT_TYPE_SUN), position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(4, 4, 4))
+        
+        lights = [PSLight(light: light, ambient: 0.1, diffuse: 0.1, specular: 0.1)]
     }
     
     func addSolid(solid: Solid) {
@@ -75,7 +77,6 @@ class PhongShadingScene: RenderableScene {
         
         // Inverting Camera Axis
         currentCamera.rotation *= -1
-        currentCamera.position *= -1
         
         sceneConstants.viewMatrix = currentCamera.viewMatrix
         sceneConstants.projectionMatrix = currentCamera.projectionMatrix
@@ -83,7 +84,6 @@ class PhongShadingScene: RenderableScene {
         
         // Resetting Camera Axis
         currentCamera.rotation *= -1
-        currentCamera.position *= -1
         
         renderEncoder.setVertexBytes(&sceneConstants, length: SceneConstants.stride, index: 1)
         
@@ -94,7 +94,7 @@ class PhongShadingScene: RenderableScene {
         
         renderEncoder.setFragmentSamplerState(sampler, index: 0)
         
-        renderEncoder.setFragmentBytes(&lights[0], length: Light.stride, index: 3)
+        renderEncoder.setFragmentBytes(&lights[0], length: MemoryLayout<PSLight>.stride, index: 3)
         
         renderEncoder.useHeap(heap.heap, stages: .fragment)
         renderEncoder.setFragmentBuffer(textureBuffer, offset: 0, index: 1)

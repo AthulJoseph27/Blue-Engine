@@ -61,6 +61,11 @@ struct VertexIndex {
     uint submeshId    [[ attribute(1) ]];
 };
 
+struct AlphaTestingPrimitiveData {
+    texture2d<float, access::sample> texture;
+    vector_float2 uvCoordinates[3];
+};
+
 constant unsigned int primes[] = {
     2,   3,  5,  7,
     11, 13, 17, 19,
@@ -283,7 +288,7 @@ inline float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
         return float3(skyBox.read(uint2((int)_v, (int)_u)));
     }
 
-        return float3(skyBox.read(uint2((int)_u, (int)_v)));
+    return float3(skyBox.read(uint2((int)_u, (int)_v)));
 }
 
 inline float3 refractRay(Ray ray, float3 normal, float eta) {
@@ -296,6 +301,25 @@ inline float3 refractRay(Ray ray, float3 normal, float eta) {
     
     return refract(normalize(ray.direction), normalize(normal), eta);
 }
+
+//inline float3 reflectRay(Ray ray, float3 normal, float3 sampleDirection) {
+//    // n, x, z be the  new axis
+//    // z = ray.direction x n -> out of the plane
+//    // x = n x z -> left and n -> top
+//
+//    // move the reflected ray by a factor proportional to roughness with some randomness
+//    // along x and n direction
+//
+//    float3 z = cross(ray.direction, normal);
+//    float3 x = cross(normal, z);
+//
+//    float3 reflectedRay = reflect(ray.direction, normal);
+//
+//    reflectedRay += sampleDirection.x * x;
+//    reflectedRay += sampleDirection.y * normal;
+//
+//    return normalize(reflectedRay);
+//}
 
 kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         constant Uniforms & uniforms,
@@ -374,7 +398,18 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 //                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
 
                    if(material.isTextureEnabled){
-                       objectColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord).xyz;
+                       float4 sampledColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord);
+                       if(sampledColor.a < 0.5) {
+                           ray.origin = intersectionPoint + ray.direction * 1e-3f;
+                           ray.mask = RAY_MASK_SECONDARY;
+                           ray.maxDistance = INFINITY;
+                           
+                           shadowRay.color = float3(0);
+                           shadowRay.maxDistance = -2.0f;
+                           return;
+                       }
+                       
+                       objectColor = sampledColor.xyz;
                    } else {
                        objectColor = materials[submeshId].color.xyz;
                    }
@@ -390,19 +425,17 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    float refractiveIndex = 0;
 
-//                   if(material.opacity < 1.0) {
-//                       refractiveIndex = material.opticalDensity;
-//                       if(refractiveIndex < 1.0) {
-//                           refractiveIndex = 1.0 / refractiveIndex;
-//                       }
-//                   }
+                   if(material.opacity < 1.0) {
+                       refractiveIndex = material.opticalDensity;
+                       if(refractiveIndex < 1.0) {
+                           refractiveIndex = 1.0 / refractiveIndex;
+                       }
+                   }
 
-                   float reflectivity = 1.0 - material.roughness;
+                   float reflectivity = 0.0;
 
                    if(material.isMetallicMapEnabled) {
                        reflectivity = primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
-                   } else if(material.isRoughnessMapEnabled) {
-                       reflectivity = 1.0 - primitiveData[submeshId].roughnessMap.sample(sampler2d, uvCoord).x;
                    }
 
                    if(refractiveIndex >= 1.0f){
@@ -416,19 +449,25 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        // Reflect ray
                        ray.direction = reflect(ray.direction, surfaceNormal);
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
-                       ray.color = color;
+                       ray.color = reflectivity * color;
                        ray.mask = RAY_MASK_SECONDARY;
                        ray.maxDistance = INFINITY;
                    }else{
+                       float roughness = 0;
+//
                        r = float2(halton(offset + uniforms.frameIndex, bounce + 1),
                                   halton(offset + uniforms.frameIndex, bounce + 3));
-
+//
+                       if(material.isRoughnessMapEnabled) {
+                           roughness = primitiveData[submeshId].roughnessMap.sample(sampler2d, uvCoord).x;
+                       }
+                       
                        float3 sampleDirection = sampleCosineWeightedHemisphere(r);
-                        sampleDirection = alignHemisphereWithNormal(sampleDirection, surfaceNormal);
+                       sampleDirection = alignHemisphereWithNormal(sampleDirection, surfaceNormal);
 
                        ray.direction = sampleDirection;
                        ray.origin = intersectionPoint + ray.direction * 1e-3f;
-                       ray.color = color;
+                       ray.color = color * (1.0f - roughness);
                        ray.mask = RAY_MASK_SECONDARY;
                    }
                }
@@ -532,4 +571,25 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     color = color / (1.0f + color);
     
     return float4(color, 1.0f);
+}
+
+inline float2 calculateSamplingCoordinate(float2 coordinates, float2 T0, float2 T1, float2 T2) {
+    float3 uvw;
+    uvw.xy = coordinates;
+    uvw.z = 1.0f - uvw.x - uvw.y;
+    
+    return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
+}
+
+[[intersection(triangle, raytracing::triangle_data, raytracing::instancing)]]
+bool alphaTestIntersection(float2 coordinates [[barycentric_coord]], const device AlphaTestingPrimitiveData *primitiveData [[primitive_data]]) {
+    
+    AlphaTestingPrimitiveData ppd = *primitiveData;
+    
+    float2 uv = calculateSamplingCoordinate(coordinates, ppd.uvCoordinates[0], ppd.uvCoordinates[1], ppd.uvCoordinates[2]);
+    
+    constexpr sampler sam(mip_filter::none);
+    
+    float alpha = ppd.texture.sample(sam, uv).w;
+    return alpha >= 0.5f;
 }

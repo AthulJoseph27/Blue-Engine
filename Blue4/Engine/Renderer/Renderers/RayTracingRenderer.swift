@@ -91,6 +91,13 @@ class RayTracingRenderer: Renderer {
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
     }
     
+    private func createIntersectionFunctionTable() {
+        var tableDescriptor = MTLIntersectionFunctionTableDescriptor()
+        tableDescriptor.functionCount = 1
+        
+        var table = shadePipeline.makeIntersectionFunctionTable(descriptor: tableDescriptor)
+    }
+    
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         self.size = size
         
@@ -236,8 +243,8 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             shadeEncoder.endEncoding()
             
-            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
-            intersector.encodeIntersection(commandBuffer: commandBuffer, intersectionType: .any, rayBuffer: shadowRayBuffer, rayBufferOffset: 0, intersectionBuffer: intersectionBuffer, intersectionBufferOffset: 0, rayCount: width * height, accelerationStructure: scene.getAccelerationStructure())
+//            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
+//            intersector.encodeIntersection(commandBuffer: commandBuffer, intersectionType: .any, rayBuffer: shadowRayBuffer, rayBufferOffset: 0, intersectionBuffer: intersectionBuffer, intersectionBufferOffset: 0, rayCount: width * height, accelerationStructure: scene.getAccelerationStructure())
             
             
             intersector.intersectionDataType = .distance
