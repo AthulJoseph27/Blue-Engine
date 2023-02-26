@@ -5,6 +5,7 @@ class SettingsViewModel: ObservableObject {
     static let scenes: [GameScenes] = [
         .Sandbox,
         .Sponza,
+        .FireplaceRoom,
         .TestScene
     ]
     @Published var maxBounce = 4

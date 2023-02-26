@@ -27,6 +27,8 @@ class SceneManager {
             _currentScene = Sandbox()
         case .Sponza:
             _currentScene = Sponza()
+        case .FireplaceRoom:
+            _currentScene = FireplaceRoom()
         case .TestScene:
             _currentScene = TestScene()
         }

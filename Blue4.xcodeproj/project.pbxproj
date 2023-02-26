@@ -25,12 +25,6 @@
 		3C14A3B62983D20C007C0E03 /* E-45-nor_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3522983D20C007C0E03 /* E-45-nor_1.jpg */; };
 		3C14A3B72983D20C007C0E03 /* E 45 Aircraft_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3532983D20C007C0E03 /* E 45 Aircraft_obj.obj */; };
 		3C14A3B82983D20C007C0E03 /* E-45 _col_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */; };
-		3C14A3B92983D20C007C0E03 /* picture8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3562983D20C007C0E03 /* picture8.png */; };
-		3C14A3BA2983D20C007C0E03 /* fireplace_room.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3572983D20C007C0E03 /* fireplace_room.obj */; };
-		3C14A3BB2983D20C007C0E03 /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3582983D20C007C0E03 /* wood.png */; };
-		3C14A3BC2983D20C007C0E03 /* wood5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3592983D20C007C0E03 /* wood5.png */; };
-		3C14A3BD2983D20C007C0E03 /* fireplace_room.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */; };
-		3C14A3BE2983D20C007C0E03 /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35B2983D20C007C0E03 /* leaf.png */; };
 		3C14A3C02983D20C007C0E03 /* Beach.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A35D2983D20C007C0E03 /* Beach.jpeg */; };
 		3C14A3C12983D20C007C0E03 /* Icosphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3602983D20C007C0E03 /* Icosphere.mtl */; };
 		3C14A3C22983D20C007C0E03 /* Icosphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C14A3612983D20C007C0E03 /* Icosphere.obj */; };
@@ -100,6 +94,7 @@
 		3C14A41D29842CD5007C0E03 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41C29842CD5007C0E03 /* TabButton.swift */; };
 		3C14A41F2984376E007C0E03 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A41E2984376E007C0E03 /* BlurView.swift */; };
 		3C14A42129844C15007C0E03 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C14A42029844C15007C0E03 /* Sidebar.swift */; };
+		3C29233729A9BC6200497EE0 /* FireplaceRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C29233629A9BC6200497EE0 /* FireplaceRoom.swift */; };
 		3C34303029850A4D002F6A6E /* RenderImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34302F29850A4D002F6A6E /* RenderImageView.swift */; };
 		3C34303329853A53002F6A6E /* RenderImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303229853A53002F6A6E /* RenderImageViewModel.swift */; };
 		3C34303529858369002F6A6E /* RendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C34303429858369002F6A6E /* RendererView.swift */; };
@@ -153,6 +148,12 @@
 		3C6F4FD32998F29F00C3C571 /* sponza.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C6F4FA42998F29F00C3C571 /* sponza.mtl */; };
 		3C6F4FD42998F29F00C3C571 /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C6F4FA52998F29F00C3C571 /* sponza.obj */; };
 		3C6F4FD62998FBE700C3C571 /* Sponza.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6F4FD52998FBE600C3C571 /* Sponza.swift */; };
+		3C7471B629A92629001BB3AF /* picture8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B029A92629001BB3AF /* picture8.png */; };
+		3C7471B729A92629001BB3AF /* fireplace_room.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B129A92629001BB3AF /* fireplace_room.obj */; };
+		3C7471B829A92629001BB3AF /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B229A92629001BB3AF /* wood.png */; };
+		3C7471B929A92629001BB3AF /* wood5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B329A92629001BB3AF /* wood5.png */; };
+		3C7471BA29A92629001BB3AF /* fireplace_room.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B429A92629001BB3AF /* fireplace_room.mtl */; };
+		3C7471BB29A92629001BB3AF /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C7471B529A92629001BB3AF /* leaf.png */; };
 		3CDE610A2990D31A009E2C77 /* TestScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDE61092990D31A009E2C77 /* TestScene.swift */; };
 		3CF39CD7298BA7AE00E4F399 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */; };
 		3CF39CD9298BE87B00E4F399 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */; };
@@ -199,12 +200,6 @@
 		3C14A3522983D20C007C0E03 /* E-45-nor_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45-nor_1.jpg"; sourceTree = "<group>"; };
 		3C14A3532983D20C007C0E03 /* E 45 Aircraft_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "E 45 Aircraft_obj.obj"; sourceTree = "<group>"; };
 		3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "E-45 _col_3.jpg"; sourceTree = "<group>"; };
-		3C14A3562983D20C007C0E03 /* picture8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picture8.png; sourceTree = "<group>"; };
-		3C14A3572983D20C007C0E03 /* fireplace_room.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.obj; sourceTree = "<group>"; };
-		3C14A3582983D20C007C0E03 /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
-		3C14A3592983D20C007C0E03 /* wood5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood5.png; sourceTree = "<group>"; };
-		3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.mtl; sourceTree = "<group>"; };
-		3C14A35B2983D20C007C0E03 /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
 		3C14A35D2983D20C007C0E03 /* Beach.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Beach.jpeg; sourceTree = "<group>"; };
 		3C14A3602983D20C007C0E03 /* Icosphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.mtl; sourceTree = "<group>"; };
 		3C14A3612983D20C007C0E03 /* Icosphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icosphere.obj; sourceTree = "<group>"; };
@@ -275,6 +270,7 @@
 		3C14A41C29842CD5007C0E03 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		3C14A41E2984376E007C0E03 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3C14A42029844C15007C0E03 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
+		3C29233629A9BC6200497EE0 /* FireplaceRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireplaceRoom.swift; sourceTree = "<group>"; };
 		3C34302F29850A4D002F6A6E /* RenderImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageView.swift; sourceTree = "<group>"; };
 		3C34303229853A53002F6A6E /* RenderImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderImageViewModel.swift; sourceTree = "<group>"; };
 		3C34303429858369002F6A6E /* RendererView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererView.swift; sourceTree = "<group>"; };
@@ -328,6 +324,12 @@
 		3C6F4FA42998F29F00C3C571 /* sponza.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza.mtl; sourceTree = "<group>"; };
 		3C6F4FA52998F29F00C3C571 /* sponza.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		3C6F4FD52998FBE600C3C571 /* Sponza.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sponza.swift; sourceTree = "<group>"; };
+		3C7471B029A92629001BB3AF /* picture8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picture8.png; sourceTree = "<group>"; };
+		3C7471B129A92629001BB3AF /* fireplace_room.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.obj; sourceTree = "<group>"; };
+		3C7471B229A92629001BB3AF /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		3C7471B329A92629001BB3AF /* wood5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood5.png; sourceTree = "<group>"; };
+		3C7471B429A92629001BB3AF /* fireplace_room.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fireplace_room.mtl; sourceTree = "<group>"; };
+		3C7471B529A92629001BB3AF /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
 		3CDE61092990D31A009E2C77 /* TestScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestScene.swift; sourceTree = "<group>"; };
 		3CF39CD6298BA7AE00E4F399 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3CF39CD8298BE87B00E4F399 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -440,9 +442,9 @@
 		3C14A3492983D20C007C0E03 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				3C7471AF29A92629001BB3AF /* fireplace_room */,
 				3C6F4F752998F29F00C3C571 /* Sponza */,
 				3C14A34B2983D20C007C0E03 /* E-45-Aircraft */,
-				3C14A3552983D20C007C0E03 /* fireplace_room */,
 				3C14A3792983D20C007C0E03 /* chest */,
 				3C14A35E2983D20C007C0E03 /* Meshes */,
 				3C14A3772983D20C007C0E03 /* Jungle.jpg */,
@@ -467,19 +469,6 @@
 				3C14A3542983D20C007C0E03 /* E-45 _col_3.jpg */,
 			);
 			path = "E-45-Aircraft";
-			sourceTree = "<group>";
-		};
-		3C14A3552983D20C007C0E03 /* fireplace_room */ = {
-			isa = PBXGroup;
-			children = (
-				3C14A3562983D20C007C0E03 /* picture8.png */,
-				3C14A3582983D20C007C0E03 /* wood.png */,
-				3C14A3592983D20C007C0E03 /* wood5.png */,
-				3C14A3572983D20C007C0E03 /* fireplace_room.obj */,
-				3C14A35A2983D20C007C0E03 /* fireplace_room.mtl */,
-				3C14A35B2983D20C007C0E03 /* leaf.png */,
-			);
-			path = fireplace_room;
 			sourceTree = "<group>";
 		};
 		3C14A35E2983D20C007C0E03 /* Meshes */ = {
@@ -683,6 +672,7 @@
 			children = (
 				3C14A3AB2983D20C007C0E03 /* Sandbox.swift */,
 				3C6F4FD52998FBE600C3C571 /* Sponza.swift */,
+				3C29233629A9BC6200497EE0 /* FireplaceRoom.swift */,
 				3CDE61092990D31A009E2C77 /* TestScene.swift */,
 			);
 			path = Scenes;
@@ -771,6 +761,19 @@
 				3C6F4FA52998F29F00C3C571 /* sponza.obj */,
 			);
 			path = Sponza;
+			sourceTree = "<group>";
+		};
+		3C7471AF29A92629001BB3AF /* fireplace_room */ = {
+			isa = PBXGroup;
+			children = (
+				3C7471B029A92629001BB3AF /* picture8.png */,
+				3C7471B229A92629001BB3AF /* wood.png */,
+				3C7471B329A92629001BB3AF /* wood5.png */,
+				3C7471B529A92629001BB3AF /* leaf.png */,
+				3C7471B129A92629001BB3AF /* fireplace_room.obj */,
+				3C7471B429A92629001BB3AF /* fireplace_room.mtl */,
+			);
+			path = fireplace_room;
 			sourceTree = "<group>";
 		};
 		3CF39CE2298D59C500E4F399 /* RenderableScene */ = {
@@ -900,6 +903,7 @@
 				3C6F4FC12998F29F00C3C571 /* sponza_roof_diff.tga in Resources */,
 				3C6F4FA62998F29F00C3C571 /* Thumbs.db in Resources */,
 				3C6F4FCF2998F29F00C3C571 /* sponza_flagpole_ddn.tga in Resources */,
+				3C7471BA29A92629001BB3AF /* fireplace_room.mtl in Resources */,
 				3C6F4FB22998F29F00C3C571 /* sponza_fabric_ddn.tga in Resources */,
 				3C14A3B52983D20C007C0E03 /* E-45-steel detail_2_col.jpg in Resources */,
 				3C6F4FB42998F29F00C3C571 /* vase_plant.tga in Resources */,
@@ -919,6 +923,7 @@
 				3C6F4FAB2998F29F00C3C571 /* vase_round.tga in Resources */,
 				3C6F4FC92998F29F00C3C571 /* sponza_curtain_diff.tga in Resources */,
 				3C6F4FD02998F29F00C3C571 /* sponza_fabric_blue_diff.tga in Resources */,
+				3C7471B929A92629001BB3AF /* wood5.png in Resources */,
 				3C6F4FAC2998F29F00C3C571 /* sponza_column_a_ddn.tga in Resources */,
 				3C6F4FB32998F29F00C3C571 /* sponza_column_c_ddn.tga in Resources */,
 				3C14A3C72983D20C007C0E03 /* Cone.obj in Resources */,
@@ -927,9 +932,10 @@
 				3C14A31C2983D0E9007C0E03 /* Assets.xcassets in Resources */,
 				3C6F4FA72998F29F00C3C571 /* lion2_ddn.tga in Resources */,
 				3C14A3CC2983D20C007C0E03 /* Plane.mtl in Resources */,
+				3C7471B729A92629001BB3AF /* fireplace_room.obj in Resources */,
 				3C14A3B72983D20C007C0E03 /* E 45 Aircraft_obj.obj in Resources */,
 				3C14A3B32983D20C007C0E03 /* E-45_glass_nor_.jpg in Resources */,
-				3C14A3BD2983D20C007C0E03 /* fireplace_room.mtl in Resources */,
+				3C7471B629A92629001BB3AF /* picture8.png in Resources */,
 				3C14A3C82983D20C007C0E03 /* Cone.mtl in Resources */,
 				3C14A3B02983D20C007C0E03 /* E 45 Aircraft_obj.mtl in Resources */,
 				3C6F4FD32998F29F00C3C571 /* sponza.mtl in Resources */,
@@ -938,7 +944,6 @@
 				3C14A3CF2983D20C007C0E03 /* Cylinder.mtl in Resources */,
 				3C14A3CA2983D20C007C0E03 /* Sphere.mtl in Resources */,
 				3C14A3C02983D20C007C0E03 /* Beach.jpeg in Resources */,
-				3C14A3BB2983D20C007C0E03 /* wood.png in Resources */,
 				3C6F4FC82998F29F00C3C571 /* sponza_thorn_diff.tga in Resources */,
 				3C6F4FBD2998F29F00C3C571 /* sponza_column_b_ddn.tga in Resources */,
 				3C6F4FA92998F29F00C3C571 /* sponza_curtain_ddn.tga in Resources */,
@@ -948,15 +953,14 @@
 				3C6F4FB02998F29F00C3C571 /* lion.tga in Resources */,
 				3C6F4FBC2998F29F00C3C571 /* spnza_bricks_a_diff.tga in Resources */,
 				3C14A3D02983D20C007C0E03 /* Cylinder.obj in Resources */,
-				3C14A3B92983D20C007C0E03 /* picture8.png in Resources */,
 				3C14A3B62983D20C007C0E03 /* E-45-nor_1.jpg in Resources */,
 				3C6F4FCA2998F29F00C3C571 /* sponza_ceiling_a_diff.tga in Resources */,
+				3C7471BB29A92629001BB3AF /* leaf.png in Resources */,
 				3C14A418298412C1007C0E03 /* Main.storyboard in Resources */,
 				3C14A3C92983D20C007C0E03 /* Sphere.obj in Resources */,
 				3C6F4FB72998F29F00C3C571 /* vase_hanging.tga in Resources */,
 				3C14A3C52983D20C007C0E03 /* Cube.obj in Resources */,
 				3C14A3C62983D20C007C0E03 /* Cube.mtl in Resources */,
-				3C14A3BE2983D20C007C0E03 /* leaf.png in Resources */,
 				3C6F4FAD2998F29F00C3C571 /* lion_ddn.tga in Resources */,
 				3C14A3CD2983D20C007C0E03 /* Monkey.mtl in Resources */,
 				3C6F4FB52998F29F00C3C571 /* sponza_arch_ddn.tga in Resources */,
@@ -964,11 +968,11 @@
 				3C14A3D92983D20C007C0E03 /* chest_02_Mixed_AO.png in Resources */,
 				3C6F4FC32998F29F00C3C571 /* vase_round_ddn.tga in Resources */,
 				3C14A3D32983D20C007C0E03 /* chest.obj in Resources */,
-				3C14A3BC2983D20C007C0E03 /* wood5.png in Resources */,
 				3C14A3CB2983D20C007C0E03 /* Plane.obj in Resources */,
 				3C6F4FAF2998F29F00C3C571 /* sponza_details_ddn.tga in Resources */,
 				3C6F4FCD2998F29F00C3C571 /* sponza_floor_a_diff.tga in Resources */,
 				3C6F4FBA2998F29F00C3C571 /* sponza_roof_ddn.tga in Resources */,
+				3C7471B829A92629001BB3AF /* wood.png in Resources */,
 				3C6F4FD12998F29F00C3C571 /* chain_texture_ddn.tga in Resources */,
 				3C6F4FBE2998F29F00C3C571 /* sponza_floor_a_ddn.tga in Resources */,
 				3C14A3DA2983D20C007C0E03 /* chest_01_Metallic.png in Resources */,
@@ -979,7 +983,6 @@
 				3C14A3DC2983D20C007C0E03 /* chest.mtl in Resources */,
 				3C6F4FC42998F29F00C3C571 /* spnza_bricks_a_ddn.tga in Resources */,
 				3C14A3C22983D20C007C0E03 /* Icosphere.obj in Resources */,
-				3C14A3BA2983D20C007C0E03 /* fireplace_room.obj in Resources */,
 				3C6F4FBB2998F29F00C3C571 /* background.tga in Resources */,
 				3C6F4FCB2998F29F00C3C571 /* vase_ddn.tga in Resources */,
 				3C14A3AF2983D20C007C0E03 /* NightCity.jpg in Resources */,
@@ -1051,6 +1054,7 @@
 				3C14A41B298422C1007C0E03 /* ContentViewModel.swift in Sources */,
 				3C14A3E82983D20C007C0E03 /* Node.swift in Sources */,
 				3C14A3DF2983D20C007C0E03 /* RayTracingRenderer.swift in Sources */,
+				3C29233729A9BC6200497EE0 /* FireplaceRoom.swift in Sources */,
 				3C14A3E32983D20C007C0E03 /* Mesh.swift in Sources */,
 				3C14A41D29842CD5007C0E03 /* TabButton.swift in Sources */,
 				3C14A41F2984376E007C0E03 /* BlurView.swift in Sources */,

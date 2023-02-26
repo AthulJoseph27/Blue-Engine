@@ -2,18 +2,20 @@ import MetalKit
 import MetalPerformanceShaders
 
 class PhongShadingScene: RenderableScene {
-
+    
     var renderOptions: PSRenderOptions = PSRenderOptions()
     
     var heap = Heap()
     var textures: [Textures] = []
     var materials: [Material] = []
     var objects: [Solid] = []
-    var lights: [PSLight] = []
+    var lights: [Light] = []
+    var PSLights: [PSLight] = []
     var randomValues: [UInt32] = []
     
     var materialBuffer: MTLBuffer!
-    var textureBuffer: MTLBuffer!
+    var textureBuffer:  MTLBuffer!
+    var lightBuffer:    MTLBuffer!
     
     var skyBox: MTLTexture!
     
@@ -32,45 +34,9 @@ class PhongShadingScene: RenderableScene {
         fillRandomValues()
     }
     
-    private func fillRandomValues() {
-        for _ in 0..<1024 {
-            randomValues.append(arc4random() % 1024)
-        }
-    }
+    func updateObjects(deltaTime: Float) {}
     
-    private func createSampler() {
-        let sampleDescriptor = MTLSamplerDescriptor()
-        sampleDescriptor.minFilter = .linear
-        sampleDescriptor.magFilter = .linear
-        
-        sampler = Engine.device.makeSamplerState(descriptor: sampleDescriptor)
-    }
-    
-    private func buildScene(scene: GameScene) {
-        for solid in scene.solids {
-            addSolid(solid: solid)
-        }
-    }
-    
-    func createBuffers() {
-        let storageOptions: MTLResourceOptions
-        storageOptions = .storageModeShared
-        
-        self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
-        
-        let light = Light(type: UInt32(LIGHT_TYPE_SUN), position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(4, 4, 4))
-        
-        lights = [PSLight(light: light, ambient: 0.1, diffuse: 0.1, specular: 0.1)]
-    }
-    
-    func addSolid(solid: Solid) {
-        for i in 0..<solid.mesh.submeshCount {
-            materials.append(solid.mesh.materials[i])
-            textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
-        }
-        
-        objects.append(solid)
-    }
+    func updateScene(deltaTime: Float) {}
     
     func drawSolids(renderEncoder: MTLRenderCommandEncoder) {
         var currentCamera = CameraManager.currentCamera!
@@ -94,7 +60,10 @@ class PhongShadingScene: RenderableScene {
         
         renderEncoder.setFragmentSamplerState(sampler, index: 0)
         
-        renderEncoder.setFragmentBytes(&lights[0], length: MemoryLayout<PSLight>.stride, index: 3)
+        var lightCount = UInt32(lights.count)
+        renderEncoder.setFragmentBytes(&lightCount, length: UInt32.stride, index: 3)
+        renderEncoder.setFragmentBuffer(lightBuffer, offset: 0, index: 4)
+        
         
         renderEncoder.useHeap(heap.heap, stages: .fragment)
         renderEncoder.setFragmentBuffer(textureBuffer, offset: 0, index: 1)
@@ -118,7 +87,7 @@ class PhongShadingScene: RenderableScene {
                 renderEncoder.setFragmentBytes(&textureId, length: UInt32.stride, index: 2)
                 
                 var randomOffset = randomValues[id % 1024]
-                renderEncoder.setFragmentBytes(&randomOffset, length: UInt32.stride, index: 4)
+                renderEncoder.setFragmentBytes(&randomOffset, length: UInt32.stride, index: 5)
                 renderEncoder.drawIndexedPrimitives(type: .triangle, indexCount: indexCount, indexType: .uint32, indexBuffer: indexBuffer, indexBufferOffset: 0)
                 
                 textureId += 1
@@ -128,8 +97,45 @@ class PhongShadingScene: RenderableScene {
 
     }
     
-    func updateObjects(deltaTime: Float) {}
+    private func fillRandomValues() {
+        for _ in 0..<1024 {
+            randomValues.append(arc4random() % 1024)
+        }
+    }
     
-    func updateScene(deltaTime: Float) {}
+    private func createSampler() {
+        let sampleDescriptor = MTLSamplerDescriptor()
+        sampleDescriptor.minFilter = .linear
+        sampleDescriptor.magFilter = .linear
+        
+        sampler = Engine.device.makeSamplerState(descriptor: sampleDescriptor)
+    }
     
+    internal func createBuffers() {
+        let storageOptions: MTLResourceOptions
+        storageOptions = .storageModeShared
+        
+        self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
+        
+        self.lightBuffer = Engine.device.makeBuffer(bytes: &PSLights, length: MemoryLayout<PSLight>.stride * lights.count, options: storageOptions)
+    }
+    
+    func addSolid(solid: Solid) {
+        for i in 0..<solid.mesh.submeshCount {
+            materials.append(solid.mesh.materials[i])
+            textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
+            if solid.mesh.materials[i].isLit {
+                let light = Light(type: UInt32(LIGHT_TYPE_AREA), position: solid.position, forward: SIMD3<Float>(repeating: 1), right: SIMD3<Float>(repeating: 1), up: SIMD3<Float>(repeating: 1), color: solid.mesh.materials[i].emissive)
+                lights.append(light)
+                PSLights.append(PSLight(light: light, ambient: 0.1, diffuse: 0.1, specular: 0.1))
+            }
+        }
+        
+        objects.append(solid)
+    }
+    
+    internal func addLight(light: Light) {
+        lights.append(light)
+        PSLights.append(PSLight(light: light, ambient: 0.1, diffuse: 0.1, specular: 0.1))
+    }
 }

@@ -12,6 +12,7 @@ enum ComputePipelineStateTypes {
 
 class ComputePipelineStateLibrary {
     private static var computePipelineStates: [ComputePipelineStateTypes : ComputePipelineState] = [:]
+    private static var functions: [MTLFunction] = []
 
     public static func initialize() {
         createComputePipelineState()
@@ -29,6 +30,14 @@ class ComputePipelineStateLibrary {
 
     public static func pipelineState(_ computePipelineStateTypes: ComputePipelineStateTypes)->ComputePipelineState {
         return computePipelineStates[computePipelineStateTypes]!
+    }
+    
+    public static func getIntersectionFunctions() -> [MTLFunction] {
+        return functions
+    }
+    
+    public static func addIntersectionFunction(function: MTLFunction) {
+        functions.append(function)
     }
 }
 
@@ -120,15 +129,7 @@ public struct Shadow_ComputePipelineState: ComputePipelineState {
     init() {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.RayTracing).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadowKernel")
-            
-            let descriptor = ComputePipelineDescriptorLibrary.descriptor(.RayTracing)
-            let functions = [Engine.defaultLibrary.makeFunction(name: "alphaTestIntersection")!]
-            let linkedFunctions = MTLLinkedFunctions()
-            linkedFunctions.functions = functions
-            
-            descriptor.linkedFunctions = linkedFunctions
-            
-            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: descriptor, options: [], reflection: nil)
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.RayTracing), options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
             return;

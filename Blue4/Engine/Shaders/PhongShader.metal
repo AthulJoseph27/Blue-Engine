@@ -31,17 +31,19 @@ struct SceneConstants {
 };
 
 struct Material {
-    float4 color            [[ attribute(0) ]];
-    bool isLit              [[ attribute(1) ]];
-    float3 ambient          [[ attribute(2) ]];
-    float3 diffuse          [[ attribute(3) ]];
-    float3 specular         [[ attribute(4) ]];
-    float3 emissive         [[ attribute(5) ]];
-    float shininess         [[ attribute(5) ]];
-    float opacity           [[ attribute(6) ]];
-    float opticalDensity    [[ attribute(7) ]];
-    float roughness         [[ attribute(8) ]];
-    bool isTextureEnabled   [[ attribute(9) ]];
+    bool isLit                 [[ attribute(0)  ]];
+    float3 ambient             [[ attribute(1)  ]];
+    float3 diffuse             [[ attribute(2)  ]];
+    float3 specular            [[ attribute(3)  ]];
+    float3 emissive            [[ attribute(4)  ]];
+    float shininess            [[ attribute(5)  ]];
+    float opacity              [[ attribute(6)  ]];
+    float opticalDensity       [[ attribute(7)  ]];
+    float roughness            [[ attribute(8)  ]];
+    bool isTextureEnabled      [[ attribute(9)  ]];
+    bool isNormalMapEnabled    [[ attribute(10) ]];
+    bool isMetallicMapEnabled  [[ attribute(11) ]];
+    bool isRoughnessMapEnabled [[ attribute(12) ]];
 };
 
 struct PrimitiveData {
@@ -75,7 +77,7 @@ float halton2(unsigned int i, unsigned int d) {
     return r;
 }
 
-inline float3 sampleAreaLight2(constant Light & light,
+inline float3 sampleAreaLight2(thread Light & light,
                             float2 u,
                             float3 position)
 {
@@ -117,17 +119,22 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     return rd;
 }
 
-fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]], constant Material &material [[ buffer(0) ]], const device PrimitiveData *primitiveData [[ buffer(1) ]],
-                                      constant unsigned int &textureId [[ buffer(2) ]], constant PSLight &psLight [[ buffer(3) ]], constant unsigned int &randomOffset [[ buffer(4) ]]){
+fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler sampler2d[[ sampler(0) ]],
+                                     constant Material &material [[ buffer(0) ]],
+                                     const device PrimitiveData *primitiveData [[ buffer(1) ]],
+                                     constant unsigned int &textureId [[ buffer(2) ]],
+                                     constant unsigned int &lightCount [[ buffer(3) ]],
+                                     device PSLight *psLight [[ buffer(4) ]],
+                                     constant unsigned int &randomOffset [[ buffer(5) ]]){
     
-    float4 color = material.color;
+    float4 color = float4(material.diffuse, 1.0);
 
     if(material.isTextureEnabled){
         color = primitiveData[textureId].texture.sample(sampler2d, rd.uvCoordinate);
     }
 
     if(material.isLit) {
-        color = material.color;
+        color = float4(material.diffuse, 1.0);
     } else {
 //        float3 unitNormal = normalize(rd.surfaceNormal);
 //        float3 unitToCameraVector = normalize(rd.toCameraVector);
@@ -139,16 +146,15 @@ fragment half4 basic_fragment_shader(RasterizerData rd [[ stage_in ]], sampler s
         float2 r = float2(halton2(randomOffset, 0),
                           halton2(randomOffset, 1));
 
-//        for(int i = 0 ; i < lightCount ; i++ ) {
-        constant Light &lightData = psLight.light;
-        
-        // Ambinet
-        totalAmbient += material.ambient + 0.1;
-        
-        // Diffuse
-        totalDiffuse += sampleAreaLight2(lightData, r, rd.worldPosition);
+        for(int i = 0; i < (int)lightCount; i++) {
+            Light lightData = psLight[i].light;
             
-//        }
+            // Ambinet
+            totalAmbient += material.ambient + 0.1;
+            
+            // Diffuse
+            totalDiffuse += sampleAreaLight2(lightData, r, rd.worldPosition);
+        }
 
         float3 phongIntensity = totalAmbient + totalDiffuse + totalSpecular;
 

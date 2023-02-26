@@ -12,7 +12,7 @@ Tf 1.00 1.00 1.00
 Ni 1.00
 newmtl grey_and_white_room:BrushedStainlessSteel
 illum 4
-Kd 0.0 0.0 0.00
+Kd 0.05 0.05 0.05
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 Ks 0.85 0.78 0.55
@@ -43,7 +43,7 @@ Ns 10.00
 map_Kd wood.png
 newmtl grey_and_white_room:Glass
 illum 7
-Kd 0.0 0.00 0.0
+Kd 0.05 0.05 0.05
 Ka 0.0 0.0 0.0
 Tf 0.1 0.1 0.1
 Ks 0.5 0.5 0.5

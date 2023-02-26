@@ -12,11 +12,13 @@ class DynamicRTScene: RTScene {
     var textures: [Textures]  = []
     
     var objects: [Solid] = []
+    var lights:  [Light] = []
     var accelerationStructures: [[MPSTriangleAccelerationStructure]] = []
     
     var vertexBuffer:        MTLBuffer!
     var indexBuffer:         MTLBuffer!
     var customIndexBuffer:   MTLBuffer!
+    var lightBuffer:         MTLBuffer!
     var textureBuffer:       MTLBuffer!
     var materialBuffer:      MTLBuffer!
     var verticesCountBuffer: MTLBuffer!
@@ -48,10 +50,33 @@ class DynamicRTScene: RTScene {
         postBuildScene()
     }
     
-    private func buildScene(scene: GameScene) {
-        for solid in scene.solids {
-            addSolid(solid: solid)
+    func getAccelerationStructure()->MPSAccelerationStructure {
+        return instanceAccelerationStructures[Int(frameIndex) % renderOptions.maxFramesInFlight]
+    }
+    
+    func updateScene(deltaTime: Float) {}
+    
+    func updateObjects(deltaTime: Float) {}
+    
+    func updateUniforms(size: CGSize) {}
+    
+    internal func addSolid(solid: Solid) {
+        objects.append(solid)
+        
+        for i in 0..<solid.mesh.submeshCount {
+            materials.append(solid.mesh.materials[i])
+            textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
+            
+            if solid.isLightSource {
+                masks.append(uint(TRIANGLE_MASK_LIGHT))
+            } else {
+                masks.append(uint(TRIANGLE_MASK_GEOMETRY))
+            }
         }
+    }
+    
+    internal func addLight(light: Light) {
+        lights.append(light)
     }
     
     private func postBuildScene() {
@@ -60,26 +85,7 @@ class DynamicRTScene: RTScene {
         heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
     }
     
-    func getAccelerationStructure()->MPSAccelerationStructure {
-        return instanceAccelerationStructures[Int(frameIndex) % renderOptions.maxFramesInFlight]
-    }
-    
-    func addSolid(solid: Solid) {
-        objects.append(solid)
-        
-        for i in 0..<solid.mesh.submeshCount {
-            materials.append(solid.mesh.materials[i])
-            textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
-            
-            if solid.lightSource {
-                masks.append(uint(TRIANGLE_MASK_LIGHT))
-            } else {
-                masks.append(uint(TRIANGLE_MASK_GEOMETRY))
-            }
-        }
-    }
-    
-    func createBuffers() {
+    internal func createBuffers() {
         // Vertex Buffers
         let commandBuffer = Engine.device.makeCommandQueue()?.makeCommandBuffer()
         commandBuffer?.label = "Buffer merge Command Buffer"
@@ -139,13 +145,14 @@ class DynamicRTScene: RTScene {
         
         let uniformBufferSize = renderOptions.alignedUniformsSize * renderOptions.maxFramesInFlight
         self.uniformBuffer = Engine.device.makeBuffer(length: uniformBufferSize, options: storageOptions)
+        self.lightBuffer = Engine.device.makeBuffer(bytes: &lights, length: MemoryLayout<Light>.stride * lights.count, options: storageOptions)
         self.instanceBuffer = Engine.device.makeBuffer(bytes: &instances, length: uint.stride(instances.count), options: storageOptions)
         self.transformBuffer = Engine.device.makeBuffer(bytes: &transforms, length: matrix_float4x4.stride(transforms.count), options: storageOptions)
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: uint.stride(masks.count), options: storageOptions)
     }
     
-    func createAccelerationStructures() {
+    private func createAccelerationStructures() {
         let group = MPSAccelerationStructureGroup(device: Engine.device)
         var acceleratedStructures: [MPSTriangleAccelerationStructure] = []
         
@@ -196,17 +203,4 @@ class DynamicRTScene: RTScene {
             instanceAccelerationStructures.append(instanceAcceleratedStructure)
         }
     }
-    
-    func updateScene(deltaTime: Float) {
-        
-    }
-    
-    func updateObjects(deltaTime: Float) {
-        
-    }
-    
-    func updateUniforms(size: CGSize) {
-
-    }
-    
 }

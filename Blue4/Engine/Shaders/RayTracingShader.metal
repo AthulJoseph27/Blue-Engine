@@ -10,12 +10,11 @@ using namespace metal;
 //#define FRENEL_ANGLE 7*PI/8
 
 struct Material {
-    float4 color               [[ attribute(0)  ]];
-    bool isLit                 [[ attribute(1)  ]];
-    float3 ambient             [[ attribute(2)  ]];
-    float3 diffuse             [[ attribute(3)  ]];
-    float3 specular            [[ attribute(4)  ]];
-    float3 emissive            [[ attribute(5)  ]];
+    bool isLit                 [[ attribute(0)  ]];
+    float3 ambient             [[ attribute(1)  ]];
+    float3 diffuse             [[ attribute(2)  ]];
+    float3 specular            [[ attribute(3)  ]];
+    float3 emissive            [[ attribute(4)  ]];
     float shininess            [[ attribute(5)  ]];
     float opacity              [[ attribute(6)  ]];
     float opticalDensity       [[ attribute(7)  ]];
@@ -90,7 +89,7 @@ float halton(unsigned int i, unsigned int d) {
     return r;
 }
 
-inline void sampleAreaLight(constant Light & light,
+inline void sampleAreaLight(thread Light & light,
                             float2 u,
                             float3 position,
                             thread float3 & lightDirection,
@@ -302,27 +301,9 @@ inline float3 refractRay(Ray ray, float3 normal, float eta) {
     return refract(normalize(ray.direction), normalize(normal), eta);
 }
 
-//inline float3 reflectRay(Ray ray, float3 normal, float3 sampleDirection) {
-//    // n, x, z be the  new axis
-//    // z = ray.direction x n -> out of the plane
-//    // x = n x z -> left and n -> top
-//
-//    // move the reflected ray by a factor proportional to roughness with some randomness
-//    // along x and n direction
-//
-//    float3 z = cross(ray.direction, normal);
-//    float3 x = cross(normal, z);
-//
-//    float3 reflectedRay = reflect(ray.direction, normal);
-//
-//    reflectedRay += sampleDirection.x * x;
-//    reflectedRay += sampleDirection.y * normal;
-//
-//    return normalize(reflectedRay);
-//}
-
 kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         constant Uniforms & uniforms,
+                        device Light *lights,
                         device Ray *rays,
                         device Ray *shadowRays,
                         device Intersection *intersections,
@@ -389,13 +370,17 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    float lightDistance;
 
                    float3 objectColor;
-
-                   sampleAreaLight(uniforms.light, r, intersectionPoint, lightDirection,
-                                   lightColor, lightDistance);
-                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
-//                   sampleSpotLight(r, intersectionPoint, lightDirection,
-//                                   lightColor, lightDistance);
-//                   lightColor *= saturate(dot(surfaceNormal, lightDirection));
+                
+                   Light light = lights[0];
+                   if(light.type == LIGHT_TYPE_AREA) {
+                       sampleAreaLight(light, r, intersectionPoint, lightDirection,
+                                       lightColor, lightDistance);
+                       lightColor *= saturate(dot(surfaceNormal, lightDirection));
+                   } else {
+                      sampleSpotLight(r, intersectionPoint, lightDirection,
+                                      lightColor, lightDistance);
+                      lightColor *= saturate(dot(surfaceNormal, lightDirection));
+                   }
 
                    if(material.isTextureEnabled){
                        float4 sampledColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord);
@@ -411,8 +396,10 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        
                        objectColor = sampledColor.xyz;
                    } else {
-                       objectColor = materials[submeshId].color.xyz;
+                       objectColor = material.diffuse;
                    }
+                   
+                   objectColor *= (float3(1) + material.emissive);
                    
                    color *= objectColor;
 
@@ -423,16 +410,13 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    shadowRay.color = lightColor * color;
 
-                   float refractiveIndex = 0;
+                   float refractiveIndex = 0.0;
 
                    if(material.opacity < 1.0) {
                        refractiveIndex = material.opticalDensity;
-                       if(refractiveIndex < 1.0) {
-                           refractiveIndex = 1.0 / refractiveIndex;
-                       }
                    }
 
-                   float reflectivity = 0.0;
+                   float reflectivity = (material.specular.x + material.specular.y + material.specular.z) / 3.0f;
 
                    if(material.isMetallicMapEnabled) {
                        reflectivity = primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
@@ -472,7 +456,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    }
                }
                else {
-                   dstTex.write(float4(uniforms.light.color, 1.0f), tid);
+                   dstTex.write(float4(lights[0].color, 1.0f), tid);
                    
                    ray.maxDistance = -1.0f;
                    shadowRay.maxDistance = -1.0f;
@@ -502,6 +486,7 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
         device Ray & shadowRay = shadowRays[rayIdx];
 
         float intersectionDistance = intersections[rayIdx];
+        
         float3 color = dstTex.read(tid).xyz;
         
         if (shadowRay.maxDistance >= 0.0f && intersectionDistance < 0.0f) {
@@ -579,17 +564,4 @@ inline float2 calculateSamplingCoordinate(float2 coordinates, float2 T0, float2 
     uvw.z = 1.0f - uvw.x - uvw.y;
     
     return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
-}
-
-[[intersection(triangle, raytracing::triangle_data, raytracing::instancing)]]
-bool alphaTestIntersection(float2 coordinates [[barycentric_coord]], const device AlphaTestingPrimitiveData *primitiveData [[primitive_data]]) {
-    
-    AlphaTestingPrimitiveData ppd = *primitiveData;
-    
-    float2 uv = calculateSamplingCoordinate(coordinates, ppd.uvCoordinates[0], ppd.uvCoordinates[1], ppd.uvCoordinates[2]);
-    
-    constexpr sampler sam(mip_filter::none);
-    
-    float alpha = ppd.texture.sample(sam, uv).w;
-    return alpha >= 0.5f;
 }

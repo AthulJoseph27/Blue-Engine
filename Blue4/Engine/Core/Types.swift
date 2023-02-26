@@ -82,16 +82,15 @@ struct LightData: sizeable {
 }
 
 struct Material: sizeable {
-    var color = SIMD4<Float>(0.6, 0.6, 0.6, 1.0)
     var isLit: Bool = false
     
     var ambient = SIMD3<Float>(0.1, 0.1, 0.1)
-    var diffuse = SIMD3<Float>(1, 1, 1)
-    var specular = SIMD3<Float>(1, 1, 1)
-    var emissive = SIMD3<Float>(1, 1, 1)
+    var diffuse = SIMD3<Float>(0.6, 0.6, 0.6)
+    var specular = SIMD3<Float>(0, 0, 0)
+    var emissive = SIMD3<Float>(0, 0, 0)
     var shininess: Float = 2.0
     var opacity: Float = 1.0
-    var opticalDensity: Float = 1.0
+    var opticalDensity: Float = 0.0
     var roughness: Float = 1.0
     var isTextureEnabled: Bool = true
     var isNormalMapEnabled: Bool = true
@@ -201,6 +200,7 @@ enum RendererType : CaseIterable {
 enum GameScenes: String {
     case Sandbox = "Sandbox"
     case Sponza = "Sponze"
+    case FireplaceRoom = "FireplaceRoom"
     case TestScene = "Test Scene"
 }
 

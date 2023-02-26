@@ -3,12 +3,12 @@ import MetalKit
 class Solid: Node {
     var meshType: MeshTypes
     var mesh: Mesh
-    var lightSource = false
+    var isLightSource = false
     var animated = false
     
-    init(_ meshType: MeshTypes, ligthSource: Bool = false) {
+    init(_ meshType: MeshTypes, isLightSource: Bool = false) {
         self.meshType = meshType
-        self.lightSource = ligthSource
+        self.isLightSource = isLightSource
         if meshType == .None {
             self.mesh = Mesh(modelName: "None")
         } else {
@@ -22,8 +22,8 @@ class Solid: Node {
 }
 
 extension Solid {
-    public func setColor(_ color: SIMD4<Float>) {
-        mesh.materials[0].color = color
+    public func setColor(_ color: SIMD3<Float>) {
+        mesh.materials[0].diffuse = color
     }
     
     public func setRoughness(_ roughness: Float) {
@@ -39,7 +39,7 @@ extension Solid {
         mesh.materials[0].isTextureEnabled = enable
     }
     
-    public func enableMaterial(_ enable: Bool) {
-        mesh.materials[0].isLit = enable;
-    }
+//    public func enableMaterial(_ enable: Bool) {
+//        mesh.materials[0].isLit = enable;
+//    }
 }

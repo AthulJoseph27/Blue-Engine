@@ -3,26 +3,36 @@ import MetalPerformanceShaders
 
 protocol RenderableScene {
     
-    var heap: Heap   { get set }
-    
-    var objects: [Solid]         { get set }
-    
-    var textureBuffer:       MTLBuffer! { get set }
-    
-    var skyBox: MTLTexture!    { get set }
-    
+    var heap:          Heap         { get set }
+    var objects:       [Solid]      { get set }
+    var lights:        [Light]      { get set }
+    var textureBuffer: MTLBuffer!   { get set }
+    var skyBox:        MTLTexture!  { get set }
+
     func updateObjects(deltaTime: Float)
+    
+    func updateScene(deltaTime: Float)
     
     func createBuffers()
     
     func addSolid(solid: Solid)
     
-    func updateScene(deltaTime: Float)
+    func addLight(light: Light)
 }
 
 extension RenderableScene {
     func updateCameras(deltaTime: Float) {
         CameraManager.update(deltaTime: deltaTime)
+    }
+    
+    func buildScene(scene: GameScene) {
+        for solid in scene.solids {
+            addSolid(solid: solid)
+        }
+        
+        for light in scene.lights {
+            addLight(light: light)
+        }
     }
 }
 
@@ -40,6 +50,7 @@ protocol RTScene: RenderableScene {
     var indiciesCountBuffer: MTLBuffer! { get set }
     var maskBuffer:          MTLBuffer! { get set }
     
+    var lightBuffer:         MTLBuffer! { get set }
     var materialBuffer:      MTLBuffer! { get set }
     var uniformBuffer:       MTLBuffer! { get set }
     var transformBuffer:     MTLBuffer! { get set }
@@ -49,7 +60,7 @@ protocol RTScene: RenderableScene {
     
     var indexWrapperPipeline:       MTLComputePipelineState! { get set }
     
-    func getAccelerationStructure()->MPSAccelerationStructure
+    func getAccelerationStructure() -> MPSAccelerationStructure
     
     var frameIndex: uint    { get set }
 }
@@ -94,12 +105,13 @@ extension RTScene {
         uniforms.pointee.camera.forward = SIMD3<Float>(newForward.x, newForward.y, newForward.z)
         uniforms.pointee.camera.right = SIMD3<Float>(newRigth.x, newRigth.y, newRigth.z)
         uniforms.pointee.camera.up = SIMD3<Float>(newUp.x, newUp.y, newUp.z)
-
-        uniforms.pointee.light.position = SIMD3<Float>(0, 1.98, 0)
-        uniforms.pointee.light.forward = SIMD3<Float>(0, -1, 0)
-        uniforms.pointee.light.right = SIMD3<Float>(0.25, 0, 0)
-        uniforms.pointee.light.up = SIMD3<Float>(0, 0, 0.25)
-        uniforms.pointee.light.color = SIMD3<Float>(4, 4, 4)
+        
+        uniforms.pointee.lightCount = UInt32(lights.count)
+//        uniforms.pointee.light.position = SIMD3<Float>(0, 1.98, 0)
+//        uniforms.pointee.light.forward = SIMD3<Float>(0, -1, 0)
+//        uniforms.pointee.light.right = SIMD3<Float>(0.25, 0, 0)
+//        uniforms.pointee.light.up = SIMD3<Float>(0, 0, 0.25)
+//        uniforms.pointee.light.color = SIMD3<Float>(4, 4, 4)
 
         let fieldOfView = 45.0 * (Float.pi / 180.0)
         let aspectRatio = Float(size.width) / Float(size.height)

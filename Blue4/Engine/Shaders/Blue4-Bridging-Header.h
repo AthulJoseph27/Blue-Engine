@@ -43,8 +43,8 @@ struct Uniforms
     unsigned int height;
     unsigned int blocksWide;
     unsigned int frameIndex;
+    unsigned int lightCount;
     struct Camera camera;
-    struct Light light;
 };
 
 #endif /* ShaderTypes_h */

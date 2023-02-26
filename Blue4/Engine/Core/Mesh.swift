@@ -2,6 +2,8 @@ import MetalKit
 
 class Mesh {
     private var modelName:  String!
+    private var modelExtension: String!
+    private var materialMap: [String : MDLMaterial] = [:]
     private var submeshIds: [uint]
     
     internal var submeshCount:          Int
@@ -13,8 +15,9 @@ class Mesh {
     internal var metallicMapTextures:   [MTLTexture?]
     internal var roughnessMapTextures:  [MTLTexture?]
     
-    init(modelName: String) {
+    init(modelName: String, modelExtension: String = "obj") {
         self.modelName = modelName
+        self.modelExtension = modelExtension
         indexBuffers = []
         submeshIds = []
         materials = []
@@ -50,14 +53,22 @@ class Mesh {
             return _material
         }
         
-        if let ambient = mdlMaterial!.property(with: .emission)?.float3Value  { _material.ambient = ambient }
+        if let ambient = mdlMaterial!.property(with: .ambientOcclusion)?.float3Value  { _material.ambient = ambient }
         if let diffuse = mdlMaterial!.property(with: .baseColor)?.float3Value { _material.diffuse = diffuse }
         if let specular = mdlMaterial!.property(with: .specular)?.float3Value { _material.specular = specular }
-        if let emission = mdlMaterial!.property(with: .emission)?.float3Value { _material.emissive = emission }
         if let shininess = mdlMaterial!.property(with: .specularExponent)?.floatValue { _material.shininess = shininess }
         if let opacity = mdlMaterial!.property(with: .opacity)?.floatValue { _material.opacity = opacity }
         if let opticalDensity = mdlMaterial!.property(with: .materialIndexOfRefraction)?.floatValue { _material.opticalDensity = opticalDensity }
         if let roughness = mdlMaterial!.property(with: .roughness)?.floatValue { _material.roughness = roughness }
+        
+        let _mdlMaterial = materialMap[mdlMaterial!.name]
+        if _mdlMaterial != nil {
+            _material.emissive = _mdlMaterial!.property(with: .emission)!.float3Value
+        }
+        
+        if (_material.emissive.x + _material.emissive.y + _material.emissive.z) > 0 {
+            _material.isLit = true
+        }
         
         return _material
     }
@@ -73,6 +84,7 @@ class Mesh {
             normalMapTextures.append(getTexture(for: .objectSpaceNormal, in: mdlMesh.material, textureOrigin: .bottomLeft))
             metallicMapTextures.append(getTexture(for: .metallic , in: mdlMesh.material, textureOrigin: .bottomLeft))
             roughnessMapTextures.append(getTexture(for: .roughness, in: mdlMesh.material, textureOrigin: .bottomLeft))
+            
             
             var material = getMaterial(mdlMesh.material)
             
@@ -93,17 +105,58 @@ class Mesh {
             }
             
             materials.append(material)
+//            print(mdlMesh.material?.name)
+//            print(material)
+//            print("")
         }
         
         indexBuffers.append(mtkSubmesh.indexBuffer.buffer)
         submeshCount+=1
     }
     
+    private func loadMaterials() {
+        let fileURL = Bundle.main.url(forResource: modelName, withExtension: "mtl")!
+        let mtlString = try! String(contentsOf: fileURL)
+
+        let scanner = Scanner(string: mtlString)
+        var currentMaterial: MDLMaterial?
+        
+        var materialName = ""
+
+        while !scanner.isAtEnd {
+            var line: String?
+            line = scanner.scanUpToString("\n")
+            
+            if let line = line {
+                let components = line.components(separatedBy: .whitespaces)
+                
+                switch components[0] {
+                case "newmtl":
+                    materialName = components[1]
+                    currentMaterial = MDLMaterial(name: materialName, scatteringFunction: MDLScatteringFunction())
+                case "Ke":
+                    let emission = SIMD3<Float>(Float(components[1])!, Float(components[2])!, Float(components[3])!)
+                    currentMaterial!.setProperty(MDLMaterialProperty(name: "Ke", semantic: .emission, float3: emission))
+                default:
+                    break
+                }
+            }
+        }
+        
+        if !materialName.isEmpty {
+            materialMap[materialName] = currentMaterial
+        }
+    }
+    
     private func loadModel() {
-        guard let assetURL = Bundle.main.url(forResource: modelName, withExtension: "obj") else {
+        guard let assetURL = Bundle.main.url(forResource: modelName, withExtension: modelExtension) else {
             fatalError("Asset \(String(describing: modelName)) does not exist.")
                 }
-                
+        
+        if modelExtension == "obj" {
+            loadMaterials()
+        }
+        
         let descriptor = MTKModelIOVertexDescriptorFromMetal(VertexDescriptorLibrary.getDescriptor(.Read))
                (descriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
                (descriptor.attributes[1] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
@@ -117,6 +170,7 @@ class Mesh {
                                        bufferAllocator: bufferAllocator,
                                        preserveTopology: true,
                                        error: nil)
+        
         asset.loadTextures()
         
         var mdlMeshes: [MDLMesh] = []

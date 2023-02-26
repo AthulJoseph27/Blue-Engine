@@ -7,19 +7,20 @@ class StaticRTScene: RTScene {
     
     var renderOptions: RTRenderOptions = RTRenderOptions()
     
-    var masks: [UInt32]         = []
-    var rayMasks: [UInt32]    = []
+    var masks:     [UInt32]   = []
+    var rayMasks:  [UInt32]   = []
     var materials: [Material] = []
-    var textures: [Textures]  = []
+    var textures:  [Textures] = []
     
     var objects: [Solid] = []
+    var lights:  [Light] = []
     
     var vertexBuffer:        MTLBuffer!
     var indexBuffer:         MTLBuffer!
     var customIndexBuffer:   MTLBuffer!
     var textureBuffer:       MTLBuffer!
-    var primitiveDataBuffer: MTLBuffer!
     var materialBuffer:      MTLBuffer!
+    var lightBuffer:         MTLBuffer!
     var verticesCountBuffer: MTLBuffer!
     var indiciesCountBuffer: MTLBuffer!
     var maskBuffer:          MTLBuffer!
@@ -45,23 +46,21 @@ class StaticRTScene: RTScene {
         postBuildScene()
     }
     
-    private func buildScene(scene: GameScene) {
-        for solid in scene.solids {
-            addSolid(solid: solid)
-        }
-    }
-    
-    private func postBuildScene() {
-        createBuffers()
-        createAcceleratedStructure()
-        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
-    }
-    
     func getAccelerationStructure()->MPSAccelerationStructure {
         return accelerationStructure
     }
     
-    func addSolid(solid: Solid) {
+    func updateObjects(deltaTime: Float) {}
+    
+    func updateScene(deltaTime: Float) {}
+    
+    private func postBuildScene() {
+        createBuffers()
+        createAccelerationStructure()
+        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
+    }
+    
+    internal func addSolid(solid: Solid) {
         objects.append(solid)
         
         for i in 0..<solid.mesh.submeshCount {
@@ -69,14 +68,14 @@ class StaticRTScene: RTScene {
             textures.append(Textures(baseColor: solid.mesh.baseColorTextures[i], normalMap: solid.mesh.normalMapTextures[i], metallic: solid.mesh.metallicMapTextures[i], roughness: solid.mesh.roughnessMapTextures[i]))
             
             for _ in 0..<solid.mesh.indexBuffers[i].length / (3 * UInt32.stride) {
-                if solid.lightSource {
+                if solid.isLightSource {
                     rayMasks.append(UInt32(TRIANGLE_MASK_LIGHT))
                 } else {
                     rayMasks.append(UInt32(TRIANGLE_MASK_GEOMETRY))
                 }
             }
             
-            if solid.lightSource {
+            if solid.isLightSource {
                 masks.append(UInt32(TRIANGLE_MASK_LIGHT))
             } else {
                 masks.append(UInt32(TRIANGLE_MASK_GEOMETRY))
@@ -84,7 +83,11 @@ class StaticRTScene: RTScene {
         }
     }
     
-    func transformSolid(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer, transform: matrix_float4x4)->MTLBuffer {
+    internal func addLight(light: Light) {
+        lights.append(light)
+    }
+    
+    private func transformSolid(vertexBuffer: inout MTLBuffer, indexBuffer: inout MTLBuffer, transform: matrix_float4x4)->MTLBuffer {
         
         var vertexCount = indexBuffer.length / UInt32.stride
         var transformMatrix = transform
@@ -115,7 +118,7 @@ class StaticRTScene: RTScene {
         return transformedVertexBuffer!
     }
     
-    func createBuffers() {
+    internal func createBuffers() {
         // Vertex Buffers
         let commandBuffer = Engine.device.makeCommandQueue()?.makeCommandBuffer()
         commandBuffer?.label = "Buffer merge Command Buffer"
@@ -165,21 +168,13 @@ class StaticRTScene: RTScene {
         
         let uniformBufferSize = renderOptions.alignedUniformsSize * renderOptions.maxFramesInFlight
         self.uniformBuffer = Engine.device.makeBuffer(length: uniformBufferSize, options: storageOptions)
+        self.lightBuffer = Engine.device.makeBuffer(bytes: &lights, length: MemoryLayout<Light>.stride * lights.count, options: storageOptions)
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: UInt32.stride(masks.count), options: storageOptions)
         self.rayMaskBuffer = Engine.device.makeBuffer(bytes: &rayMasks, length: UInt32.stride(rayMasks.count), options: storageOptions)
-        
-        var primitiveDatas = getPrimitiveDatas()
-        primitiveDataBuffer = Engine.device.makeBuffer(bytes: &primitiveDatas, length: AlphaTestingPrimitiveData.stride(primitiveDatas.count), options: storageOptions)
     }
     
-    func createAcceleratedStructure() {
-        let geometryDescriptor = MTLAccelerationStructureGeometryDescriptor()
-        geometryDescriptor.primitiveDataBuffer = primitiveDataBuffer
-        geometryDescriptor.primitiveDataBufferOffset = 0
-        geometryDescriptor.primitiveDataElementSize = AlphaTestingPrimitiveData.stride
-        geometryDescriptor.primitiveDataStride = AlphaTestingPrimitiveData.stride
-        
+    private func createAccelerationStructure() {
         accelerationStructure = MPSTriangleAccelerationStructure(device: Engine.device)
         accelerationStructure.vertexBuffer = vertexBuffer
         accelerationStructure.vertexStride = VertexIn.stride
@@ -187,24 +182,5 @@ class StaticRTScene: RTScene {
         accelerationStructure.maskBuffer = rayMaskBuffer
         accelerationStructure.triangleCount = indexBuffer.length / (3 * UInt32.stride)
         accelerationStructure.rebuild()
-    }
-    
-    func updateObjects(deltaTime: Float) {}
-    
-    func updateScene(deltaTime: Float) {}
-    
-    private func getPrimitiveDatas() -> [AlphaTestingPrimitiveData] {
-        var primitiveDatas: [AlphaTestingPrimitiveData] = []
-        
-        let count = customIndexBuffer.length / VertexIndex.stride
-        let indicies = customIndexBuffer.contents().bindMemory(to: VertexIndex.self, capacity: count)
-        let vertices = vertexBuffer.contents().bindMemory(to: VertexIn.self, capacity: vertexBuffer.length / VertexIn.stride)
-        
-        for i in 0..<(count/3) {
-            let index = Int(indicies[3 * i].index)
-            primitiveDatas.append(AlphaTestingPrimitiveData(texture: textures[Int(indicies[i].submeshId)].baseColor, uvCoordinates: [vertices[index].uvCoordinate, vertices[index + 1].uvCoordinate, vertices[index + 2].uvCoordinate]))
-        }
-        
-        return primitiveDatas
     }
 }

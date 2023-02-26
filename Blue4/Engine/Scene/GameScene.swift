@@ -2,6 +2,7 @@ import MetalKit
 
 class GameScene {
     var solids: [Solid] = []
+    var lights: [Light] = []
     var cameraManager = CameraManager()
     
     init() {
@@ -10,60 +11,12 @@ class GameScene {
     
     func buildScene() {}
     
-    func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: inout Material, triangleMaks: UInt32) {
-        let solid = Solid(.None)
-        
-        solid.mesh.submeshCount = 1
-        solid.mesh.baseColorTextures = [nil]
-        solid.mesh.normalMapTextures = [nil]
-        solid.mesh.metallicMapTextures = [nil]
-        solid.mesh.roughnessMapTextures = [nil]
-        
-        if triangleMaks == TRIANGLE_MASK_LIGHT {
-            solid.lightSource = true
-            material.isLit = true
-        }
-        
-        var vertices: [VertexIn] = []
-        vertices.append(VertexIn(position: v0, uvCoordinate: SIMD2<Float>(0, 1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
-        vertices.append(VertexIn(position: v1, uvCoordinate: SIMD2<Float>(-1, -1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
-        vertices.append(VertexIn(position: v2, uvCoordinate: SIMD2<Float>(1, -1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
-        
-        var indicies: [UInt32] = [0, 1, 2]
-        
-        solid.mesh.vertexBuffer = Engine.device.makeBuffer(bytes: &vertices, length: VertexIn.stride(vertices.count), options: .storageModeShared)
-        
-        let indexBuffer: MTLBuffer = Engine.device.makeBuffer(bytes: &indicies, length: UInt32.stride(indicies.count), options: .storageModeShared)!
-        solid.mesh.indexBuffers = [indexBuffer]
-        
-        solid.mesh.materials = [material]
-        
+    func addSolid(solid: Solid) {
         solids.append(solid)
     }
     
-    func createCubeFace(_ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
-        
-        let v0 = cubeVertices[i0]
-        let v1 = cubeVertices[i1]
-        let v2 = cubeVertices[i2]
-        let v3 = cubeVertices[i3]
-        
-        var n0 = getTriangleNormal(v0: v0, v1: v1, S: v2)
-        var n1 = getTriangleNormal(v0: v0, v1: v2, S: v3)
-        
-        if (inwardNormals) {
-            n0 = -n0;
-            n1 = -n1;
-        }
-        
-        var opacity = 1.0
-        if refractiveIndex >= 1.0 {
-            opacity = 0
-        }
-        var material = Material(color: SIMD4<Float>(color, 1), isLit: true, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
-        
-        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: &material, triangleMaks: triangleMask)
-        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: &material, triangleMaks: triangleMask)
+    func addLight(light: Light) {
+        lights.append(light)
     }
     
     func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {
@@ -113,7 +66,63 @@ class GameScene {
         }
     }
     
-    func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {
+    private func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: inout Material, triangleMaks: UInt32) {
+        let solid = Solid(.None)
+        
+        solid.mesh.submeshCount = 1
+        solid.mesh.baseColorTextures = [nil]
+        solid.mesh.normalMapTextures = [nil]
+        solid.mesh.metallicMapTextures = [nil]
+        solid.mesh.roughnessMapTextures = [nil]
+        
+        if triangleMaks == TRIANGLE_MASK_LIGHT {
+            solid.isLightSource = true
+            material.isLit = true
+        }
+        
+        var vertices: [VertexIn] = []
+        vertices.append(VertexIn(position: v0, uvCoordinate: SIMD2<Float>(0, 1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
+        vertices.append(VertexIn(position: v1, uvCoordinate: SIMD2<Float>(-1, -1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
+        vertices.append(VertexIn(position: v2, uvCoordinate: SIMD2<Float>(1, -1), normal: n0, tangent: SIMD3<Float>(repeating: 1), bitangent: SIMD3<Float>(repeating: 1)))
+        
+        var indicies: [UInt32] = [0, 1, 2]
+        
+        solid.mesh.vertexBuffer = Engine.device.makeBuffer(bytes: &vertices, length: VertexIn.stride(vertices.count), options: .storageModeShared)
+        
+        let indexBuffer: MTLBuffer = Engine.device.makeBuffer(bytes: &indicies, length: UInt32.stride(indicies.count), options: .storageModeShared)!
+        solid.mesh.indexBuffers = [indexBuffer]
+        
+        solid.mesh.materials = [material]
+        
+        solids.append(solid)
+    }
+    
+    private func createCubeFace(_ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
+        
+        let v0 = cubeVertices[i0]
+        let v1 = cubeVertices[i1]
+        let v2 = cubeVertices[i2]
+        let v3 = cubeVertices[i3]
+        
+        var n0 = getTriangleNormal(v0: v0, v1: v1, S: v2)
+        var n1 = getTriangleNormal(v0: v0, v1: v2, S: v3)
+        
+        if (inwardNormals) {
+            n0 = -n0;
+            n1 = -n1;
+        }
+        
+        var opacity = 1.0
+        if refractiveIndex >= 1.0 {
+            opacity = 0
+        }
+        var material = Material(isLit: false, diffuse: color, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
+        
+        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: &material, triangleMaks: triangleMask)
+        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: &material, triangleMaks: triangleMask)
+    }
+    
+    private func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {
         let e1: SIMD3<Float> = normalize(v1 - v0);
         let e2: SIMD3<Float> = normalize(v2 - v0);
         

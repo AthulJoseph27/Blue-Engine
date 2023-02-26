@@ -36,6 +36,8 @@ class RayTracingRenderer: Renderer {
     
     var iterationCount = 0
     
+    var functionTable: MTLIntersectionFunctionTable?
+    
     var scene: RTScene!
     private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4)
     
@@ -89,13 +91,6 @@ class RayTracingRenderer: Renderer {
         intersector.rayDataType = .originMaskDirectionMaxDistance
         intersector.rayStride = scene.renderOptions.rayStride
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
-    }
-    
-    private func createIntersectionFunctionTable() {
-        var tableDescriptor = MTLIntersectionFunctionTableDescriptor()
-        tableDescriptor.functionCount = 1
-        
-        var table = shadePipeline.makeIntersectionFunctionTable(descriptor: tableDescriptor)
     }
     
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -192,9 +187,9 @@ class RayTracingRenderer: Renderer {
 
         let width = Int(size.width)
         let height = Int(size.height)
-        let w = rayPipeline.threadExecutionWidth
-        let h = rayPipeline.maxTotalThreadsPerThreadgroup / w
-        let threadsPerThreadgroup = MTLSizeMake(w, h, 1)
+//        let w = rayPipeline.threadExecutionWidth
+//        let h = rayPipeline.maxTotalThreadsPerThreadgroup / w
+        let threadsPerThreadgroup = MTLSizeMake(16, 16, 1)
 
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
@@ -225,8 +220,8 @@ class RayTracingRenderer: Renderer {
                                            accelerationStructure: scene.getAccelerationStructure())
             guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
             
-            let buffers = [scene.uniformBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, scene.vertexBuffer, scene.customIndexBuffer, scene.verticesCountBuffer, scene.indiciesCountBuffer, scene.maskBuffer, scene.materialBuffer, scene.textureBuffer]
-            let offsets: [Int] = [scene.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            let buffers = [scene.uniformBuffer, scene.lightBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, scene.vertexBuffer, scene.customIndexBuffer, scene.verticesCountBuffer, scene.indiciesCountBuffer, scene.maskBuffer, scene.materialBuffer, scene.textureBuffer]
+            let offsets: [Int] = [scene.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             
             shadeEncoder.useHeap(scene.heap.heap)
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
@@ -242,10 +237,6 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.setComputePipelineState(shadePipeline)
             shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             shadeEncoder.endEncoding()
-            
-//            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
-//            intersector.encodeIntersection(commandBuffer: commandBuffer, intersectionType: .any, rayBuffer: shadowRayBuffer, rayBufferOffset: 0, intersectionBuffer: intersectionBuffer, intersectionBufferOffset: 0, rayCount: width * height, accelerationStructure: scene.getAccelerationStructure())
-            
             
             intersector.intersectionDataType = .distance
             intersector.encodeIntersection(commandBuffer: commandBuffer,
@@ -264,6 +255,7 @@ class RayTracingRenderer: Renderer {
 
             colorEncoder.setTexture(renderTarget, index: 0)
             colorEncoder.setComputePipelineState(shadowPipeline)
+            
             colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             colorEncoder.endEncoding()
             
