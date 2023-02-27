@@ -109,7 +109,8 @@ vertex RasterizerData basic_vertex_shader(const VertexIn vertexIn[[ stage_in ]],
     float4 worldPosition = modelConstants.modelMatrix * float4(vertexIn.position, 1);
     
     rd.position = sceneConstants.projectionMatrix * sceneConstants.viewMatrix * worldPosition;
-    rd.uvCoordinate = vertexIn.uvCoordinate;
+    rd.uvCoordinate = vertexIn.uvCoordinate - floor(vertexIn.uvCoordinate);
+    
     
     rd.worldPosition = worldPosition.xyz;
     rd.surfaceNormal = (modelConstants.modelMatrix * float4(vertexIn.normal, 1)).xyz;

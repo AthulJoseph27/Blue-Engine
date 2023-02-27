@@ -44,12 +44,6 @@ public struct Basic_VertexDescriptor: VertexDescriptor{
         vertexDescriptor.attributes[1].offset = size
         size += SIMD2<Float>.size
         
-//        //Texture Id
-//        vertexDescriptor.attributes[2].format = .uint
-//        vertexDescriptor.attributes[2].bufferIndex = 0
-//        vertexDescriptor.attributes[2].offset = size
-//        size += UInt32.size
-        
         //Normal
         vertexDescriptor.attributes[2].format = .float3
         vertexDescriptor.attributes[2].bufferIndex = 0

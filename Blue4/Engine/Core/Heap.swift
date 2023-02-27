@@ -90,10 +90,10 @@ class Heap {
 
             region.size.width /= 2
             region.size.height /= 2
-            if region.size.width == 0{
+            if region.size.width == 0 {
                 region.size.width = 1
             }
-            if region.size.height == 0{
+            if region.size.height == 0 {
                 region.size.height = 1
             }
 

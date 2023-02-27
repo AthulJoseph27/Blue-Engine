@@ -181,7 +181,8 @@ inline float2 interpolateVertexUVCoord(device Vertex *vertices, device VertexInd
     float2 T1 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 1].index].uvCoordinate;
     float2 T2 = vertices[vertexOffset + indicies[indiciesOffset + triangleIndex * 3 + 2].index].uvCoordinate;
     
-    return uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
+    float2 uv = uvw.x * T0 + uvw.y * T1 + uvw.z * T2;
+    return uv - floor(uv);
 }
 
 inline float3 interpolateVertexNormal(device Vertex *vertices, device VertexIndex *indicies, uint vertexOffset, uint indiciesOffset, Intersection intersection) {
@@ -553,7 +554,7 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     
     float3 color = tex.sample(sam, in.uv).xyz;
     
-    color = color / (1.0f + color);
+//    color = color / (1.0f + color);
     
     return float4(color, 1.0f);
 }
