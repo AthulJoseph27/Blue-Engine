@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:blue_engine/globals.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 const String methodChannelName = "flutter_method_channel";
@@ -10,15 +12,13 @@ const methodChannel = MethodChannel(methodChannelName);
 const eventChannel = EventChannel(eventChannelName);
 final eventStreamController = StreamController<dynamic>();
 
-class PlatformFunctions {
-  static const String sendMessage = 'send_message';
-}
-
-Future<void> invokePlatformMethod(String function, Map<String, dynamic> arguments) async {
+Future<void> invokePlatformMethod(SwiftMethods function, Map<String, dynamic> arguments) async {
   try {
-    await methodChannel.invokeMethod(function, jsonEncode(arguments));
+    await methodChannel.invokeMethod(function.name, jsonEncode(arguments));
   } on PlatformException catch (e) {
-    print("Failed to send message: '${e.message}'.");
+    if (kDebugMode) {
+      print("Failed to send message: '${e.message}'.");
+    }
   }
 }
 

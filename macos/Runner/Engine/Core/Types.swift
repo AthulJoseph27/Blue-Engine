@@ -185,10 +185,10 @@ enum RenderMode {
     case render
 }
 
-enum RenderQuality {
-    case low
-    case medium
-    case high
+enum RenderQuality : String {
+    case low = "low"
+    case medium = "medium"
+    case high = "high"
 }
 
 enum RendererType : CaseIterable {

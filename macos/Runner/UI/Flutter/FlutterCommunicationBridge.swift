@@ -1,7 +1,12 @@
 import FlutterMacOS
+import SwiftUI
 
 enum FlutterBridgingMethod: String {
     case sendMessage = "send_message"
+}
+
+enum SwiftBridgingMethod: String {
+    case renderImage = "renderImage"
 }
 
 enum FlutterPage: String {
@@ -19,15 +24,13 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
     public static func register(with registrar: FlutterPluginRegistrar) {}
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if call.method == FlutterBridgingMethod.sendMessage.rawValue {
-            if let args = decodeArguments(call.arguments) as [String: Any]? {
-                print("Received message from Flutter: \(args)")
-                result(nil)
-            } else {
-                result(FlutterError(code: "argument_error", message: "Invalid argument", details: nil))
+        if let args = decodeArguments(call.arguments) as [String: Any]? {
+            switch call.method {
+                case SwiftBridgingMethod.renderImage.rawValue:
+                SwiftBridgingMethods.renderImage(arguments: args)
+                default:
+                    result(FlutterMethodNotImplemented)
             }
-        } else {
-            result(FlutterMethodNotImplemented)
         }
     }
     
@@ -49,6 +52,9 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
     }
     
     func sendEvent(arguments: [String: Any]) {
+        if(self.eventSink == nil) {
+            print("Swift: Event Sink is nil")
+        }
         self.eventSink?(encodeArguments(arguments))
     }
     
@@ -82,5 +88,36 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
         }
         
         return [:]
+    }
+}
+
+class SwiftBridgingMethods {
+    
+    static func renderImage(arguments: [String: Any]) {
+        if RenderImageModel.rendering {
+            return
+        }
+        
+        let model = RenderImageModel(json: arguments)
+        
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: model.resolution.x, height: model.resolution.y),
+                              styleMask: [.titled, .miniaturizable],
+                                          backing: .buffered,
+                                          defer: false)
+
+        let rendererType = (model.renderEngine == .aurora) ? RendererType.StaticRT : RendererType.PhongShader
+        window.center()
+        window.title = "Rendering"
+        window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: rendererType, settings: model.getRenderingSettings()))
+
+        let windowController = NSWindowController(window: window)
+        windowController.showWindow(nil)
+        RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
+            model.saveRenderImage()
+            DispatchQueue.main.async {
+                RenderImageModel.rendering = false
+                window.close()
+            }
+        }
     }
 }

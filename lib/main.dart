@@ -1,7 +1,13 @@
 import 'dart:convert';
 
+import 'package:blue_engine/Screens/SplashScreen.dart';
+import 'package:blue_engine/screens/RenderAnimation.dart';
+import 'package:blue_engine/screens/RenderImage/RenderImageView.dart';
+import 'package:blue_engine/screens/Settings/Settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Screens/Loading.dart';
 import 'SwiftCommunicationBridge.dart';
 
 void main() {
@@ -16,12 +22,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const CupertinoApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      // theme: CupertinoThemeData(
+      //   brightness: Brightness.dark,
+      // ),
+      theme: CupertinoThemeData(brightness: Brightness.light),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -35,16 +43,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  var text = "You have pushed the button this many times:";
-  final colors = [Colors.redAccent, Colors.blue, Colors.green, Colors.amber];
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-    invokePlatformMethod(PlatformFunctions.sendMessage, {'counter' : _counter});
-  }
+  var page = '';
 
   @override
   Widget build(BuildContext context) {
@@ -52,34 +51,25 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: eventStreamController.stream,
       builder: (context, snapshot) {
         if(snapshot.hasData) {
-          text = jsonDecode(snapshot.data)['page'];
+          page = jsonDecode(snapshot.data)['page'];
         }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  text,
-                ),
-                Text(
-                  '$_counter',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-            // backgroundColor: ,
-          ),
-        );
+        return SafeArea(child: getPage(page));
       },
     );
+  }
+
+  Widget getPage(String page) {
+    switch(page) {
+      case 'Settings':
+        return const SettingsPage();
+      case 'RenderImage':
+        return const RenderImagePage();
+      case 'RenderAnimation':
+        return const RenderAnimationPage();
+      case 'Loading':
+        return const Loading();
+      default:
+        return const SplashScreen();
+    }
   }
 }

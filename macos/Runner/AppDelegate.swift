@@ -14,7 +14,7 @@ struct BlueApp: App {
     
     init() {
         FlutterView.initialize()
-        
+
         let device = MTLCreateSystemDefaultDevice()!
         Engine.start(device: device)
         RendererManager.initialize()

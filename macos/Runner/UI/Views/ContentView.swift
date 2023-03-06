@@ -8,80 +8,92 @@ var gameStoryboard: NSStoryboard!
 
 struct ContentView: View {
     @StateObject var contentData = ContentViewModel()
+    @State var showSplashScreen = true
+    var flutterView: WindowViewController
     
-    let RTView = RendererManager.getMetalView(.StaticRT)
-    let PSView = RendererManager.getMetalView(.PhongShader)
+    init() {
+        flutterView = FlutterView.flutterView
+    }
+    //     let RTView = RendererManager.getMetalView(.StaticRT)
+    //     let PSView = RendererManager.getMetalView(.PhongShader)
     
     var body: some View {
-
-        ZStack {
-            
-            switch contentData.selectedTab {
-                
-            case .RayTracing:
-//                Color.red.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                RTView
-                    .edgesIgnoringSafeArea(.all)
-                
-            case .VertexShader:
-//                Color.blue.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                PSView
-                    .edgesIgnoringSafeArea(.all)
-                
-            default:
-                FlutterView()
-//                SettingsView()
+        if showSplashScreen {
+            flutterView.onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.showSplashScreen = false
+                }
             }
-            
-            HStack() {
-                Spacer()
+        } else {
+            ZStack {
                 
-                Sidebar(contentData: contentData)
-                    .frame(width: 100)
-                    .offset(x: contentData.showSideBar ? 0 : 120)
+                switch contentData.selectedTab {
+                    
+                case .RayTracing:
+                    Color.red.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    //                 RTView
+                    //                     .edgesIgnoringSafeArea(.all)
+                    
+                case .VertexShader:
+                    Color.blue.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    //                 PSView
+                    //                     .edgesIgnoringSafeArea(.all)
+                    
+                default:
+                    flutterView
+                    //                SettingsView()
+                }
                 
-            }
-            
-            HStack {
-            
-                Spacer()
+                HStack() {
+                    Spacer()
+                    
+                    Sidebar(contentData: contentData)
+                        .frame(width: 100)
+                        .offset(x: contentData.showSideBar ? 0 : 120)
+                    
+                }
                 
-                VStack(alignment: .trailing) {
-                
-                    Button(action: {withAnimation{ contentData.showSideBar.toggle() }}, label: {
-                            
-                        Image(systemName: "sidebar.right")
-                        .font(.system(size: 16, weight: .semibold))
-                            
-                    })
-                    .padding(.all, 12)
-                    .buttonStyle(PlainButtonStyle())
-                    .opacity((contentData.showDrawerButton || contentData.showSideBar) ? 1 : 0)
-                    .onHover{ hover in
-                        withAnimation {
-                            contentData.showDrawerButton = hover
-                        }
-                    }
+                HStack {
                     
                     Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        
+                        Button(action: {withAnimation{ contentData.showSideBar.toggle() }}, label: {
+                            
+                            Image(systemName: "sidebar.right")
+                                .font(.system(size: 16, weight: .semibold))
+                            
+                        })
+                        .padding(.all, 12)
+                        .buttonStyle(PlainButtonStyle())
+                        .opacity((contentData.showDrawerButton || contentData.showSideBar) ? 1 : 0)
+                        .onHover{ hover in
+                            withAnimation {
+                                contentData.showDrawerButton = hover
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea(.all, edges: .all)
+            .onChange(of: contentData.selectedTab) { value in
+                if contentData.selectedTab != .RayTracing && contentData.selectedTab != .VertexShader {
+                    RendererManager.pauseAllRenderingLoop()
+                }
+                
+                if contentData.selectedTab == .RayTracing {
+                    RendererManager.updateViewPort(viewPortType: .StaticRT)
+                } else if contentData.selectedTab == .VertexShader{
+                    RendererManager.updateViewPort(viewPortType: .PhongShader)
                 }
             }
             
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.all, edges: .all)
-        .onChange(of: contentData.selectedTab) { value in
-            if contentData.selectedTab != .RayTracing && contentData.selectedTab != .VertexShader {
-                RendererManager.pauseAllRenderingLoop()
-            }
-            
-            if contentData.selectedTab == .RayTracing {
-                RendererManager.updateViewPort(viewPortType: .StaticRT)
-            } else if contentData.selectedTab == .VertexShader{
-                RendererManager.updateViewPort(viewPortType: .PhongShader)
-            }
-        }
         
     }
-    
 }

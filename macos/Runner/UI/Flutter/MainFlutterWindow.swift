@@ -2,19 +2,6 @@ import Cocoa
 import SwiftUI
 import FlutterMacOS
 
-//class MainFlutterWindow: NSWindow {
-//  override func awakeFromNib() {
-//    let flutterViewController = FlutterViewController.init()
-//    let windowFrame = self.frame
-//    self.contentViewController = flutterViewController
-//    self.setFrame(windowFrame, display: true)
-//
-//    RegisterGeneratedPlugins(registry: flutterViewController)
-//
-//    super.awakeFromNib()
-//  }
-//}
-
 struct WindowViewController: NSViewControllerRepresentable {
     let viewController: NSViewController
     
@@ -23,21 +10,20 @@ struct WindowViewController: NSViewControllerRepresentable {
     }
     
     func updateNSViewController(_ nsViewController: NSViewController, context: Context) {}
+    
 }
 
-struct FlutterView: View {
+class FlutterView {
     static var flutterViewController: FlutterViewController!
     static var communicationBridge: FlutterCommunicationBridge!
+    static var flutterView: WindowViewController!
     
     static func initialize() {
         FlutterView.flutterViewController = FlutterViewController.init()
         communicationBridge = FlutterCommunicationBridge()
         setUpCommunicationBridge()
         RegisterGeneratedPlugins(registry: FlutterView.flutterViewController)
-    }
-
-    var body: some View {
-        WindowViewController(viewController: FlutterView.flutterViewController)
+        flutterView = WindowViewController(viewController: FlutterView.flutterViewController)
     }
     
     private static func setUpCommunicationBridge() {

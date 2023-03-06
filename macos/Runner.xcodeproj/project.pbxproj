@@ -75,6 +75,7 @@
 		3CD0114C29B3BED60009DEC6 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114B29B3BED60009DEC6 /* Sidebar.swift */; };
 		3CD0114F29B3BEF80009DEC6 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114E29B3BEF80009DEC6 /* TabButton.swift */; };
 		3CD0115129B3BF150009DEC6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0115029B3BF150009DEC6 /* BlurView.swift */; };
+		3CE728B129B629060073AC4C /* FlutterModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE728B029B629060073AC4C /* FlutterModels.swift */; };
 		3CFEAB9929B4F23600440CF5 /* muros_g.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CFEA9E029B4F23500440CF5 /* muros_g.png */; };
 		3CFEAB9A29B4F23600440CF5 /* Maceta_D2_Color_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CFEA9E129B4F23500440CF5 /* Maceta_D2_Color_0.png */; };
 		3CFEAB9B29B4F23600440CF5 /* citrus_limon_leaf_Bump.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CFEA9E229B4F23500440CF5 /* citrus_limon_leaf_Bump.png */; };
@@ -593,6 +594,7 @@
 		3CD0114B29B3BED60009DEC6 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		3CD0114E29B3BEF80009DEC6 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		3CD0115029B3BF150009DEC6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		3CE728B029B629060073AC4C /* FlutterModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterModels.swift; sourceTree = "<group>"; };
 		3CFEA9E029B4F23500440CF5 /* muros_g.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = muros_g.png; sourceTree = "<group>"; };
 		3CFEA9E129B4F23500440CF5 /* Maceta_D2_Color_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Maceta_D2_Color_0.png; sourceTree = "<group>"; };
 		3CFEA9E229B4F23500440CF5 /* citrus_limon_leaf_Bump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = citrus_limon_leaf_Bump.png; sourceTree = "<group>"; };
@@ -1105,6 +1107,7 @@
 			children = (
 				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
 				3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */,
+				3CE728B029B629060073AC4C /* FlutterModels.swift */,
 			);
 			path = Flutter;
 			sourceTree = "<group>";
@@ -2419,6 +2422,7 @@
 				3C1717C529B490FC00B19B27 /* Camera.swift in Sources */,
 				3C1717DD29B491DF00B19B27 /* Transform.metal in Sources */,
 				3C1717E129B491FC00B19B27 /* PhongShader.metal in Sources */,
+				3CE728B129B629060073AC4C /* FlutterModels.swift in Sources */,
 				3C1717CC29B4914500B19B27 /* Skybox.swift in Sources */,
 				3C1717AF29B4901000B19B27 /* Mesh.swift in Sources */,
 				3C1717E329B4921B00B19B27 /* Lighting.metal in Sources */,
