@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:blue_engine/Screens/SplashScreen.dart';
+import 'package:blue_engine/globals.dart';
 import 'package:blue_engine/screens/RenderAnimation.dart';
 import 'package:blue_engine/screens/RenderImage/RenderImageView.dart';
-import 'package:blue_engine/screens/Settings/Settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Screens/Loading.dart';
+import 'Screens/Settings/SettingsView.dart';
 import 'SwiftCommunicationBridge.dart';
 
 void main() {
@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const CupertinoApp(
+    return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       // theme: CupertinoThemeData(
       //   brightness: Brightness.dark,
       // ),
-      theme: CupertinoThemeData(brightness: Brightness.light),
+      theme: ThemeData(brightness: Brightness.light, primaryColor: LightTheme.activeBlue),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

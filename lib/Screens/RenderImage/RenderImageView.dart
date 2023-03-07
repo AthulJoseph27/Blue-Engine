@@ -1,9 +1,10 @@
 import 'package:blue_engine/Screens/RenderImage/RenderImageController.dart';
 import 'package:blue_engine/Screens/RenderImage/RenderImageModel.dart';
-import 'package:blue_engine/Screens/Settings/SettingsModel.dart';
-import 'package:blue_engine/Widgets/CupertinoRow.dart';
+import 'package:blue_engine/Widgets/SettingsRow.dart';
+import 'package:blue_engine/Widgets/MaterialSegmentedControl.dart';
 import 'package:blue_engine/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RenderImagePage extends StatefulWidget {
@@ -19,18 +20,18 @@ class _RenderImagePageState extends State<RenderImagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: Center(
+    return Scaffold(
+      body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CupertinoRow(
+            SettingsRow(
               firstChild: Text(
                 'Render Engine :',
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: CupertinoSegmentedControl<RenderEngine>(
-                selectedColor: CupertinoColors.activeBlue,
+              secondChild: MaterialSegmentedControl<RenderEngine>(
+                selectedColor: LightTheme.activeBlue,
                 groupValue: RenderImageModel.renderEngine,
                 onValueChanged: (RenderEngine value) {
                   setState(() {
@@ -45,10 +46,10 @@ class _RenderImagePageState extends State<RenderImagePage> {
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
-                  RenderEngine.velocity: Padding(
+                  RenderEngine.comet: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Velocity',
+                      'Comet',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -56,13 +57,13 @@ class _RenderImagePageState extends State<RenderImagePage> {
               ),
               spacingRatio: spacingRatio,
             ),
-            CupertinoRow(
+            SettingsRow(
               firstChild: Text(
                 'Quality :',
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: CupertinoSegmentedControl<RenderQuality>(
-                selectedColor: CupertinoColors.activeBlue,
+              secondChild: MaterialSegmentedControl<RenderQuality>(
+                selectedColor: LightTheme.activeBlue,
                 groupValue: RenderImageModel.quality,
                 onValueChanged: (RenderQuality value) {
                   setState(() {
@@ -95,10 +96,10 @@ class _RenderImagePageState extends State<RenderImagePage> {
               ),
               spacingRatio: spacingRatio,
             ),
-            CupertinoRow(
+            SettingsRow(
               firstChild: Text(
                 'Resolution :',
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               secondChild: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -130,10 +131,10 @@ class _RenderImagePageState extends State<RenderImagePage> {
               ),
               spacingRatio: spacingRatio,
             ),
-            CupertinoRow(
+            SettingsRow(
               firstChild: Text(
                 'Save Location :',
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               secondChild: Padding(
                 padding: const EdgeInsets.only(left: 16),
@@ -146,10 +147,10 @@ class _RenderImagePageState extends State<RenderImagePage> {
               ),
               spacingRatio: spacingRatio,
             ),
-            CupertinoRow(
+            SettingsRow(
               firstChild: Text(
                 'Persistent render window:',
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               secondChild: Padding(
                   padding: const EdgeInsets.only(left: 16),
@@ -158,7 +159,7 @@ class _RenderImagePageState extends State<RenderImagePage> {
                     child: FittedBox(
                       fit: BoxFit.contain,
                       child: CupertinoSwitch(
-                          activeColor: CupertinoTheme.of(context).primaryColor,
+                          activeColor: Theme.of(context).primaryColor,
                           value: RenderImageModel.keepAlive,
                           onChanged: (value) {
                             setState(() {
@@ -176,8 +177,9 @@ class _RenderImagePageState extends State<RenderImagePage> {
                   height: 32,
                   width: 100,
                   child: CupertinoButton(
-                    color: CupertinoTheme.of(context).primaryColor,
-                    padding: const EdgeInsets.all(2.0),
+                    color: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    // style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),),
                     onPressed: controller.renderImage,
                     child: const Center(child: Text('Render', style: TextStyle(fontSize: 16),)),),
                 ),

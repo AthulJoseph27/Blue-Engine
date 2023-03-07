@@ -1,8 +1,9 @@
 import 'package:blue_engine/Screens/Settings/Tabs/Scene/SceneSettingsModel.dart';
-import 'package:blue_engine/Screens/Settings/Tabs/ViewPort/ViewPortModel.dart';
+
+import 'Tabs/Viewport/Models/ViewportModel.dart';
 
 class SettingsModel {
-  static var viewPortSettings = ViewPortModel();
+  static var viewportSettings = ViewportModel();
   static var sceneSettings = SceneSettingsModel();
 
   Future<bool> load() async {

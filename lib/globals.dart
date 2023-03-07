@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+
 enum RenderEngine {
   aurora,
-  velocity,
+  comet,
 }
 
 enum RenderQuality {
@@ -25,4 +29,10 @@ class Int2 {
     'x' : x,
     'y' : y,
   };
+}
+
+const transparent = Color(0x00000000);
+
+class LightTheme {
+  static const activeBlue = Color.fromARGB(255, 0, 122, 255);
 }
