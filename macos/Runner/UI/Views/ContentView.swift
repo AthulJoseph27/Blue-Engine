@@ -32,14 +32,14 @@ struct ContentView: View {
                 switch contentData.selectedTab {
                     
                 case .RayTracing:
-                    Color.red.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-//                                     RTView
-//                                         .edgesIgnoringSafeArea(.all)
+//                    Color.red.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                                     RTView
+                                         .edgesIgnoringSafeArea(.all)
                     
                 case .VertexShader:
-                    Color.blue.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-//                                     PSView
-//                                         .edgesIgnoringSafeArea(.all)
+//                    Color.blue.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                                     PSView
+                                         .edgesIgnoringSafeArea(.all)
                     
                 default:
                     flutterView

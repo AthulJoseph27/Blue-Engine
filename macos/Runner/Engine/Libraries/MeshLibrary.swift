@@ -38,7 +38,7 @@ class MeshLibrary {
         meshes.updateValue(Mesh(modelName: "chest"), forKey: .Chest)
         meshes.updateValue(Mesh(modelName: "fireplace_room"), forKey: .FireplaceRoom)
         meshes.updateValue(Mesh(modelName: "sponza"), forKey: .Sponza)
-//        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
+        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->Mesh{
