@@ -15,6 +15,9 @@ class AuroraViewPortController {
   final tileXFocusNode = FocusNode();
   final tileYFocusNode = FocusNode();
 
+  final maxBounceStreamController = StreamController<int>();
+  final maxBounceFocusNode = FocusNode();
+
   final keyboardTranslationSensitivityController = StreamController<double>();
   final keyboardRotationSensitivityController = StreamController<double>();
   final trackpadRotationSensitivityController = StreamController<double>();
@@ -30,6 +33,12 @@ class AuroraViewPortController {
     tileYFocusNode.addListener(() {
       if(!tileYFocusNode.hasFocus) {
         onTileYEdited();
+      }
+    });
+
+    maxBounceFocusNode.addListener(() {
+      if(!maxBounceFocusNode.hasFocus) {
+        maxBounceController.text = ViewportModel.auroraViewportModel.maxBounce.toString();
       }
     });
   }

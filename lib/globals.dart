@@ -16,7 +16,7 @@ enum RenderQuality {
 enum SwiftMethods {
   renderImage,
   renderAnimation,
-  updateViewPortSettings,
+  updateViewportSettings,
   updateSceneSettings,
   updateCameraSettings
 }

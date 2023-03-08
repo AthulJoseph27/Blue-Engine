@@ -5,8 +5,12 @@ enum FlutterBridgingMethod: String {
     case sendMessage = "send_message"
 }
 
-enum SwiftBridgingMethod: String {
+enum SwiftBridgingMethodName: String {
     case renderImage = "renderImage"
+    case renderAnimation = "renderAnimation"
+    case updateViewportSettings = "updateViewportSettings"
+    case updateSceneSettings = "updateSceneSettings"
+    case updateCameraSettings = "updateCameraSettings"
 }
 
 enum FlutterPage: String {
@@ -26,8 +30,18 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if let args = decodeArguments(call.arguments) as [String: Any]? {
             switch call.method {
-                case SwiftBridgingMethod.renderImage.rawValue:
-                SwiftBridgingMethods.renderImage(arguments: args)
+                case SwiftBridgingMethodName.renderImage.rawValue:
+                    SwiftBridgingMethods.renderImage(arguments: args)
+                    result(true)
+                    break
+                case SwiftBridgingMethodName.updateViewportSettings.rawValue:
+                    SwiftBridgingMethods.updateViewportSettings(arguments: args)
+                    result(true)
+                    break
+                case SwiftBridgingMethodName.updateSceneSettings.rawValue:
+                    SwiftBridgingMethods.updateScenetSettings(arguments: args)
+                    result(true)
+                    break
                 default:
                     result(FlutterMethodNotImplemented)
             }
@@ -35,7 +49,6 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
     }
     
     // To Flutter
-    
     func onListen(withArguments arguments: Any?, eventSink: @escaping FlutterEventSink) -> FlutterError? {
         self.eventSink = eventSink
         return nil
@@ -80,7 +93,6 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
         
         do {
             if let dictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                print(dictionary)
                 return dictionary
             }
         } catch {
@@ -119,5 +131,45 @@ class SwiftBridgingMethods {
                 window.close()
             }
         }
+    }
+    
+    static func updateScenetSettings(arguments: [String: Any]) {
+        if let scene = arguments["scene"] as? String, let gameScene = GameScenes(rawValue: scene) {
+            RendererManager.updateCurrentScene(scene: gameScene)
+        }
+        
+        if let skyboxName = arguments["skybox"] as? String, let skybox = SkyboxTypes(rawValue: skyboxName) {
+            SceneManager.updateSkybox(skybox: skybox)
+        }
+    }
+    
+    static func updateViewportSettings(arguments: [String: Any]) {
+        updateAuroraViewportSettings(arguments: arguments["aurora"] as? ([String: Any]))
+        updateCometViewportSettings(arguments: arguments["comet"] as? ([String: Any]))
+    }
+    
+    private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
+        if(arguments == nil) {
+            return
+        }
+        
+        if let maxBounce = arguments!["maxBounce"] as? Int {
+            updateMaxBounce(bounce: maxBounce)
+        }
+        
+        print("Swift: \(arguments)")
+    }
+    
+    private static func updateCometViewportSettings(arguments: [String: Any]?) {
+        if(arguments == nil) {
+            return
+        }
+        
+        print("Swift: \(arguments)")
+    }
+    
+    private static func updateMaxBounce(bounce: Int) {
+        let maxBounce = max(bounce, 1)
+        RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(maxBounce: maxBounce))
     }
 }

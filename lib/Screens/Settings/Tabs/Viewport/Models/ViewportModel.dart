@@ -20,7 +20,7 @@ class AuroraViewportModel {
   Map<String, dynamic> toJson() => {
     'maxBounce' : maxBounce,
     'resolution' : resolution.name,
-    'tileSize' : tileSize,
+    'tileSize' : tileSize.toJson(),
     'controlSensitivity' : controlSensitivity.toJson()
   };
 }

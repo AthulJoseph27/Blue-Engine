@@ -60,6 +60,10 @@ class DynamicRTScene: RTScene {
     
     func updateScene(deltaTime: Float) {}
     
+    func updateSkybox(skyboxType: SkyboxTypes) {
+        skyBox = Skyboxibrary.skybox(skyboxType)
+    }
+    
     func updateObjects(deltaTime: Float) {}
     
     func updateUniforms(size: CGSize) {}

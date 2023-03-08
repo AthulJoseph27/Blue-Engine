@@ -1,12 +1,11 @@
 import MetalKit
 import simd
 
-enum SkyboxTypes {
-    case Sky
-    case Beach
-    case City
-    case NightCity
-    case Jungle
+enum SkyboxTypes: String {
+    case Sky = "Sky"
+    case Beach = "Beach"
+    case NightCity = "NightCity"
+    case Jungle = "Jungle"
 }
 
 class Skyboxibrary {

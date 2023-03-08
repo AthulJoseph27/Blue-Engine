@@ -14,6 +14,6 @@ class ViewportSettingsController {
   }
 
   static onViewportSettingsUpdated() {
-    invokePlatformMethod(SwiftMethods.updateViewPortSettings, ViewportModel.toJson());
+    invokePlatformMethod(SwiftMethods.updateViewportSettings, ViewportModel.toJson());
   }
 }

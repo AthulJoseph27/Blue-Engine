@@ -1302,15 +1302,15 @@
 			isa = PBXGroup;
 			children = (
 				3CFEA9DF29B4F23500440CF5 /* San_Miguel */,
-				3CFEAB2629B4F23500440CF5 /* NightCity.jpg */,
 				3CFEAB2729B4F23500440CF5 /* E-45-Aircraft */,
 				3CFEAB3129B4F23500440CF5 /* sponza */,
 				3CFEAB6B29B4F23500440CF5 /* fireplace_room */,
-				3CFEAB7229B4F23500440CF5 /* Beach.jpeg */,
+				3CFEAB8E29B4F23500440CF5 /* chest */,
 				3CFEAB7329B4F23500440CF5 /* Meshes */,
 				3CFEAB8C29B4F23500440CF5 /* Jungle.jpg */,
 				3CFEAB8D29B4F23500440CF5 /* Sky.jpg */,
-				3CFEAB8E29B4F23500440CF5 /* chest */,
+				3CFEAB7229B4F23500440CF5 /* Beach.jpeg */,
+				3CFEAB2629B4F23500440CF5 /* NightCity.jpg */,
 			);
 			path = res;
 			sourceTree = "<group>";

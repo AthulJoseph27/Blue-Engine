@@ -4,9 +4,11 @@ class GameScene {
     var ambient : Float = 0
     var solids: [Solid] = []
     var lights: [Light] = []
+    var skybox: SkyboxTypes = .Sky
     var cameraManager = CameraManager()
     
-    init() {
+    init(skybox: SkyboxTypes = .Sky) {
+        self.skybox = skybox
         buildScene()
     }
     
@@ -18,6 +20,10 @@ class GameScene {
     
     func addLight(light: Light) {
         lights.append(light)
+    }
+    
+    func updateSkybox(skybox: SkyboxTypes) {
+        self.skybox = skybox
     }
     
     func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {

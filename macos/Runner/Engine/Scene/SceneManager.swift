@@ -3,6 +3,7 @@ import MetalKit
 class SceneManager {
     public static var currentRendererType: RendererType = .StaticRT
     
+    private static var _currentSkybox: SkyboxTypes = .Sky
     private static var _currentScene: GameScene!
     private static var _currentRenderableScene: RenderableScene!
     static var currentRenderableScene: RenderableScene {
@@ -24,15 +25,25 @@ class SceneManager {
     public static func setScene(_ scene: GameScenes){
         switch scene {
         case .Sandbox:
-            _currentScene = Sandbox()
+            _currentScene = Sandbox(skybox: _currentSkybox)
+            break
         case .Sponza:
-            _currentScene = Sponza()
+            _currentScene = Sponza(skybox: _currentSkybox)
+            break
         case .FireplaceRoom:
-            _currentScene = FireplaceRoom()
+            _currentScene = FireplaceRoom(skybox: _currentSkybox)
+            break
         case .SanMiguel:
-            _currentScene = SanMiguel()
+            _currentScene = SanMiguel(skybox: _currentSkybox)
+            break
         }
         updateRenderableScene(currentRendererType)
+    }
+    
+    public static func updateSkybox(skybox: SkyboxTypes) {
+        _currentSkybox = skybox
+        _currentScene.updateSkybox(skybox: skybox)
+        _currentRenderableScene.updateSkybox(skyboxType: skybox)
     }
     
     public static func updateRenderableScene(_ rendererType: RendererType) {

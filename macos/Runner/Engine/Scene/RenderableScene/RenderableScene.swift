@@ -20,6 +20,8 @@ protocol RenderableScene {
     func addSolid(solid: Solid)
     
     func addLight(light: Light)
+    
+    func updateSkybox(skyboxType: SkyboxTypes)
 }
 
 extension RenderableScene {

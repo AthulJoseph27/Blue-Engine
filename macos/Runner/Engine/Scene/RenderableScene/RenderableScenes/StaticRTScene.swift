@@ -59,6 +59,10 @@ class StaticRTScene: RTScene {
     
     func updateScene(deltaTime: Float) {}
     
+    func updateSkybox(skyboxType: SkyboxTypes) {
+        skyBox = Skyboxibrary.skybox(skyboxType)
+    }
+    
     private func postBuildScene() {
         createBuffers()
         createAccelerationStructure()

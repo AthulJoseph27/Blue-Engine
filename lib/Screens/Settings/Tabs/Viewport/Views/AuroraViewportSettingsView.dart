@@ -46,11 +46,17 @@ class _AuroraViewportSettingsViewState
             padding: const EdgeInsets.only(left: 24),
             child: SizedBox(
               width: 80,
-              child: CupertinoTextField(
-                controller: controller.maxBounceController,
-                onChanged: controller.setMaxBounce,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              child: StreamBuilder<int>(
+                stream: controller.maxBounceStreamController.stream,
+                builder: (context, snapshot) {
+                  return CupertinoTextField(
+                    controller: controller.maxBounceController,
+                    focusNode: controller.maxBounceFocusNode,
+                    onChanged: controller.setMaxBounce,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  );
+                }
               ),
             ),
           ),

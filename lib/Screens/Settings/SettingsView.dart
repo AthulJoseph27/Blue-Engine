@@ -1,3 +1,4 @@
+import 'package:blue_engine/Screens/Settings/Tabs/Scene/SceneSettingsView.dart';
 import 'package:blue_engine/Widgets/MaterialSlidingSegmentedControl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +18,11 @@ class _SettingsPageState extends State<SettingsPage> {
   var _selectedTab = SettingTab.viewPort;
   var tabs = [
     const ViewportSettingsView(),
-    Container(
-      color: CupertinoColors.activeOrange,
-    ),
+    const SceneSettingsView(),
     Container(
       color: CupertinoColors.destructiveRed,
     )
   ];
-  var firstChildIndex = 0;
-  var secondChildIndex = 1;
-  var crossFadeState = CrossFadeState.showFirst;
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               if (value == null || value == _selectedTab) {
                                 return;
                               }
-
                               setState(() {
-                                if (crossFadeState == CrossFadeState.showFirst) {
-                                  secondChildIndex = value.index;
-                                  crossFadeState = CrossFadeState.showSecond;
-                                } else {
-                                  secondChildIndex = firstChildIndex;
-                                  firstChildIndex = value.index;
-                                  crossFadeState = CrossFadeState.showFirst;
-                                }
-
                                 _selectedTab = value;
                               });
                             },
@@ -97,13 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: SizedBox(
                         width: constraints.maxWidth,
                         height: constraints.maxHeight - 100,
-                        child: AnimatedCrossFade(
-                          firstChild: tabs[firstChildIndex],
-                          secondChild: tabs[secondChildIndex],
-                          crossFadeState: crossFadeState,
-                          duration: const Duration(milliseconds: 500),
-                          firstCurve: Curves.easeIn,
-                          secondCurve: Curves.easeIn,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          child: tabs[_selectedTab.index],
                         ),
                       ),
                     ),

@@ -10,12 +10,14 @@ struct ContentView: View {
     @StateObject var contentData = ContentViewModel()
     @State var showSplashScreen = true
     var flutterView: WindowViewController
+    var RTView: MetalView
+    var PSView: MetalView
     
     init() {
         flutterView = FlutterView.flutterView
+        RTView = RendererManager.getMetalView(.StaticRT)
+        PSView = RendererManager.getMetalView(.PhongShader)
     }
-    //     let RTView = RendererManager.getMetalView(.StaticRT)
-    //     let PSView = RendererManager.getMetalView(.PhongShader)
     
     var body: some View {
         if showSplashScreen {
@@ -31,17 +33,16 @@ struct ContentView: View {
                     
                 case .RayTracing:
                     Color.red.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                    //                 RTView
-                    //                     .edgesIgnoringSafeArea(.all)
+//                                     RTView
+//                                         .edgesIgnoringSafeArea(.all)
                     
                 case .VertexShader:
                     Color.blue.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                    //                 PSView
-                    //                     .edgesIgnoringSafeArea(.all)
+//                                     PSView
+//                                         .edgesIgnoringSafeArea(.all)
                     
                 default:
                     flutterView
-                    //                SettingsView()
                 }
                 
                 HStack() {

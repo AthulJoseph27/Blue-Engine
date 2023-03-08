@@ -1,19 +1,15 @@
-enum Scene {
-  cornell,
-  sponza,
-  fireplaceRoom,
-  sanMiguel
-}
-
-enum SkyBox {
-  sky,
-  jungle,
-  city,
-  beach
-}
+const List<String> scenes = ['Cornell', 'Sponza', 'Fireplace Room', 'San Miguel'];
+const List<String> skyBoxes = ['Sky', 'Jungle', 'NightCity', 'Beach'];
 
 class SceneSettingsModel {
-  var currentScene = Scene.cornell;
-  var skybox = SkyBox.sky;
-  var ambientBrightness = 1.0;
+  static var scene = scenes[0];
+  static var skybox = skyBoxes[0];
+  static var ambientBrightness = 0.1;
+
+  static Map<String, dynamic> toJson() => {
+    'scene' : scene,
+    'skybox' : skybox,
+    'ambient' : ambientBrightness,
+  };
+
 }

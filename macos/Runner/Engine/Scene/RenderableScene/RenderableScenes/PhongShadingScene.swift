@@ -40,6 +40,10 @@ class PhongShadingScene: RenderableScene {
     
     func updateScene(deltaTime: Float) {}
     
+    func updateSkybox(skyboxType: SkyboxTypes) {
+        skyBox = Skyboxibrary.skybox(skyboxType)
+    }
+    
     func drawSolids(renderEncoder: MTLRenderCommandEncoder) {
         var currentCamera = CameraManager.currentCamera!
         
