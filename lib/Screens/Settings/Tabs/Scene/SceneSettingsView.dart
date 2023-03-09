@@ -45,13 +45,23 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 24),
-                    child: CustomDropDownMenu(
-                      list: SceneSettingsModel.scenes,
-                      onChanged: controller.onSceneChanged,
+                    child: StreamBuilder<String>(
+                      stream: controller.sceneController.stream,
+                      builder: (context, snapshot) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          child: CustomDropDownMenu(
+                            key: UniqueKey(),
+                            list: SceneSettingsModel.scenes,
+                            onChanged: controller.onSceneChanged,
+                            initialValue: SceneSettingsModel.scene,
+                          ),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(width: 20,),
-                  IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new scene",),
+                  IconButton(onPressed: controller.import3DModel, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new scene",),
                 ],
               )
             ),
@@ -65,13 +75,23 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 24),
-                    child: CustomDropDownMenu(
-                      list: SceneSettingsModel.skyBoxes,
-                      onChanged: controller.onSkyboxChanged,
+                    child: StreamBuilder<String>(
+                      stream: controller.skyboxController.stream,
+                      builder: (context, snapshot) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          child: CustomDropDownMenu(
+                            key: UniqueKey(),
+                            list: SceneSettingsModel.skyBoxes,
+                            onChanged: controller.onSkyboxChanged,
+                            initialValue: SceneSettingsModel.skybox,
+                          ),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(width: 20,),
-                  IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new skybox",),
+                  IconButton(onPressed: controller.importSkyBox, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new skybox",),
                 ],
               ),
             ),
@@ -133,21 +153,6 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 ),
               ),
               spacingRatio: spacingRatio,
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: SizedBox(
-                  height: 32,
-                  width: 100,
-                  child: CupertinoButton(
-                    color: Theme.of(context).primaryColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    // style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),),
-                    onPressed: controller.import3DModel,
-                    child: const Center(child: Text('Import', style: TextStyle(fontSize: 16),)),),
-                ),
-              ),
             ),
           ],
         ),

@@ -12,6 +12,12 @@ enum SwiftBridgingMethodName: String {
     case updateSceneSettings = "updateSceneSettings"
     case updateCameraSettings = "updateCameraSettings"
     case importScene = "importScene"
+    case importSkybox = "importSkybox"
+}
+
+enum SwiftBridgingEvents: String {
+    case setPage = "setPage"
+    case updateCurrentScene = "updateCurrentScene"
 }
 
 enum FlutterPage: String {
@@ -44,7 +50,12 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                     result(true)
                     break
                 case SwiftBridgingMethodName.importScene.rawValue:
-                    SwiftBridgingMethods.importScene(arguments: args)
+                    let _result = SwiftBridgingMethods.importScene(arguments: args)
+                    result(_result)
+                    break
+                case SwiftBridgingMethodName.importSkybox.rawValue:
+                    let _result = SwiftBridgingMethods.importSkybox(arguments: args)
+                    result(_result)
                     break
                 default:
                     result(FlutterMethodNotImplemented)
@@ -64,7 +75,7 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
     }
     
     func setPage(page: FlutterPage) {
-        let argument = ["page" : page.rawValue]
+        let argument = ["function" : SwiftBridgingEvents.setPage.rawValue, "page" : page.rawValue]
         sendEvent(arguments: argument)
     }
     
@@ -146,14 +157,29 @@ class SwiftBridgingMethods {
         updateCometViewportSettings(arguments: arguments["comet"] as? ([String: Any]))
     }
     
-    static func importScene(arguments: [String: Any]) {
-        if let filePath = arguments["filePath"] as? String {
-            MeshLibrary.loadMesh(filePath: filePath)
-            updateScenetSettings(arguments: ["scene" : "Custom"])
-        }
+    static func importScene(arguments: [String: Any]) -> Bool {
+        do {
+            if let filePath = arguments["filePath"] as? String {
+                try MeshLibrary.loadMesh(filePath: filePath)
+                updateScenetSettings(arguments: ["scene" : "Custom"])
+                return true
+            }
+        } catch {}
+        
+        return false
     }
     
-    static func openFilePicker() {}
+    static func importSkybox(arguments: [String: Any]) -> Bool {
+        do {
+            if let filePath = arguments["filePath"] as? String {
+                try Skyboxibrary.loadSkyboxFromPath(path: filePath)
+                updateScenetSettings(arguments: ["skybox" : "Custom"])
+                return true
+            }
+        } catch {}
+        
+        return false
+    }
     
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
         if(arguments == nil) {

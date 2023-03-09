@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:blue_engine/Screens/Settings/Tabs/Scene/SceneSettingsModel.dart';
 import 'package:blue_engine/SwiftCommunicationBridge.dart';
 import 'package:blue_engine/globals.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 
 class SceneSettingsController {
+  final sceneController = StreamController<String>();
+  final skyboxController = StreamController<String>();
   final ambientLightController = StreamController<double>();
   final ambientLightTextController = TextEditingController(text: SceneSettingsModel.ambientBrightness.toString());
   final ambientLightFocusNode = FocusNode();
@@ -70,12 +74,32 @@ class SceneSettingsController {
   }
 
   void import3DModel() async {
-    var result = "";
+    var result = await FilePicker.platform.pickFiles(allowedExtensions: supportedModelExtension);
     if (result != null) {
-      invokePlatformMethod(SwiftMethods.importScene, {'filePath' : '/Users/athuljoseph/Downloads/San_Miguel/san-miguel.obj'});
-    } else {
-      // User canceled the picker
+      File file = File(result.files.single.path ?? "");
+      var loaded = await invokePlatformMethod(SwiftMethods.importScene, {'filePath' : file.path});
+      if(loaded) {
+        SceneSettingsModel.hasImportedScene = true;
+        SceneSettingsModel.scene = SceneSettingsModel.scenes.last;
+        sceneController.sink.add(SceneSettingsModel.scene);
+        // TODO: Show success message
+      }
     }
   }
 
+  void importSkyBox() async {
+    var result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      File file = File(result.files.single.path ?? "");
+      var loaded = await invokePlatformMethod(SwiftMethods.importSkybox, {'filePath' : file.path});
+      print("Loaded: $loaded");
+      if(loaded) {
+        SceneSettingsModel.hasImportedSkybox = true;
+        SceneSettingsModel.skybox = SceneSettingsModel.skyBoxes.last;
+        print(SceneSettingsModel.skybox);
+        skyboxController.sink.add(SceneSettingsModel.skybox);
+        // TODO: Show success message
+      }
+    }
+  }
 }

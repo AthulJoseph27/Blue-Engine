@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class CustomDropDownMenu extends StatefulWidget {
   final double width;
   final List<String> list;
-  final int initialIndex;
+  final String? initialValue;
   final void Function(String)? onChanged;
-  const CustomDropDownMenu({Key? key, required this.list, this.width = 300, this.onChanged, this.initialIndex = 0}) : super(key: key);
+  const CustomDropDownMenu({Key? key, required this.list, this.width = 300, this.onChanged, this.initialValue}) : super(key: key);
 
   @override
   State<CustomDropDownMenu> createState() => _CustomDropDownMenuState();
@@ -17,7 +17,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
 
   @override
   void initState() {
-    dropdownValue = widget.list[widget.initialIndex];
+    dropdownValue = widget.initialValue ?? widget.list[0];
     super.initState();
   }
 

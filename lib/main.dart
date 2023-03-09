@@ -48,10 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: eventStreamController.stream,
+      stream: pageController.stream,
       builder: (context, snapshot) {
         if(snapshot.hasData) {
-          page = jsonDecode(snapshot.data)['page'];
+          page = snapshot.data['page'];
         }
         return SafeArea(child: getPage(page));
       },

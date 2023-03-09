@@ -27,11 +27,11 @@ class Mesh {
         roughnessMapTextures = []
         submeshCount = 0
         if modelName != "None" {
-            loadModel()
+            try? loadModel()
         }
     }
     
-    init(modelPath: String) {
+    init(modelPath: String) throws {
         var baseUrl = URL(fileURLWithPath: modelPath)
         self.modelName = baseUrl.lastPathComponent
         self.modelExtension = baseUrl.pathExtension
@@ -46,7 +46,11 @@ class Mesh {
         metallicMapTextures = []
         roughnessMapTextures = []
         submeshCount = 0
-        loadModel(url: url)
+        do {
+            try loadModel(url: url)
+        } catch let error {
+            throw error
+        }
     }
     
     private func getTexture(for semantic: MDLMaterialSemantic,
@@ -166,7 +170,7 @@ class Mesh {
         }
     }
     
-    private func loadModel(url: URL? = nil) {
+    private func loadModel(url: URL? = nil) throws {
         var _url: URL?
         
         if url != nil {
@@ -176,65 +180,77 @@ class Mesh {
         }
         
         guard let assetURL = _url else {
-            fatalError("Asset \(String(describing: modelName)) does not exist.")
+            throw MeshError.loadFailed("Asset \(String(describing: modelName)) does not exist.")
         }
         
-        if modelExtension == "obj" {
-            if url != nil {
-                let mtlFileName = String(modelName).replacingOccurrences(of: ".obj", with: ".mtl")
-                let mtlURL = URL(fileURLWithPath: mtlFileName, relativeTo: url?.baseURL)
-                loadMaterials(url: mtlURL)
-            } else {
-                loadMaterials()
+        do {
+            if modelExtension == "obj" {
+                if url != nil {
+                    let mtlFileName = String(modelName).replacingOccurrences(of: ".obj", with: ".mtl")
+                    let mtlURL = URL(fileURLWithPath: mtlFileName, relativeTo: url?.baseURL)
+                    loadMaterials(url: mtlURL)
+                } else {
+                    loadMaterials()
+                }
             }
-        }
-        
-        let descriptor = MTKModelIOVertexDescriptorFromMetal(VertexDescriptorLibrary.getDescriptor(.Read))
-               (descriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
-               (descriptor.attributes[1] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
-               (descriptor.attributes[2] as! MDLVertexAttribute).name = MDLVertexAttributeNormal
-               (descriptor.attributes[3] as! MDLVertexAttribute).name = MDLVertexAttributeTangent
-               (descriptor.attributes[4] as! MDLVertexAttribute).name = MDLVertexAttributeBitangent
-
-        let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
-        let asset: MDLAsset = MDLAsset(url: assetURL,
-                                       vertexDescriptor: descriptor,
-                                       bufferAllocator: bufferAllocator,
-                                       preserveTopology: true,
-                                       error: nil)
-        
-        asset.loadTextures()
-        
-        var mdlMeshes: [MDLMesh] = []
-        do{
-            mdlMeshes = try MTKMesh.newMeshes(asset: asset,
-                                                   device: Engine.device).modelIOMeshes
             
-        } catch {
-            print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
-        }
-        
-        var mtkMeshes: [MTKMesh] = []
-        
-        for mdlMesh in mdlMeshes {
-            mdlMesh.addTangentBasis(forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate, tangentAttributeNamed: MDLVertexAttributeBitangent, bitangentAttributeNamed: MDLVertexAttributeTangent)
-            mdlMesh.vertexDescriptor = descriptor
+            let descriptor = MTKModelIOVertexDescriptorFromMetal(VertexDescriptorLibrary.getDescriptor(.Read))
+            (descriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
+            (descriptor.attributes[1] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
+            (descriptor.attributes[2] as! MDLVertexAttribute).name = MDLVertexAttributeNormal
+            (descriptor.attributes[3] as! MDLVertexAttribute).name = MDLVertexAttributeTangent
+            (descriptor.attributes[4] as! MDLVertexAttribute).name = MDLVertexAttributeBitangent
             
-            do {
-                let mtkMesh = try MTKMesh(mesh: mdlMesh, device: Engine.device)
-                mtkMeshes.append(mtkMesh)
+            let bufferAllocator = MTKMeshBufferAllocator(device: Engine.device)
+            let asset: MDLAsset = MDLAsset(url: assetURL,
+                                           vertexDescriptor: descriptor,
+                                           bufferAllocator: bufferAllocator,
+                                           preserveTopology: true,
+                                           error: nil)
+            
+            asset.loadTextures()
+            
+            var mdlMeshes: [MDLMesh] = []
+            do{
+                mdlMeshes = try MTKMesh.newMeshes(asset: asset,
+                                                  device: Engine.device).modelIOMeshes
+                
             } catch {
-                print("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
+                throw MeshError.loadFailed("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
             }
-        }
-        
-        vertexBuffer = mtkMeshes[0].vertexBuffers[0].buffer
-        
-        for i in 0..<mtkMeshes[0].submeshes.count {
-            let mtkSubmesh = mtkMeshes[0].submeshes[i]
-            let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh
             
-            addMesh(mtkSubmesh: mtkSubmesh, mdlMesh: mdlSubmesh, submeshId: i)
+            var mtkMeshes: [MTKMesh] = []
+            
+            for mdlMesh in mdlMeshes {
+                mdlMesh.addTangentBasis(forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate, tangentAttributeNamed: MDLVertexAttributeBitangent, bitangentAttributeNamed: MDLVertexAttributeTangent)
+                mdlMesh.vertexDescriptor = descriptor
+                
+                do {
+                    let mtkMesh = try MTKMesh(mesh: mdlMesh, device: Engine.device)
+                    mtkMeshes.append(mtkMesh)
+                } catch {
+                    throw MeshError.loadFailed("ERROR::LOADING_MESH::__\(String(describing: modelName))__::\(error)")
+                }
+            }
+            
+            if mtkMeshes.count == 0 {
+                throw MeshError.loadFailed("ERROR::LOADING_MESH::__NO DATA__")
+            }
+            
+            vertexBuffer = mtkMeshes[0].vertexBuffers[0].buffer
+            
+            for i in 0..<mtkMeshes[0].submeshes.count {
+                let mtkSubmesh = mtkMeshes[0].submeshes[i]
+                let mdlSubmesh = mdlMeshes[0].submeshes![i] as! MDLSubmesh
+                
+                addMesh(mtkSubmesh: mtkSubmesh, mdlMesh: mdlSubmesh, submeshId: i)
+            }
+        } catch let error {
+            throw error
         }
     }
+}
+
+enum MeshError: Error {
+    case loadFailed(String)
 }

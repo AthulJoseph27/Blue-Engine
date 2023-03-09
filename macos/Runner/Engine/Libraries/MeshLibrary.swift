@@ -42,8 +42,13 @@ class MeshLibrary {
 //        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
     }
     
-    public static func loadMesh(filePath: String) {
-        meshes.updateValue(Mesh(modelPath: filePath), forKey: .Custom)
+    public static func loadMesh(filePath: String) throws {
+        do {
+            let mesh = try Mesh(modelPath: filePath)
+            meshes.updateValue(mesh, forKey: .Custom)
+        } catch let error {
+            throw error
+        }
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->Mesh{
