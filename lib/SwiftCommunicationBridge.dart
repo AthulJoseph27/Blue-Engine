@@ -1,12 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:blue_engine/globals.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 const String methodChannelName = "flutter_method_channel";
 const String eventChannelName = "flutter_event_channel";
+
+enum SwiftMethods {
+  renderImage,
+  renderAnimation,
+  updateViewportSettings,
+  updateSceneSettings,
+  updateCameraSettings,
+  importScene,
+}
 
 const methodChannel = MethodChannel(methodChannelName);
 const eventChannel = EventChannel(eventChannelName);

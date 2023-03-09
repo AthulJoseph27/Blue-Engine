@@ -82,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Center(
                       child: SizedBox(
                         width: constraints.maxWidth,
-                        height: constraints.maxHeight - 100,
+                        height: constraints.maxHeight - 92,
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 400),
                           child: tabs[_selectedTab.index],

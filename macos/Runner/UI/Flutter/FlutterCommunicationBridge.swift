@@ -153,6 +153,8 @@ class SwiftBridgingMethods {
         }
     }
     
+    static func openFilePicker() {}
+    
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
         if(arguments == nil) {
             return

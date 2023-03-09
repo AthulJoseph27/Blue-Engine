@@ -13,14 +13,6 @@ enum RenderQuality {
   low
 }
 
-enum SwiftMethods {
-  renderImage,
-  renderAnimation,
-  updateViewportSettings,
-  updateSceneSettings,
-  updateCameraSettings, importScene
-}
-
 class Int2 {
   int  x = 0, y = 0;
   Int2({required this.x, required this.y});

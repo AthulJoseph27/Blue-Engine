@@ -77,4 +77,5 @@ class SceneSettingsController {
       // User canceled the picker
     }
   }
+
 }

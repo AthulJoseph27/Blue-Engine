@@ -41,13 +41,19 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 'Scene :',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: CustomDropDownMenu(
-                  list: scenes,
-                  onChanged: controller.onSceneChanged,
-                ),
-              ),
+              secondChild: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24),
+                    child: CustomDropDownMenu(
+                      list: SceneSettingsModel.scenes,
+                      onChanged: controller.onSceneChanged,
+                    ),
+                  ),
+                  const SizedBox(width: 20,),
+                  IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new scene",),
+                ],
+              )
             ),
             SettingsRow(
               spacingRatio: spacingRatio,
@@ -55,12 +61,18 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 'Skybox :',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: CustomDropDownMenu(
-                  list: skyBoxes,
-                  onChanged: controller.onSkyboxChanged,
-                ),
+              secondChild: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24),
+                    child: CustomDropDownMenu(
+                      list: SceneSettingsModel.skyBoxes,
+                      onChanged: controller.onSkyboxChanged,
+                    ),
+                  ),
+                  const SizedBox(width: 20,),
+                  IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.upload_circle, color: Theme.of(context).primaryColor), tooltip: "Import new skybox",),
+                ],
               ),
             ),
             SettingsRow(
