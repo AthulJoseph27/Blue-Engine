@@ -18,7 +18,7 @@ enum SwiftMethods {
   renderAnimation,
   updateViewportSettings,
   updateSceneSettings,
-  updateCameraSettings
+  updateCameraSettings, importScene
 }
 
 class Int2 {

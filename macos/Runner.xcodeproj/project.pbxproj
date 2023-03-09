@@ -69,6 +69,8 @@
 		3C17180D29B494B700B19B27 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C17180C29B494B700B19B27 /* GameViewController.swift */; };
 		3C17180F29B494C600B19B27 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C17180E29B494C600B19B27 /* GameView.swift */; };
 		3C17181129B494D800B19B27 /* MetalView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C17181029B494D800B19B27 /* MetalView.storyboard */; };
+		3C54789229B98D7D00D20911 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789129B98D7D00D20911 /* Custom.swift */; };
+		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
 		3CD0114629B3A8700009DEC6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114529B3A8700009DEC6 /* ContentView.swift */; };
 		3CD0114829B3B4D70009DEC6 /* FlutterCommunicationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */; };
 		3CD0114A29B3BE840009DEC6 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114929B3BE840009DEC6 /* ContentViewModel.swift */; };
@@ -588,6 +590,8 @@
 		3C17180C29B494B700B19B27 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		3C17180E29B494C600B19B27 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		3C17181029B494D800B19B27 /* MetalView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MetalView.storyboard; sourceTree = "<group>"; };
+		3C54789129B98D7D00D20911 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
+		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
 		3CD0114529B3A8700009DEC6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterCommunicationBridge.swift; sourceTree = "<group>"; };
 		3CD0114929B3BE840009DEC6 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
@@ -1196,6 +1200,7 @@
 				3C1717E829B4936000B19B27 /* RenderableScene */,
 				3C1717F229B493C200B19B27 /* Scenes */,
 				3C1717FB29B4940900B19B27 /* SceneManager.swift */,
+				3C54789329B98E0900D20911 /* SceneSettings.swift */,
 				3C1717FD29B4941400B19B27 /* GameScene.swift */,
 			);
 			path = Scene;
@@ -1227,6 +1232,7 @@
 				3C1717F529B493DB00B19B27 /* Sponza.swift */,
 				3C1717F729B493EC00B19B27 /* FireplaceRoom.swift */,
 				3C1717F929B493FC00B19B27 /* SanMiguel.swift */,
+				3C54789129B98D7D00D20911 /* Custom.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -2424,6 +2430,7 @@
 				3C1717E129B491FC00B19B27 /* PhongShader.metal in Sources */,
 				3CE728B129B629060073AC4C /* FlutterModels.swift in Sources */,
 				3C1717CC29B4914500B19B27 /* Skybox.swift in Sources */,
+				3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */,
 				3C1717AF29B4901000B19B27 /* Mesh.swift in Sources */,
 				3C1717E329B4921B00B19B27 /* Lighting.metal in Sources */,
 				3C1717EF29B493A000B19B27 /* DynamicRTScene.swift in Sources */,
@@ -2455,6 +2462,7 @@
 				3CD0114C29B3BED60009DEC6 /* Sidebar.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 				3C1717AD29B48FFA00B19B27 /* Math.swift in Sources */,
+				3C54789229B98D7D00D20911 /* Custom.swift in Sources */,
 				3C1717F629B493DB00B19B27 /* Sponza.swift in Sources */,
 				3C17180F29B494C600B19B27 /* GameView.swift in Sources */,
 				3C1717B529B4904C00B19B27 /* Heap.swift in Sources */,

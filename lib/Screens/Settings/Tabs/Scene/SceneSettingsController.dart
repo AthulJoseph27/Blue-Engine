@@ -69,4 +69,12 @@ class SceneSettingsController {
     invokePlatformMethod(SwiftMethods.updateSceneSettings, SceneSettingsModel.toJson());
   }
 
+  void import3DModel() async {
+    var result = "";
+    if (result != null) {
+      invokePlatformMethod(SwiftMethods.importScene, {'filePath' : '/Users/athuljoseph/Downloads/San_Miguel/san-miguel.obj'});
+    } else {
+      // User canceled the picker
+    }
+  }
 }

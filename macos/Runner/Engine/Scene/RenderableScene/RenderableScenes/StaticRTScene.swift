@@ -43,7 +43,7 @@ class StaticRTScene: RTScene {
     var uniformBufferIndex: Int = 0
     
     init(scene: GameScene) {
-        skyBox = Skyboxibrary.skybox(.Sky)
+        skyBox = Skyboxibrary.skybox(scene.skybox)
         ambient = scene.ambient
         transformPipeline = ComputePipelineStateLibrary.pipelineState(.Transform).computePipelineState
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexGenerator).computePipelineState
@@ -59,8 +59,9 @@ class StaticRTScene: RTScene {
     
     func updateScene(deltaTime: Float) {}
     
-    func updateSkybox(skyboxType: SkyboxTypes) {
-        skyBox = Skyboxibrary.skybox(skyboxType)
+    func updateSceneSettings(sceneSettings: SceneSettings) {
+        skyBox = Skyboxibrary.skybox(sceneSettings.skybox)
+        ambient = sceneSettings.ambientLighting
     }
     
     private func postBuildScene() {

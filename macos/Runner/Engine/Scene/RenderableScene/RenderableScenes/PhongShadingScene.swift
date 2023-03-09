@@ -31,7 +31,6 @@ class PhongShadingScene: RenderableScene {
         createSampler()
         buildScene(scene: scene)
         createBuffers()
-//        debugVertices()
         heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
         fillRandomValues()
     }
@@ -40,8 +39,9 @@ class PhongShadingScene: RenderableScene {
     
     func updateScene(deltaTime: Float) {}
     
-    func updateSkybox(skyboxType: SkyboxTypes) {
-        skyBox = Skyboxibrary.skybox(skyboxType)
+    func updateSceneSettings(sceneSettings: SceneSettings) {
+        skyBox = Skyboxibrary.skybox(sceneSettings.skybox)
+        ambient = sceneSettings.ambientLighting
     }
     
     func drawSolids(renderEncoder: MTLRenderCommandEncoder) {
@@ -101,34 +101,6 @@ class PhongShadingScene: RenderableScene {
             }
         }
 
-    }
-    
-    func debugVertexBuffer(vertexBuffer: MTLBuffer) {
-        let count = vertexBuffer.length / MemoryLayout<VertexIn>.stride
-        
-        let vertices = vertexBuffer.contents().bindMemory(to: VertexIn.self, capacity: count)
-        
-        for i in 0..<count {
-            let vertex = vertices[i]
-            print("Vertex \(i): position=\(vertex.position), uvCoordinate=\(vertex.uvCoordinate)")
-        }
-    }
-    
-    func debugVertices() {
-        for solid in objects {
-            var show = false
-            
-            for mat in solid.mesh.materials {
-                if mat.isTextureEnabled {
-                    show = true
-                    break
-                }
-            }
-            
-            if show {
-                debugVertexBuffer(vertexBuffer: solid.mesh.vertexBuffer)
-            }
-        }
     }
     
     private func fillRandomValues() {

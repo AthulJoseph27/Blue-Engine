@@ -73,54 +73,69 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                 child: StreamBuilder<double>(
                     stream: controller.ambientLightController.stream,
                     initialData: SceneSettingsModel.ambientBrightness,
-                  builder: (context, snapshot) {
-                    var value = snapshot.data ?? 0.0;
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16, right: 12),
-                          child: SizedBox(
-                              width: 240,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                SizedBox(
+                    builder: (context, snapshot) {
+                      var value = snapshot.data ?? 0.0;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16, right: 12),
+                            child: SizedBox(
                                 width: 240,
-                                child: CupertinoSlider(
-                                  value: value,
-                                  onChanged: controller.onAmbientLightChanged,
-                                  min: 0.0,
-                                  max: 1.0,
-                                  divisions: 20,
-                                ),
-                              ),
-                                  Row(
-                                    children: [
-                                      Text('0.0', style: Theme.of(context).textTheme.caption,),
-                                      const Spacer(),
-                                      Text('1.0', style: Theme.of(context).textTheme.caption,),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                        ),
-                        SizedBox(
-                          width: 48,
-                          height: 32,
-                          child: CupertinoTextField(
-                            controller: controller.ambientLightTextController,
-                            focusNode: controller.ambientLightFocusNode,
-                            onChanged: controller.onAmbientLightTextChanged,
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 240,
+                                      child: CupertinoSlider(
+                                        value: value,
+                                        onChanged: controller.onAmbientLightChanged,
+                                        min: 0.0,
+                                        max: 1.0,
+                                        divisions: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('0.0', style: Theme.of(context).textTheme.caption,),
+                                        const Spacer(),
+                                        Text('1.0', style: Theme.of(context).textTheme.caption,),
+                                      ],
+                                    ),
+                                  ],
+                                )),
                           ),
-                        ),
-                      ],
-                    );
-                  }
+                          SizedBox(
+                            width: 48,
+                            height: 32,
+                            child: CupertinoTextField(
+                              controller: controller.ambientLightTextController,
+                              focusNode: controller.ambientLightFocusNode,
+                              onChanged: controller.onAmbientLightTextChanged,
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                 ),
               ),
               spacingRatio: spacingRatio,
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: SizedBox(
+                  height: 32,
+                  width: 100,
+                  child: CupertinoButton(
+                    color: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    // style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),),
+                    onPressed: controller.import3DModel,
+                    child: const Center(child: Text('Import', style: TextStyle(fontSize: 16),)),),
+                ),
+              ),
             ),
           ],
         ),

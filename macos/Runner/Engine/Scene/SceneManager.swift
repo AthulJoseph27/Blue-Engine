@@ -3,7 +3,7 @@ import MetalKit
 class SceneManager {
     public static var currentRendererType: RendererType = .StaticRT
     
-    private static var _currentSkybox: SkyboxTypes = .Sky
+    private static var _sceneSettings = SceneSettings(currentScene: .Sandbox, skybox: .Sky, ambientLighting: 0.1)
     private static var _currentScene: GameScene!
     private static var _currentRenderableScene: RenderableScene!
     static var currentRenderableScene: RenderableScene {
@@ -25,25 +25,41 @@ class SceneManager {
     public static func setScene(_ scene: GameScenes){
         switch scene {
         case .Sandbox:
-            _currentScene = Sandbox(skybox: _currentSkybox)
+            _currentScene = Sandbox(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
         case .Sponza:
-            _currentScene = Sponza(skybox: _currentSkybox)
+            _currentScene = Sponza(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
         case .FireplaceRoom:
-            _currentScene = FireplaceRoom(skybox: _currentSkybox)
+            _currentScene = FireplaceRoom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
         case .SanMiguel:
-            _currentScene = SanMiguel(skybox: _currentSkybox)
+            _currentScene = SanMiguel(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
+        case .Custom:
+            _currentScene = Custom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
         }
         updateRenderableScene(currentRendererType)
     }
     
-    public static func updateSkybox(skybox: SkyboxTypes) {
-        _currentSkybox = skybox
-        _currentScene.updateSkybox(skybox: skybox)
-        _currentRenderableScene.updateSkybox(skyboxType: skybox)
+    public static func updateSceneSettings(arguments: [String: Any]) {
+        let newSettings = _sceneSettings.fromJson(arguments)
+        
+        if newSettings.currentScene != _sceneSettings.currentScene {
+            RendererManager.updateCurrentScene(scene: newSettings.currentScene)
+        }
+        
+        if newSettings.skybox != _sceneSettings.skybox {
+            _currentScene.updateSkybox(skybox: newSettings.skybox)
+            
+        }
+        
+        if newSettings.ambientLighting != newSettings.ambientLighting {
+            _currentScene.updateAmbient(ambient: newSettings.ambientLighting)
+        }
+        
+        _sceneSettings = newSettings
+        _currentRenderableScene.updateSceneSettings(sceneSettings: newSettings)
     }
     
     public static func updateRenderableScene(_ rendererType: RendererType) {

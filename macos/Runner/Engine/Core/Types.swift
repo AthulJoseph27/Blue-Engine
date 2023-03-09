@@ -202,6 +202,7 @@ enum GameScenes: String, CaseIterable {
     case Sponza = "Sponza"
     case FireplaceRoom = "Fireplace Room"
     case SanMiguel = "San Miguel"
+    case Custom = "Custom"
 }
 
 enum RenderViewPortType : String, CaseIterable {

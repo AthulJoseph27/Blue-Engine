@@ -11,6 +11,7 @@ enum SwiftBridgingMethodName: String {
     case updateViewportSettings = "updateViewportSettings"
     case updateSceneSettings = "updateSceneSettings"
     case updateCameraSettings = "updateCameraSettings"
+    case importScene = "importScene"
 }
 
 enum FlutterPage: String {
@@ -41,6 +42,9 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                 case SwiftBridgingMethodName.updateSceneSettings.rawValue:
                     SwiftBridgingMethods.updateScenetSettings(arguments: args)
                     result(true)
+                    break
+                case SwiftBridgingMethodName.importScene.rawValue:
+                    SwiftBridgingMethods.importScene(arguments: args)
                     break
                 default:
                     result(FlutterMethodNotImplemented)
@@ -134,18 +138,19 @@ class SwiftBridgingMethods {
     }
     
     static func updateScenetSettings(arguments: [String: Any]) {
-        if let scene = arguments["scene"] as? String, let gameScene = GameScenes(rawValue: scene) {
-            RendererManager.updateCurrentScene(scene: gameScene)
-        }
-        
-        if let skyboxName = arguments["skybox"] as? String, let skybox = SkyboxTypes(rawValue: skyboxName) {
-            SceneManager.updateSkybox(skybox: skybox)
-        }
+        SceneManager.updateSceneSettings(arguments: arguments)
     }
     
     static func updateViewportSettings(arguments: [String: Any]) {
         updateAuroraViewportSettings(arguments: arguments["aurora"] as? ([String: Any]))
         updateCometViewportSettings(arguments: arguments["comet"] as? ([String: Any]))
+    }
+    
+    static func importScene(arguments: [String: Any]) {
+        if let filePath = arguments["filePath"] as? String {
+            MeshLibrary.loadMesh(filePath: filePath)
+            updateScenetSettings(arguments: ["scene" : "Custom"])
+        }
     }
     
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {

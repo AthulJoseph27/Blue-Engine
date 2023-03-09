@@ -31,6 +31,24 @@ class Mesh {
         }
     }
     
+    init(modelPath: String) {
+        var baseUrl = URL(fileURLWithPath: modelPath)
+        self.modelName = baseUrl.lastPathComponent
+        self.modelExtension = baseUrl.pathExtension
+        baseUrl.deleteLastPathComponent()
+        let url = URL(fileURLWithPath: self.modelName, relativeTo: baseUrl)
+        
+        indexBuffers = []
+        submeshIds = []
+        materials = []
+        baseColorTextures = []
+        normalMapTextures = []
+        metallicMapTextures = []
+        roughnessMapTextures = []
+        submeshCount = 0
+        loadModel(url: url)
+    }
+    
     private func getTexture(for semantic: MDLMaterialSemantic,
                              in material: MDLMaterial?,
                              textureOrigin: MTKTextureLoader.Origin) -> MTLTexture? {
@@ -114,8 +132,8 @@ class Mesh {
         submeshCount+=1
     }
     
-    private func loadMaterials() {
-        let fileURL = Bundle.main.url(forResource: modelName, withExtension: "mtl")!
+    private func loadMaterials(url: URL? = nil) {
+        let fileURL = url ?? Bundle.main.url(forResource: modelName, withExtension: "mtl")!
         let mtlString = try! String(contentsOf: fileURL)
 
         let scanner = Scanner(string: mtlString)
@@ -148,13 +166,27 @@ class Mesh {
         }
     }
     
-    private func loadModel() {
-        guard let assetURL = Bundle.main.url(forResource: modelName, withExtension: modelExtension) else {
+    private func loadModel(url: URL? = nil) {
+        var _url: URL?
+        
+        if url != nil {
+            _url = url
+        } else {
+            _url = Bundle.main.url(forResource: modelName, withExtension: modelExtension)
+        }
+        
+        guard let assetURL = _url else {
             fatalError("Asset \(String(describing: modelName)) does not exist.")
-                }
+        }
         
         if modelExtension == "obj" {
-            loadMaterials()
+            if url != nil {
+                let mtlFileName = String(modelName).replacingOccurrences(of: ".obj", with: ".mtl")
+                let mtlURL = URL(fileURLWithPath: mtlFileName, relativeTo: url?.baseURL)
+                loadMaterials(url: mtlURL)
+            } else {
+                loadMaterials()
+            }
         }
         
         let descriptor = MTKModelIOVertexDescriptorFromMetal(VertexDescriptorLibrary.getDescriptor(.Read))

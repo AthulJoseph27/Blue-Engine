@@ -21,7 +21,7 @@ protocol RenderableScene {
     
     func addLight(light: Light)
     
-    func updateSkybox(skyboxType: SkyboxTypes)
+    func updateSceneSettings(sceneSettings: SceneSettings)
 }
 
 extension RenderableScene {

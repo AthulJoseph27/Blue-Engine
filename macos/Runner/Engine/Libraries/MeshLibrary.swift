@@ -16,6 +16,7 @@ enum MeshTypes {
     case FireplaceRoom
     case Sponza
     case SanMiguel
+    case Custom
 }
 
 class MeshLibrary {
@@ -38,7 +39,11 @@ class MeshLibrary {
         meshes.updateValue(Mesh(modelName: "chest"), forKey: .Chest)
         meshes.updateValue(Mesh(modelName: "fireplace_room"), forKey: .FireplaceRoom)
         meshes.updateValue(Mesh(modelName: "sponza"), forKey: .Sponza)
-        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
+//        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
+    }
+    
+    public static func loadMesh(filePath: String) {
+        meshes.updateValue(Mesh(modelPath: filePath), forKey: .Custom)
     }
     
     public static func mesh(_ meshTypes: MeshTypes)->Mesh{
