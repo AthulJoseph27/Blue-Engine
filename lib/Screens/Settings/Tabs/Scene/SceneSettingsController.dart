@@ -12,6 +12,7 @@ class SceneSettingsController {
   final sceneController = StreamController<String>();
   final skyboxController = StreamController<String>();
   final ambientLightController = StreamController<double>();
+  final sceneLightingController = StreamController<int>();
   final ambientLightTextController = TextEditingController(text: SceneSettingsModel.ambientBrightness.toString());
   final ambientLightFocusNode = FocusNode();
 
@@ -79,6 +80,7 @@ class SceneSettingsController {
       File file = File(result.files.single.path ?? "");
       var loaded = await invokePlatformMethod(SwiftMethods.importScene, {'filePath' : file.path});
       if(loaded) {
+        addSceneLight(SceneLight());
         SceneSettingsModel.hasImportedScene = true;
         SceneSettingsModel.scene = SceneSettingsModel.scenes.last;
         sceneController.sink.add(SceneSettingsModel.scene);
@@ -92,14 +94,23 @@ class SceneSettingsController {
     if (result != null) {
       File file = File(result.files.single.path ?? "");
       var loaded = await invokePlatformMethod(SwiftMethods.importSkybox, {'filePath' : file.path});
-      print("Loaded: $loaded");
       if(loaded) {
         SceneSettingsModel.hasImportedSkybox = true;
         SceneSettingsModel.skybox = SceneSettingsModel.skyBoxes.last;
-        print(SceneSettingsModel.skybox);
         skyboxController.sink.add(SceneSettingsModel.skybox);
         // TODO: Show success message
       }
     }
+  }
+
+  void addSceneLight(SceneLight light) {
+    SceneSettingsModel.sceneLights.add(light);
+    sceneLightingController.sink.add(SceneSettingsModel.sceneLights.length);
+    invokePlatformMethod(SwiftMethods.updateSceneSettings, {'sceneLights': SceneSettingsModel.sceneLights.map((e) => e.toJson()).toList()});
+  }
+
+  void updateSceneLight(int index, SceneLight light) async {
+      SceneSettingsModel.sceneLights[index] = light;
+      invokePlatformMethod(SwiftMethods.updateSceneSettings, {'sceneLights': SceneSettingsModel.sceneLights.map((e) => e.toJson()).toList()});
   }
 }

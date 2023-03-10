@@ -20,7 +20,10 @@ class _SettingsPageState extends State<SettingsPage> {
     const ViewportSettingsView(),
     const SceneSettingsView(),
     Container(
-      color: CupertinoColors.destructiveRed,
+      color: CupertinoColors.white,
+    ),
+    Container(
+      color: CupertinoColors.white,
     )
   ];
 
@@ -82,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Center(
                       child: SizedBox(
                         width: constraints.maxWidth,
-                        height: constraints.maxHeight - 92,
+                        height: constraints.maxHeight - 80,
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 400),
                           child: tabs[_selectedTab.index],

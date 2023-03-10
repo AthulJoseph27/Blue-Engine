@@ -4,6 +4,7 @@ class SceneManager {
     public static var currentRendererType: RendererType = .StaticRT
     
     private static var _sceneSettings = SceneSettings(currentScene: .Sandbox, skybox: .Sky, ambientLighting: 0.1)
+    private static var _currentSceneName: GameScenes = .Sandbox
     private static var _currentScene: GameScene!
     private static var _currentRenderableScene: RenderableScene!
     static var currentRenderableScene: RenderableScene {
@@ -37,8 +38,9 @@ class SceneManager {
             _currentScene = SanMiguel(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
         case .Custom:
-            _currentScene = Custom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
+            _currentScene = Custom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting, lights: _sceneSettings.sceneLights)
         }
+        _currentSceneName = scene
         updateRenderableScene(currentRendererType)
     }
     
@@ -54,8 +56,13 @@ class SceneManager {
             
         }
         
-        if newSettings.ambientLighting != newSettings.ambientLighting {
+        if newSettings.ambientLighting != _sceneSettings.ambientLighting {
             _currentScene.updateAmbient(ambient: newSettings.ambientLighting)
+        }
+        
+        if arguments["sceneLights"] != nil {
+            _currentScene.updateSceneLights(lights: newSettings.sceneLights)
+            setScene(_currentSceneName)
         }
         
         _sceneSettings = newSettings

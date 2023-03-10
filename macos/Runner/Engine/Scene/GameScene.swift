@@ -8,9 +8,13 @@ class GameScene {
     var lights: [Light] = []
     var cameraManager = CameraManager()
     
-    init(skybox: SkyboxTypes = .Sky, ambient: Float = 0) {
+    var updateSolids : (_ solids: [Solid]) -> Void
+    
+    init(skybox: SkyboxTypes = .Sky, ambient: Float = 0, lights: [Light] = []) {
         self.ambient = ambient
         self.skybox = skybox
+        self.lights = lights
+        self.updateSolids = {(solids: [Solid]) -> Void in }
         buildScene()
     }
     
@@ -30,6 +34,10 @@ class GameScene {
     
     func updateAmbient(ambient: Float) {
         self.ambient = ambient
+    }
+    
+    func updateSceneLights(lights: [Light]) {
+        self.lights = lights
     }
     
     func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {

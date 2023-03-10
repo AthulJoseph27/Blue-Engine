@@ -15,7 +15,7 @@ enum SwiftMethods {
   updateSceneSettings,
   updateCameraSettings,
   importScene,
-  importSkybox,
+  importSkybox, updateSceneLighting,
 }
 
 enum SwiftEvents {

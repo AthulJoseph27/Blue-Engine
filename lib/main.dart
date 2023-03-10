@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:blue_engine/Screens/SplashScreen.dart';
-import 'package:blue_engine/globals.dart';
 import 'package:blue_engine/screens/RenderAnimation.dart';
 import 'package:blue_engine/screens/RenderImage/RenderImageView.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Screens/Loading.dart';
@@ -23,26 +21,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      // theme: CupertinoThemeData(
-      //   brightness: Brightness.dark,
-      // ),
-      theme: ThemeData(brightness: Brightness.light, primaryColor: LightTheme.activeBlue),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData(brightness: Brightness.light, primaryColor: CupertinoColors.activeBlue),
+      home: const FlutterUI(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class FlutterUI extends StatefulWidget {
+  const FlutterUI({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<FlutterUI> createState() => _FlutterUIState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _FlutterUIState extends State<FlutterUI> {
   var page = '';
 
   @override

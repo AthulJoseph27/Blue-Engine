@@ -2,6 +2,7 @@ import simd
 
 class DebugCamera: SceneCamera {
     var cameraType: CameraTypes = CameraTypes.Debug
+    var controllSensitivity = ControllSensitivity()
     
     var position = SIMD3<Float>(0, 70, 405)
     var deltaPosition = SIMD3<Float>(0, 0, 0)
@@ -18,47 +19,47 @@ class DebugCamera: SceneCamera {
         var _deltaPosition = SIMD3<Float>(0, 0, 0)
         
         if(Keyboard.isKeyPressed(.leftArrow)) {
-            _deltaPosition.x -= deltaTime * 1
+            _deltaPosition.x -= deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.rightArrow)) {
-            _deltaPosition.x += deltaTime * 1
+            _deltaPosition.x += deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.downArrow)) {
-            _deltaPosition.y -= deltaTime * 1
+            _deltaPosition.y -= deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.upArrow)) {
-            _deltaPosition.y  += deltaTime * 1
+            _deltaPosition.y  += deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.w)) {
-            _deltaPosition.z -= deltaTime * 1
+            _deltaPosition.z -= deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.s)) {
-            _deltaPosition.z += deltaTime * 1
+            _deltaPosition.z += deltaTime * controllSensitivity.keyboardTranslation
         }
         
         if(Keyboard.isKeyPressed(.a)) {
-            self.deltaRotation.y += deltaTime
+            self.deltaRotation.y += deltaTime * controllSensitivity.keyboardRotation
         }
         
         if(Keyboard.isKeyPressed(.d)) {
-            self.deltaRotation.y -= deltaTime
+            self.deltaRotation.y -= deltaTime * controllSensitivity.keyboardRotation
         }
         
         if(Keyboard.isKeyPressed(.z)) {
-            self.deltaRotation.x -= deltaTime
+            self.deltaRotation.x -= deltaTime * controllSensitivity.keyboardRotation
         }
         
         if(Keyboard.isKeyPressed(.x)) {
-            self.deltaRotation.x += deltaTime
+            self.deltaRotation.x += deltaTime * controllSensitivity.keyboardRotation
         }
         
-        self.deltaRotation.y += Mouse.getDWheelX() / -10
-        self.deltaRotation.x += Mouse.getDWheelY() / -10
+        self.deltaRotation.y += Mouse.getDWheelX() / -1 * controllSensitivity.trackpadRotation
+        self.deltaRotation.x += Mouse.getDWheelY() / -1 *  controllSensitivity.trackpadRotation
         
         rotation += deltaRotation
         

@@ -136,12 +136,12 @@ class _AuroraViewportSettingsViewState
                   stream: controller.keyboardTranslationSensitivityController.stream,
                   initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.translation,
                   builder: (context, snapshot) {
-                    var value = snapshot.data ?? 0.0;
+                    var value = snapshot.data ?? 1.0;
                     return CupertinoSlider(
                       value: value,
                       onChanged: controller.onKeyboardTranslationSensitivityChanged,
-                      min: 1,
-                      max: 1000,
+                      min: 0.001,
+                      max: 10,
                     );
                   }
                 )),
@@ -161,10 +161,12 @@ class _AuroraViewportSettingsViewState
                   stream: controller.keyboardRotationSensitivityController.stream,
                   initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.rotation,
                   builder: (context, snapshot) {
-                    var value = snapshot.data ?? 0.0;
+                    var value = snapshot.data ?? 1.0;
                     return CupertinoSlider(
                       value: value,
                       onChanged: controller.onKeyboardRotationSensitivityChanged,
+                      min: 1,
+                      max: 100,
                     );
                   }
                 )),
@@ -196,10 +198,12 @@ class _AuroraViewportSettingsViewState
                   stream: controller.trackpadRotationSensitivityController.stream,
                   initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.rotation,
                   builder: (context, snapshot) {
-                    var value = snapshot.data ?? 0.0;
+                    var value = snapshot.data ?? 1.0;
                     return CupertinoSlider(
                       value: value,
                       onChanged: controller.onTrackpadRotationSensitivityChanged,
+                      min: 0.01,
+                      max: 10,
                     );
                   }
                 )),
@@ -219,10 +223,12 @@ class _AuroraViewportSettingsViewState
                   stream: controller.trackpadZoomSensitivityController.stream,
                   initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.zoom,
                   builder: (context, snapshot) {
-                    var value = snapshot.data ?? 0.0;
+                    var value = snapshot.data ?? 1.0;
                     return CupertinoSlider(
                       value: value,
                       onChanged: controller.onTrackpadZoomSensitivityChanged,
+                      min: 1,
+                      max: 100,
                     );
                   }
                 )),

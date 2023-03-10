@@ -19,6 +19,11 @@ class RendererManager {
         .PhongShader : .PhongShader,
         .Render : .StaticRT
     ]
+    private static var _controllSettings: [RenderViewPortType: ControllSensitivity] = [
+        .StaticRT : ControllSensitivity(),
+        .DynamicRT : ControllSensitivity(),
+        .PhongShader : ControllSensitivity()
+    ]
     private static var sceneType: GameScenes = .Sandbox
     private static var viewPortType: RenderViewPortType = .StaticRT
     private static var renderMode: RenderMode = .display
@@ -28,11 +33,6 @@ class RendererManager {
         .PhongShader : VertexShadingSettings()
     ]
     private static var postRenderingCallback: (() -> Void)?
-    
-//    private static var mtkView: MTKView!
-//    private static var renderer: Renderer!
-//    private static var gc: GameViewController!
-//    private static var sb: NSStoryboard!
     
     public static func initialize() {
         sceneType = .Sandbox
@@ -122,6 +122,8 @@ class RendererManager {
     }
     
     public static func updateViewPort(viewPortType: RenderViewPortType) {
+        CameraManager.setCameraControllSensitivity(_controllSettings[viewPortType]!)
+        
         if self.viewPortType == viewPortType {
             resumeRenderingLoop(viewPortType: viewPortType)
             return
@@ -134,17 +136,8 @@ class RendererManager {
         resumeRenderingLoop(viewPortType: viewPortType)
     }
     
-    private static func resumeRenderingLoop(viewPortType: RenderViewPortType) {
-        renderers[viewPortType]!.onResume()
-        renderers[viewPortType]!.updateViewPort()
-        mtkViews[viewPortType]!.isPaused = false
-    }
-    
-    private static func setupDefaultCamera() {
-        let camera = DebugCamera()
-        camera.position = SIMD3<Float>(0, 1, 3.38)
-        CameraManager.registerCamera(camera: camera)
-        CameraManager.setCamera(.Debug)
+    public static func updateCameraControllSensitivity(viewPortType: RenderViewPortType, controllSettings: ControllSensitivity) {
+        _controllSettings[viewPortType] = controllSettings
     }
     
     public static func initializeViewPort(viewPortType: RenderViewPortType, rendererType: RendererType) {
@@ -172,6 +165,19 @@ class RendererManager {
         setRenderer(mtkView: mtkViews[.Render]!, rendererType: rendererType, viewPortType: .Render)
         renderers[.Render]!.switchToRenderMode(settings: settings)
         return MetalView(gameViewControllers[.Render]!)
+    }
+    
+    private static func resumeRenderingLoop(viewPortType: RenderViewPortType) {
+        renderers[viewPortType]!.onResume()
+        renderers[viewPortType]!.updateViewPort()
+        mtkViews[viewPortType]!.isPaused = false
+    }
+    
+    private static func setupDefaultCamera() {
+        let camera = DebugCamera()
+        camera.position = SIMD3<Float>(0, 1, 3.38)
+        CameraManager.registerCamera(camera: camera)
+        CameraManager.setCamera(.Debug)
     }
     
     private static func setRenderer(mtkView: MTKView, rendererType: RendererType, viewPortType: RenderViewPortType) {

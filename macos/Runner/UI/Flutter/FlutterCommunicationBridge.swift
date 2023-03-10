@@ -182,23 +182,25 @@ class SwiftBridgingMethods {
     }
     
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
-        if(arguments == nil) {
-            return
+        if let json = arguments {
+            
+            if let maxBounce = json["maxBounce"] as? Int {
+                updateMaxBounce(bounce: maxBounce)
+            }
+            
+            let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
+            
+            RendererManager.updateCameraControllSensitivity(viewPortType: .StaticRT, controllSettings: settings)
+            RendererManager.updateCameraControllSensitivity(viewPortType: .DynamicRT, controllSettings: settings)
         }
-        
-        if let maxBounce = arguments!["maxBounce"] as? Int {
-            updateMaxBounce(bounce: maxBounce)
-        }
-        
-        print("Swift: \(arguments)")
     }
     
     private static func updateCometViewportSettings(arguments: [String: Any]?) {
-        if(arguments == nil) {
-            return
+        if let json = arguments {
+            
+            let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
+            RendererManager.updateCameraControllSensitivity(viewPortType: .PhongShader, controllSettings: settings)
         }
-        
-        print("Swift: \(arguments)")
     }
     
     private static func updateMaxBounce(bounce: Int) {

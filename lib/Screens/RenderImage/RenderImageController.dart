@@ -1,6 +1,5 @@
 import 'package:blue_engine/Screens/RenderImage/RenderImageModel.dart';
 import 'package:blue_engine/SwiftCommunicationBridge.dart';
-import 'package:blue_engine/globals.dart';
 import 'package:flutter/cupertino.dart';
 
 class RenderImageController {

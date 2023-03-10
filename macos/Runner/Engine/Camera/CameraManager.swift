@@ -11,6 +11,10 @@ class CameraManager {
         currentCamera = _cameras[cameraType]
     }
     
+    public static func setCameraControllSensitivity(_ settings: ControllSensitivity) {
+        currentCamera.controllSensitivity = settings
+    }
+    
     public static func lockCamera() {
         locked = true
     }
