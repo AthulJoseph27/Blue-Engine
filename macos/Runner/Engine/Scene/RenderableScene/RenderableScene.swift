@@ -22,6 +22,8 @@ protocol RenderableScene {
     func addLight(light: Light)
     
     func updateSceneSettings(sceneSettings: SceneSettings)
+    
+    func postSceneLightSet()
 }
 
 extension RenderableScene {
@@ -37,6 +39,11 @@ extension RenderableScene {
         for light in scene.lights {
             addLight(light: light)
         }
+    }
+    
+    mutating func updateSceneLights(lights: [Light]) {
+        self.lights = lights
+        postSceneLightSet()
     }
 }
 

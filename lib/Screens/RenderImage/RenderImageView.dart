@@ -31,7 +31,7 @@ class _RenderImagePageState extends State<RenderImagePage> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               secondChild: MaterialSegmentedControl<RenderEngine>(
-                selectedColor: LightTheme.activeBlue,
+                selectedColor: CupertinoColors.activeBlue,
                 groupValue: RenderImageModel.renderEngine,
                 onValueChanged: (RenderEngine value) {
                   setState(() {
@@ -63,7 +63,7 @@ class _RenderImagePageState extends State<RenderImagePage> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               secondChild: MaterialSegmentedControl<RenderQuality>(
-                selectedColor: LightTheme.activeBlue,
+                selectedColor: CupertinoColors.activeBlue,
                 groupValue: RenderImageModel.quality,
                 onValueChanged: (RenderQuality value) {
                   setState(() {
@@ -128,6 +128,40 @@ class _RenderImagePageState extends State<RenderImagePage> {
                     ),
                   ),
                 ],
+              ),
+              spacingRatio: spacingRatio,
+            ),
+            SettingsRow(
+              firstChild: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: Text(
+                  'Max Bounce :',
+                  style: (RenderImageModel.renderEngine == RenderEngine.aurora) ? Theme.of(context).textTheme.titleMedium
+                  :
+                  const TextStyle(
+                    fontSize: 16,
+                    color: CupertinoColors.systemGrey3,
+                  ) ,
+                ),
+              ),
+              secondChild: Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: SizedBox(
+                  width: 80,
+                  child: StreamBuilder<int>(
+                      stream: controller.maxBounceStreamController.stream,
+                      builder: (context, snapshot) {
+                        return CupertinoTextField(
+                          enabled: RenderImageModel.renderEngine == RenderEngine.aurora,
+                          controller: controller.maxBounceController,
+                          focusNode: controller.maxBounceFocusNode,
+                          onChanged: controller.setMaxBounce,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        );
+                      }
+                  ),
+                ),
               ),
               spacingRatio: spacingRatio,
             ),

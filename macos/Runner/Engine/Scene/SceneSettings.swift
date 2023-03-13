@@ -2,7 +2,9 @@ class SceneSettings {
     var currentScene: GameScenes
     var skybox: SkyboxTypes
     var ambientLighting: Float
-    var sceneLights: [Light] = []
+    var sceneLights: [Light] = [
+        Light(type: UInt32(LIGHT_TYPE_SUN), position: SIMD3<Float>(0, 0, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0, 0, 0), up: SIMD3<Float>(0, 0, 0), color: SIMD3<Float>(1, 1, 1))
+    ]
     
     init(currentScene: GameScenes, skybox: SkyboxTypes, ambientLighting: Float) {
         self.currentScene = currentScene
@@ -27,9 +29,9 @@ class SceneSettings {
         }
         
         if let sceneLights = json["sceneLights"] as? [[String: Any]] {
-            
+            sceneSettings.sceneLights = []
             for sceneLight in sceneLights {
-                self.sceneLights.append(decodeSceneLight(sceneLight))
+                sceneSettings.sceneLights.append(decodeSceneLight(sceneLight))
             }
             
         }

@@ -310,7 +310,7 @@ Widget _getXYZInputBox(BuildContext context, TextEditingController x, TextEditin
               onChanged: onXChanged,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+|\d*\.\d+)?$"),
+                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
                 )
               ],
             ),
@@ -331,7 +331,7 @@ Widget _getXYZInputBox(BuildContext context, TextEditingController x, TextEditin
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+|\d*\.\d+)?$"),
+                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
                 )
               ],
             ),
@@ -352,7 +352,7 @@ Widget _getXYZInputBox(BuildContext context, TextEditingController x, TextEditin
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+|\d*\.\d+)?$"),
+                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
                 )
               ],
             ),
@@ -390,7 +390,7 @@ Future<dynamic> showColorPicker(BuildContext context, Color color) {
               padding: const EdgeInsets.all(2.0),
               color: CupertinoColors.activeBlue,
               child: const Text(
-                'Got it',
+                'Pick',
                 style: TextStyle(color: CupertinoColors.white, fontSize: 16),
               ),
               onPressed: () {

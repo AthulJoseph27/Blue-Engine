@@ -2,7 +2,7 @@ import MetalKit
 import MetalPerformanceShaders
 
 class PhongShadingScene: RenderableScene {
-    
+
     var renderOptions: PSRenderOptions = PSRenderOptions()
     
     var heap = Heap()
@@ -38,6 +38,8 @@ class PhongShadingScene: RenderableScene {
     func updateObjects(deltaTime: Float) {}
     
     func updateScene(deltaTime: Float) {}
+    
+    func postSceneLightSet() {}
     
     func updateSceneSettings(sceneSettings: SceneSettings) {
         skyBox = Skyboxibrary.skybox(sceneSettings.skybox)

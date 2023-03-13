@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'Screens/Loading.dart';
 import 'Screens/Settings/SettingsView.dart';
 import 'SwiftCommunicationBridge.dart';
+import 'globals.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

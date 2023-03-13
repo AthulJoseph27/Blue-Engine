@@ -8,13 +8,13 @@ class GameScene {
     var lights: [Light] = []
     var cameraManager = CameraManager()
     
-    var updateSolids : (_ solids: [Solid]) -> Void
+    var updateSolids : (_ solids: [Solid], _ deltaTime: Float) -> Void
     
     init(skybox: SkyboxTypes = .Sky, ambient: Float = 0, lights: [Light] = []) {
         self.ambient = ambient
         self.skybox = skybox
         self.lights = lights
-        self.updateSolids = {(solids: [Solid]) -> Void in }
+        self.updateSolids = {(solids: [Solid], deltaTime: Float) -> Void in }
         buildScene()
     }
     

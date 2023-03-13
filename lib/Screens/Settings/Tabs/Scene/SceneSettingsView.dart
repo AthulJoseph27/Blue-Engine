@@ -137,40 +137,39 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
                           Padding(
                             padding: const EdgeInsets.only(top: 16, right: 12),
                             child: SizedBox(
-                                width: 240,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      width: 240,
-                                      child: CupertinoSlider(
-                                        value: value,
-                                        onChanged:
-                                            controller.onAmbientLightChanged,
-                                        min: 0.0,
-                                        max: 1.0,
-                                        divisions: 20,
+                              width: 240,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 240,
+                                    child: CupertinoSlider(
+                                      value: value,
+                                      onChanged:
+                                          controller.onAmbientLightChanged,
+                                      min: 0.0,
+                                      max: 1.0,
+                                      divisions: 20,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '0.0',
+                                        style:
+                                            Theme.of(context).textTheme.caption,
                                       ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '0.0',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          '1.0',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )),
+                                      const Spacer(),
+                                      Text(
+                                        '1.0',
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                           SizedBox(
                             width: 48,
@@ -196,82 +195,92 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
               height: 24,
             ),
             StreamBuilder<int>(
-                stream: controller.sceneLightingController.stream,
-                builder: (context, snapshot) {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: SceneSettingsModel.hasImportedScene ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SettingsRow(
-                          firstChild: Text(
-                            'Scene Lights :',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          secondChild: Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CupertinoButton(
-                                color: CupertinoColors.activeBlue,
-                                padding: const EdgeInsets.all(2.0),
-                                onPressed: () async {
-                                  var sceneLight = SceneLight();
-                                  var light = await editLightSettings(context, sceneLight,
-                                      heading: 'Add Light');
-                                  if (light != null) {
-                                    controller.addSceneLight(light);
-                                  }
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.add,
-                                  color: CupertinoColors.white,
-                                  size: 16,
+              stream: controller.sceneLightingController.stream,
+              builder: (context, snapshot) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: SceneSettingsModel.hasImportedScene
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SettingsRow(
+                              firstChild: Text(
+                                'Scene Lights :',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              secondChild: Padding(
+                                padding: const EdgeInsets.only(left: 24),
+                                child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CupertinoButton(
+                                    color: CupertinoColors.activeBlue,
+                                    padding: const EdgeInsets.all(2.0),
+                                    onPressed: () async {
+                                      var sceneLight = SceneLight();
+                                      var light = await editLightSettings(
+                                          context, sceneLight,
+                                          heading: 'Add Light');
+                                      if (light != null) {
+                                        controller.addSceneLight(light);
+                                      }
+                                    },
+                                    child: const Icon(
+                                      CupertinoIcons.add,
+                                      color: CupertinoColors.white,
+                                      size: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              spacingRatio: spacingRatio,
                             ),
-                          ),
-                          spacingRatio: spacingRatio,
-                        ),
-                        SettingsRow(
-                          firstChild: const SizedBox(),
-                          secondChild: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                border:
-                                Border.all(color: CupertinoColors.systemGrey5)),
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 0),
-                            padding: const EdgeInsets.only(top: 12, bottom: 12),
-                            constraints: BoxConstraints(
-                                maxWidth: 300,
-                                maxHeight: size.height - 572,
-                                minWidth: 300,
-                                minHeight: 60),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: List.generate(
-                                SceneSettingsModel.sceneLights.length,
+                            SettingsRow(
+                              firstChild: const SizedBox(),
+                              secondChild: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                        color: CupertinoColors.systemGrey5)),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 0),
+                                padding:
+                                    const EdgeInsets.only(top: 12, bottom: 12),
+                                constraints: BoxConstraints(
+                                  maxWidth: 300,
+                                  maxHeight: size.height - 572,
+                                  minWidth: 300,
+                                  minHeight: 60,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(
+                                    SceneSettingsModel.sceneLights.length,
                                     (index) => LightTile(
-                                  light: SceneSettingsModel.sceneLights[index],
-                                  onTap: () async {
-                                    var light = await editLightSettings(context,
-                                        SceneSettingsModel.sceneLights[index]);
-                                    if (light != null) {
-                                      controller.updateSceneLight(index, light);
-                                    }
-                                  },
+                                      light:
+                                          SceneSettingsModel.sceneLights[index],
+                                      onTap: () async {
+                                        var light = await editLightSettings(
+                                            context,
+                                            SceneSettingsModel
+                                                .sceneLights[index]);
+                                        if (light != null) {
+                                          controller.updateSceneLight(
+                                              index, light);
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
+                              spacingRatio: spacingRatio,
                             ),
-                          ),
-                          spacingRatio: spacingRatio,
-                        ),
-                      ],
-                    ) : const SizedBox(),
-                  );
-                })
+                          ],
+                        )
+                      : const SizedBox(),
+                );
+              },
+            ),
           ],
         ),
       ),

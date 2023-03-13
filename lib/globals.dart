@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 enum RenderEngine {
   aurora,
@@ -36,8 +35,16 @@ class Double3 {
   };
 }
 
-// const transparent = Color(0x00000000);
+final GlobalKey<ScaffoldMessengerState> settingsScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-class LightTheme {
-  static const activeBlue = Color.fromARGB(255, 0, 122, 255);
+SnackBar showSnackBar(String message, {bool error = false}) {
+  return SnackBar(
+    backgroundColor: error ? CupertinoColors.systemRed : const Color(0xff04cfb5),
+    content: Text(
+      message,
+      style: const TextStyle(
+        color: CupertinoColors.white,
+        fontSize: 16,
+      ),
+    ),);
 }

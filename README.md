@@ -10,6 +10,7 @@ Consists of two engines: <br/>
 
 * blue4.4
   * Added support to import 3D models and sky-boxes.
+  * Option to add light to custom scene.
 
 * blue4.3
     * Integrated Flutter for the development of a comprehensive UI

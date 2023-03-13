@@ -62,7 +62,7 @@ class SceneManager {
         
         if arguments["sceneLights"] != nil {
             _currentScene.updateSceneLights(lights: newSettings.sceneLights)
-            setScene(_currentSceneName)
+            _currentRenderableScene.updateSceneLights(lights: newSettings.sceneLights)
         }
         
         _sceneSettings = newSettings

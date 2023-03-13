@@ -64,6 +64,10 @@ class StaticRTScene: RTScene {
         ambient = sceneSettings.ambientLighting
     }
     
+    func postSceneLightSet() {
+        lightBuffer = Engine.device.makeBuffer(bytes: &self.lights, length: MemoryLayout<Light>.stride * lights.count, options: .storageModeShared)
+    }
+    
     private func postBuildScene() {
         createBuffers()
         createAccelerationStructure()

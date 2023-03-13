@@ -7,7 +7,7 @@
 using namespace metal;
 
 #define PI 3.14159265359
-//#define FRENEL_ANGLE 7*PI/8
+#define FRENEL_ANGLE 7*PI/8
 
 #define RAY_HIT_LIGHT -4
 #define RAY_HIT_SKYBOX -3
@@ -245,16 +245,53 @@ inline float3 getSkyBoxColor(float3 u, texture2d<float, access::read> skyBox) {
     return float3(skyBox.read(uint2((int)_u, (int)_v)));
 }
 
-inline float3 refractRay(Ray ray, float3 normal, float eta) {
-    bool inside = (dot(ray.direction, normal) >= 0);
+//inline float3 refractRay(Ray ray, float3 normal, float eta) {
+//    bool inside = (dot(ray.direction, normal) >= 0);
+//
+//    if(inside){
+////         Invert normal
+//        normal *= -1;
+//    }
+//
+//    return refract(normalize(ray.direction), normalize(normal), eta);
+//}
 
+inline void trueReflection(device Ray & ray, float3 normal, float reflectivity, float3 color) {
+    ray.direction = normalize(reflect(ray.direction, normal));
+    ray.color = reflectivity * color;
+    ray.mask = RAY_MASK_SECONDARY;
+    ray.maxDistance = INFINITY;
+}
+
+inline void refractRay(device Ray & ray, float3 normal, float refractiveIndex, float3 color, unsigned int frameIndex) {
+    normal = normalize(normal);
+    float cosine = dot(ray.direction, normal);
+    float eta = 1.0 / refractiveIndex; // n2/n1
+    bool inside = (cosine >= 0);
+    
     if(inside){
 //         Invert normal
         normal *= -1;
     }
     
-    return refract(normalize(ray.direction), normalize(normal), eta);
+    
+//    if(!inside) {
+//        float angleI = PI - acos(cosine);
+//        float brewsterAngle = atan(refractiveIndex);
+//        if(frameIndex != 0 && frameIndex % 4 == 0) {
+//            // Reflect Ray, Frensel Effect
+//            return trueReflection(ray, normal, max(1e-3f,(angleI - brewsterAngle)), color);
+//        }
+//    }
+    
+    float3 refractedRay = normalize(refract(ray.direction, normalize(normal), eta));
+    
+    ray.direction = refractedRay;
+    ray.color = color;
+    ray.mask = RAY_MASK_SECONDARY;
+    ray.maxDistance = INFINITY;
 }
+
 
 kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                         constant Uniforms & uniforms,
@@ -365,26 +402,20 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
 
                    float reflectivity = (material.specular.x + material.specular.y + material.specular.z) / 3.0f;
                 
-                   reflectivity *= 0.1;
+//                   reflectivity *= 0.1;
                    
                    if(material.isMetallicMapEnabled) {
                        reflectivity = primitiveData[submeshId].metallicMap.sample(sampler2d, uvCoord).x;
                    }
-
+                   
+                   
+                   
                    if(refractiveIndex >= 1.0f){
                         // Refract ray
-                       ray.direction = refractRay(ray, surfaceNormal, 1.0 / refractiveIndex);
-                       ray.origin = intersectionPoint + ray.direction * 1e-3f;
-                       ray.color = color;
-                       ray.mask = RAY_MASK_SECONDARY;
-                       ray.maxDistance = INFINITY;
+                       refractRay(ray, surfaceNormal, refractiveIndex, color, uniforms.frameIndex);
                    }else if(reflectivity > 0.5f){
                        // Reflect ray
-                       ray.direction = reflect(ray.direction, surfaceNormal);
-                       ray.origin = intersectionPoint + ray.direction * 1e-3f;
-                       ray.color = reflectivity * color;
-                       ray.mask = RAY_MASK_SECONDARY;
-                       ray.maxDistance = INFINITY;
+                       trueReflection(ray, surfaceNormal, reflectivity, color);
                    }else{
                        float roughness = 0;
 
@@ -399,10 +430,11 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        sampleDirection = alignHemisphereWithNormal(sampleDirection, surfaceNormal);
 
                        ray.direction = sampleDirection;
-                       ray.origin = intersectionPoint + ray.direction * 1e-3f;
                        ray.color = color * (1.0f - roughness);
                        ray.mask = RAY_MASK_SECONDARY;
                    }
+                   
+                   ray.origin = intersectionPoint + ray.direction * 1e-3f;
                }
                else {
                    dstTex.write(float4(material.emissive, 1.0f), tid);
@@ -444,6 +476,8 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
             } else{
                 color += shadowRay.color * uniforms.ambient;
             }
+        } else if(shadowRay.maxDistance == RAY_HIT_SKYBOX) {
+            color += shadowRay.color;
         }
         
         dstTex.write(float4(color, 1.0f), tid);

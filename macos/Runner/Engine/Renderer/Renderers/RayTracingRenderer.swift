@@ -28,23 +28,28 @@ class RayTracingRenderer: Renderer {
     var accumulationTarget: MTLTexture!
     var randomTexture:      MTLTexture!
     
+    var svgf: MPSSVGF!
+    var textureAllocator: MPSSVGFDefaultTextureAllocator!
+    var denoiser: MPSSVGFDenoiser!
+    
     var semaphore: DispatchSemaphore!
     var size: CGSize!
+    var threadsPerThreadgroup = MTLSizeMake(16, 16, 1)
     
     var lastCheckPoint = Date()
     var timeIntervals: [CFTimeInterval] = []
     
     var iterationCount = 0
     
-    var functionTable: MTLIntersectionFunctionTable?
-    
     var scene: RTScene!
+    
     private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4)
     
     override func initialize() {
         self.updateViewPort()
         self.createPipelines()
         self.createIntersector()
+//        self.loadMPSSVGF()
         
         semaphore = DispatchSemaphore(value: scene.renderOptions.maxFramesInFlight)
         
@@ -91,6 +96,18 @@ class RayTracingRenderer: Renderer {
         intersector.rayDataType = .originMaskDirectionMaxDistance
         intersector.rayStride = scene.renderOptions.rayStride
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
+    }
+    
+    private func loadMPSSVGF() {
+        svgf = MPSSVGF(device: device)
+        svgf.channelCount = 1
+        svgf.temporalWeighting = .exponentialMovingAverage
+        svgf.temporalReprojectionBlendFactor = 0.1
+        
+        textureAllocator = MPSSVGFDefaultTextureAllocator(device: device)
+        denoiser = MPSSVGFDenoiser(SVGF: svgf, textureAllocator: textureAllocator)
+        denoiser.bilateralFilterIterations = 5;
+        
     }
     
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -189,8 +206,6 @@ class RayTracingRenderer: Renderer {
         let height = Int(size.height)
 //        let w = rayPipeline.threadExecutionWidth
 //        let h = rayPipeline.maxTotalThreadsPerThreadgroup / w
-        let threadsPerThreadgroup = MTLSizeMake(16, 16, 1)
-
 
         let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
 
@@ -227,8 +242,8 @@ class RayTracingRenderer: Renderer {
             shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
         
             var bounce = UInt32(i)
+            shadeEncoder.setBytes(&bounce, length: UInt32.size, index: buffers.count)
             
-            shadeEncoder.setBytes(&bounce, length: uint.size, index: buffers.count)
             shadeEncoder.setTexture(randomTexture, index: 0)
             shadeEncoder.setTexture(renderTarget, index: 1)
             shadeEncoder.setTexture(scene.skyBox, index: 2)
@@ -261,15 +276,7 @@ class RayTracingRenderer: Renderer {
             
         }
         
-        guard let denoiseEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
-        denoiseEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
-
-        denoiseEncoder.setTexture(renderTarget, index: 0)
-        denoiseEncoder.setTexture(accumulationTarget, index: 1)
-        
-        denoiseEncoder.setComputePipelineState(accumulatePipeline)
-        denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
-        denoiseEncoder.endEncoding()
+        denoiseFrame(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
         
         if let renderPassDescriptor = view.currentRenderPassDescriptor {
             guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else { return }
@@ -300,4 +307,27 @@ class RayTracingRenderer: Renderer {
             }
         }
     }
+    
+    private func denoiseFrame(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
+        if scene is DynamicRTScene {
+            accumulationTarget = renderTarget
+            return
+        }
+        
+        guard let denoiseEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
+        denoiseEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
+
+        denoiseEncoder.setTexture(renderTarget, index: 0)
+        denoiseEncoder.setTexture(accumulationTarget, index: 1)
+        
+        denoiseEncoder.setComputePipelineState(accumulatePipeline)
+        denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        denoiseEncoder.endEncoding()
+    }
+    
+//    private func denoiseDynamicScene(commandBuffer: MTLCommandBuffer) {
+//
+//        denoiser.encode(commandBuffer: commandBuffer, sourceTexture: renderTarget, motionVectorTexture: , depthNormalTexture: , previousDepthNormalTexture: )
+//    }
+    
 }

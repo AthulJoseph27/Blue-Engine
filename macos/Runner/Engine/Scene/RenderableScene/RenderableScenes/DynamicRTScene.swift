@@ -43,13 +43,15 @@ class DynamicRTScene: RTScene {
     
     var indexWrapperPipeline: MTLComputePipelineState!
     
+    var updateSceneSolids: (_ solids: [Solid], _ deltaTime: Float) -> Void
+    
     init(scene: GameScene) {
         renderOptions = RTRenderOptions()
         renderOptions.rayMaskOptions = .instance
         indexWrapperPipeline = ComputePipelineStateLibrary.pipelineState(.IndexWrapper).computePipelineState
         skyBox = Skyboxibrary.skybox(.Sky)
         ambient = scene.ambient
-        
+        self.updateSceneSolids = scene.updateSolids
         buildScene(scene: scene)
         postBuildScene()
     }
@@ -65,9 +67,17 @@ class DynamicRTScene: RTScene {
         ambient = sceneSettings.ambientLighting
     }
     
-    func updateObjects(deltaTime: Float) {}
+    func updateObjects(deltaTime: Float) {
+        updateSceneSolids(objects, deltaTime)
+        updateTransformBuffer()
+        createAccelerationStructures()
+    }
     
     func updateUniforms(size: CGSize) {}
+    
+    func postSceneLightSet() {
+        lightBuffer = Engine.device.makeBuffer(bytes: &self.lights, length: MemoryLayout<Light>.stride * lights.count, options: .storageModeShared)
+    }
     
     internal func addSolid(solid: Solid) {
         objects.append(solid)
@@ -86,12 +96,6 @@ class DynamicRTScene: RTScene {
     
     internal func addLight(light: Light) {
         lights.append(light)
-    }
-    
-    private func postBuildScene() {
-        createBuffers()
-        createAccelerationStructures()
-        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
     }
     
     internal func createBuffers() {
@@ -184,9 +188,9 @@ class DynamicRTScene: RTScene {
                 triangleAccelerationStructure.indexBufferOffset = indexBufferOffset
                 triangleAccelerationStructure.triangleCount = solid.mesh.indexBuffers[i].length / (3 * UInt32.stride)
                 
-//                if solid.animated {
-//                    triangleAccelerationStructure.usage = .refit
-//                }
+                if solid.animated {
+                    triangleAccelerationStructure.usage = .refit
+                }
                 
                 triangleAccelerationStructure.rebuild()
                 
@@ -213,4 +217,22 @@ class DynamicRTScene: RTScene {
             instanceAccelerationStructures.append(instanceAcceleratedStructure)
         }
     }
+    
+    private func postBuildScene() {
+        createBuffers()
+        createAccelerationStructures()
+        heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
+    }
+    
+    private func updateTransformBuffer() {
+        var transforms: [matrix_float4x4] = []
+        for solid in objects {
+            for _ in 0..<solid.mesh.submeshCount {
+                transforms.append(solid.modelMatrix)
+            }
+        }
+        
+        self.transformBuffer = Engine.device.makeBuffer(bytes: &transforms, length: matrix_float4x4.stride(transforms.count), options: .storageModeShared)
+    }
+    
 }
