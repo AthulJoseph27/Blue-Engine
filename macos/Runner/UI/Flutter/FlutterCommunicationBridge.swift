@@ -184,8 +184,10 @@ class SwiftBridgingMethods {
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
         if let json = arguments {
             
-            if let maxBounce = json["maxBounce"] as? Int {
-                updateMaxBounce(bounce: maxBounce)
+            if let bounce = json["maxBounce"] as? Int {
+                let maxBounce = max(bounce, 1)
+                let alphaTesting = json["alphaTesting"] as? Bool ?? false
+                RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(maxBounce: maxBounce, alphaTesting: alphaTesting))
             }
             
             let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
@@ -203,8 +205,4 @@ class SwiftBridgingMethods {
         }
     }
     
-    private static func updateMaxBounce(bounce: Int) {
-        let maxBounce = max(bounce, 1)
-        RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(maxBounce: maxBounce))
-    }
 }

@@ -13,12 +13,14 @@ class ViewportModel {
 
 class AuroraViewportModel {
   var maxBounce = 6;
+  var alphaTesting = false;
   var resolution = RenderQuality.high;
   var tileSize = Int2(x: 8, y: 8);
   var controlSensitivity = ControlSensitivity();
 
   Map<String, dynamic> toJson() => {
     'maxBounce' : maxBounce,
+    'alphaTesting' : alphaTesting,
     'resolution' : resolution.name,
     'tileSize' : tileSize.toJson(),
     'controlSensitivity' : controlSensitivity.toJson()

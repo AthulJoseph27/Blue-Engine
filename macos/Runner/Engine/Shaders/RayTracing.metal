@@ -486,7 +486,7 @@ bool alphaTest(uint instanceIndex, uint primitiveIndex, float2 barycentricCoord,
     return alpha >= 0.2;
 }
 
-kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
+kernel void shadowKernelWithAlphaTesting(uint2 tid [[thread_position_in_grid]],
                          primitive_acceleration_structure accelerationStructure,
                          constant Uniforms & uniforms,
                          device Ray *shadowRays,
@@ -539,6 +539,32 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
             }
         } else if(shadowRay.maxDistance == RAY_HIT_SKYBOX) {
             color += shadowRay.color;
+        }
+        
+        dstTex.write(float4(color, 1.0f), tid);
+    }
+}
+
+kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
+                         constant Uniforms & uniforms,
+                         device Ray *shadowRays,
+                         device float *intersections,
+                         texture2d<float, access::read_write> dstTex)
+{
+    if (tid.x < uniforms.width && tid.y < uniforms.height) {
+        unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+        device Ray & shadowRay = shadowRays[rayIdx];
+
+        float intersectionDistance = intersections[rayIdx];
+        
+        float3 color = dstTex.read(tid).xyz;
+        
+        if(shadowRay.maxDistance >= 0.0f) {
+            if(intersectionDistance < 0.0f) {
+                color += shadowRay.color;
+            } else{
+                color += shadowRay.color * uniforms.ambient;
+            }
         }
         
         dstTex.write(float4(color, 1.0f), tid);

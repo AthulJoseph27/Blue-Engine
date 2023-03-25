@@ -39,7 +39,7 @@ class _ViewportSettingsViewState extends State<ViewportSettingsView> {
                 ),
                 margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
                 padding: const EdgeInsets.only(top: 30),
-                height: size.height - 180,
+                height: size.height - 140,
                 width: 800,
                 child: AnimatedCrossFade(
                   firstChild: auroraViewPort,
@@ -54,7 +54,7 @@ class _ViewportSettingsViewState extends State<ViewportSettingsView> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               padding: const EdgeInsets.only(top: 12),
-              height: size.height - 180,
+              height: size.height - 140,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: MaterialSegmentedControl<RenderEngine>(

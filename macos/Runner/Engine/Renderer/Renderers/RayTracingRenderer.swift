@@ -24,6 +24,8 @@ class RayTracingRenderer: Renderer {
     var copyPipeline:       MTLRenderPipelineState!
     var renderPipeline:     MTLRenderPipelineState!
     
+    var shadowWithAlphaTestingPipeline:     MTLComputePipelineState!
+    
     var renderTarget:       MTLTexture!
     var accumulationTarget: MTLTexture!
     var randomTexture:      MTLTexture!
@@ -43,7 +45,7 @@ class RayTracingRenderer: Renderer {
     
     var scene: RTScene!
     
-    private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4)
+    private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4, alphaTesting: false)
     
     override func initialize() {
         self.updateViewPort()
@@ -82,13 +84,14 @@ class RayTracingRenderer: Renderer {
     }
     
     private func createPipelines() {
-        self.rayPipeline = ComputePipelineStateLibrary.pipelineState(.GenerateRay).computePipelineState
-        self.shadePipeline = ComputePipelineStateLibrary.pipelineState(.Shade).computePipelineState
-        self.shadowPipeline = ComputePipelineStateLibrary.pipelineState(.Shadow).computePipelineState
-        self.accumulatePipeline = ComputePipelineStateLibrary.pipelineState(.Accumulate).computePipelineState
+        rayPipeline = ComputePipelineStateLibrary.pipelineState(.GenerateRay).computePipelineState
+        shadePipeline = ComputePipelineStateLibrary.pipelineState(.Shade).computePipelineState
+        shadowPipeline = ComputePipelineStateLibrary.pipelineState(.Shadow).computePipelineState
+        shadowWithAlphaTestingPipeline = ComputePipelineStateLibrary.pipelineState(.ShadowWithAlphaTesting).computePipelineState
+        accumulatePipeline = ComputePipelineStateLibrary.pipelineState(.Accumulate).computePipelineState
         
-        self.copyPipeline = RenderPipelineStateLibrary.pipelineState(.RayTracing)
-        self.renderPipeline = RenderPipelineStateLibrary.pipelineState(.Rendering)
+        copyPipeline = RenderPipelineStateLibrary.pipelineState(.RayTracing)
+        renderPipeline = RenderPipelineStateLibrary.pipelineState(.Rendering)
     }
     
     private func createIntersector() {
@@ -212,7 +215,12 @@ class RayTracingRenderer: Renderer {
         
         for i in 0..<maxBounce {
             reflectRays(bounce: i, commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
-            traceShadows(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
+            
+            if _renderSettings.alphaTesting {
+                traceShadowsWithAlphaTesting(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
+            } else {
+                traceShadows(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
+            }
         }
         
         denoiseFrame(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
@@ -296,18 +304,30 @@ class RayTracingRenderer: Renderer {
     }
     
     private func traceShadows(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
+        intersector.intersectionDataType = .distance
+        intersector.encodeIntersection(commandBuffer: commandBuffer,
+                                       intersectionType: .any,
+                                       rayBuffer: shadowRayBuffer,
+                                       rayBufferOffset: 0,
+                                       intersectionBuffer: intersectionBuffer,
+                                       intersectionBufferOffset: 0,
+                                       rayCount: Int(size.width * size.height),
+                                       accelerationStructure: scene.getAccelerationStructure())
+
+        guard let colorEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
+        colorEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
+        colorEncoder.setBuffer(shadowRayBuffer, offset: 0, index: 1)
+        colorEncoder.setBuffer(intersectionBuffer, offset: 0, index: 2)
+
+        colorEncoder.setTexture(renderTarget, index: 0)
+        colorEncoder.setComputePipelineState(shadowPipeline)
         
-//        intersector.intersectionDataType = scene.renderOptions.intersectionDataType
-//        intersector.encodeIntersection(commandBuffer: commandBuffer,
-//                                       intersectionType: .any,
-//                                       rayBuffer: rayBuffer,
-//                                       rayBufferOffset: 0,
-//                                       intersectionBuffer: intersectionBuffer,
-//                                       intersectionBufferOffset: 0,
-//                                       rayCount: Int(size.width * size.height),
-//                                       accelerationStructure: scene.getAccelerationStructure())
+        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        colorEncoder.endEncoding()
+    }
+    
+    private func traceShadowsWithAlphaTesting(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
         
-//        print("Materials : \(scene.materialBuffer.length / Material.stride)")
         guard let colorEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
         colorEncoder.setAccelerationStructure(scene.getMTLAccelerationStructure(), bufferIndex: 0)
         colorEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 1)

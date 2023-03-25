@@ -7,6 +7,7 @@ enum ComputePipelineStateTypes {
     case GenerateRay
     case Shade
     case Shadow
+    case ShadowWithAlphaTesting
     case Accumulate
 }
 
@@ -25,6 +26,7 @@ class ComputePipelineStateLibrary {
         computePipelineStates.updateValue(RayTracing_ComputePipelineState(), forKey: .GenerateRay)
         computePipelineStates.updateValue(Shade_ComputePipelineState(), forKey: .Shade)
         computePipelineStates.updateValue(Shadow_ComputePipelineState(), forKey: .Shadow)
+        computePipelineStates.updateValue(ShadowWithAlphaTesting_ComputePipelineState(), forKey: .ShadowWithAlphaTesting)
         computePipelineStates.updateValue(Accumulate_ComputePipelineState(), forKey: .Accumulate)
     }
 
@@ -129,6 +131,21 @@ public struct Shadow_ComputePipelineState: ComputePipelineState {
     init() {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.RayTracing).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadowKernel")
+            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.RayTracing), options: [], reflection: nil)
+        }catch let error as NSError{
+            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
+            return;
+        }
+    }
+}
+
+public struct ShadowWithAlphaTesting_ComputePipelineState: ComputePipelineState {
+    var name: String = "Shadow Tracing With Alpha Testing Compute Pipeline State"
+    var computePipelineState: MTLComputePipelineState!
+    
+    init() {
+        do{
+            ComputePipelineDescriptorLibrary.descriptor(.RayTracing).computeFunction = Engine.defaultLibrary.makeFunction(name: "shadowKernelWithAlphaTesting")
             computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.RayTracing), options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")

@@ -18,6 +18,8 @@ class AuroraViewPortController {
   final maxBounceStreamController = StreamController<int>();
   final maxBounceFocusNode = FocusNode();
 
+  final alphaTestingStreamController = StreamController<bool>();
+
   final keyboardTranslationSensitivityController = StreamController<double>();
   final keyboardRotationSensitivityController = StreamController<double>();
   final trackpadRotationSensitivityController = StreamController<double>();
@@ -41,6 +43,11 @@ class AuroraViewPortController {
         maxBounceController.text = ViewportModel.auroraViewportModel.maxBounce.toString();
       }
     });
+  }
+
+  void onAlphaTestingChanged(bool value) {
+    ViewportModel.auroraViewportModel.alphaTesting = value;
+    ViewportSettingsController.onViewportSettingsUpdated();
   }
 
   void onResolutionChanged(String? value) {

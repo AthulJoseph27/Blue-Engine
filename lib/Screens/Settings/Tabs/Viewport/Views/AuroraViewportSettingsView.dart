@@ -64,6 +64,34 @@ class _AuroraViewportSettingsViewState
         ),
         SettingsRow(
           firstChild: Text(
+            'Alpha Testing :',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          secondChild: SizedBox(
+            width: 80,
+            child: StreamBuilder<bool>(
+                stream: controller.alphaTestingStreamController.stream,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: SizedBox(
+                      height: 32,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: CupertinoSwitch(
+                            activeColor: Theme.of(context).primaryColor,
+                            value: ViewportModel.auroraViewportModel.alphaTesting,
+                            onChanged: controller.onAlphaTestingChanged,
+                        ),
+                      ),
+                    ),);
+                }
+            ),
+          ),
+          spacingRatio: spacingRatio,
+        ),
+        SettingsRow(
+          firstChild: Text(
             'Tile Size :',
             style: Theme.of(context).textTheme.titleMedium,
           ),

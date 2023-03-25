@@ -11,6 +11,7 @@ class RenderImageModel {
     var quality = RenderQuality.low;
     var resolution = SIMD2<Int>(x: 512, y: 512);
     var maxBounce = 1;
+    var alphaTesting = false
     var saveLocation = "Users/athuljoseph/Downloads/";
     var keepAlive = false;
     
@@ -32,7 +33,7 @@ class RenderImageModel {
         if renderEngine == .velocity {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(maxBounce: maxBounce)
+            return RayTracingSettings(maxBounce: maxBounce, alphaTesting: alphaTesting)
         }
     }
     

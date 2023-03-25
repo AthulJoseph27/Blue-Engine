@@ -28,8 +28,8 @@ class RendererManager {
     private static var viewPortType: RenderViewPortType = .StaticRT
     private static var renderMode: RenderMode = .display
     private static var viewPortSettings: [RenderViewPortType : RenderingSettings] = [
-        .StaticRT : RayTracingSettings(maxBounce: 4),
-        .DynamicRT : RayTracingSettings(maxBounce: 4),
+        .StaticRT : RayTracingSettings(maxBounce: 4, alphaTesting: false),
+        .DynamicRT : RayTracingSettings(maxBounce: 4, alphaTesting: false),
         .PhongShader : VertexShadingSettings()
     ]
     private static var postRenderingCallback: (() -> Void)?

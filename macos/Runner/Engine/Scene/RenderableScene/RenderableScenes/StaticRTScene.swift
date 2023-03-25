@@ -216,8 +216,6 @@ class StaticRTScene: RTScene {
         geometryDescriptor.indexType = .uint32
         geometryDescriptor.triangleCount = indexBuffer.length / (3 * UInt32.stride)
         
-        print("Triangle count \(indexBuffer.length / (3 * UInt32.stride))")
-        
         accelerationStructureDescriptor.geometryDescriptors = [geometryDescriptor]
         
         let sizes = Engine.device.accelerationStructureSizes(descriptor: accelerationStructureDescriptor)
