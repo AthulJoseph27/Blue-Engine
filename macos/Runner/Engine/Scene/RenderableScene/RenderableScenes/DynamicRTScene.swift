@@ -60,6 +60,10 @@ class DynamicRTScene: RTScene {
         return instanceAccelerationStructures[Int(frameIndex) % renderOptions.maxFramesInFlight]
     }
     
+    func getMTLAccelerationStructure() -> MTLAccelerationStructure {
+        fatalError("Function is not implemented!")
+    }
+    
     func updateScene(deltaTime: Float) {}
     
     func updateSceneSettings(sceneSettings: SceneSettings) {

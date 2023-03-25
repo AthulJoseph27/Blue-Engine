@@ -200,8 +200,6 @@ enum RendererType : CaseIterable {
 enum GameScenes: String, CaseIterable {
     case Sandbox = "Cornell"
     case Sponza = "Sponza"
-    case FireplaceRoom = "Fireplace Room"
-    case SanMiguel = "San Miguel"
     case Custom = "Custom"
 }
 

@@ -31,12 +31,6 @@ class SceneManager {
         case .Sponza:
             _currentScene = Sponza(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
-        case .FireplaceRoom:
-            _currentScene = FireplaceRoom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
-            break
-        case .SanMiguel:
-            _currentScene = SanMiguel(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
-            break
         case .Custom:
             _currentScene = Custom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting, lights: _sceneSettings.sceneLights)
         }

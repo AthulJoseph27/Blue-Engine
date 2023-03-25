@@ -5,6 +5,7 @@
 #import "Runner-Bridging-Header.h"
 
 using namespace metal;
+using namespace raytracing;
 
 #define PI 3.14159265359
 #define FRENEL_ANGLE 7*PI/8
@@ -456,22 +457,82 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
        }
 }
 
+bool alphaTest(uint instanceIndex, uint primitiveIndex, float2 barycentricCoord, device Vertex * vertices, device VertexIndex * indicies, device uint *verticiesCount, device uint *indiciesCount, device Material *materials, device PrimitiveData *primitiveDatas) {
+    
+    uint verticesOffset = verticiesCount[instanceIndex];
+    uint indiciesOffset = indiciesCount[instanceIndex];
+    
+    VertexIndex vertexIndex = indicies[indiciesOffset + primitiveIndex * 3];
+    
+    uint submeshId = vertexIndex.submeshId;
+    
+    Material material = materials[submeshId];
+    
+    if(!material.isTextureEnabled) {
+        return true;
+    }
+    
+    constexpr sampler sam(min_filter::nearest, mag_filter::nearest, mip_filter::none);
+    
+    texture2d<float, access::sample> alphaTexture = primitiveDatas[submeshId].texture;
+    
+    Intersection intersection;
+    intersection.primitiveIndex = primitiveIndex;
+    intersection.coordinates = barycentricCoord;
+    float2 uvCoords = interpolateVertexUVCoord(vertices, indicies, verticesOffset, indiciesOffset, intersection);
+    
+    float alpha = alphaTexture.sample(sam, uvCoords).x;
+    
+    return alpha >= 0.2;
+}
+
 kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
+                         primitive_acceleration_structure accelerationStructure,
                          constant Uniforms & uniforms,
                          device Ray *shadowRays,
-                         device float *intersections,
+                         device Vertex *vertices,
+                         device VertexIndex *indicies,
+                         device uint *verticiesCount,
+                         device uint *indiciesCount,
+                         device Material *materials,
+                         device PrimitiveData *primitiveDatas,
                          texture2d<float, access::read_write> dstTex)
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
         device Ray & shadowRay = shadowRays[rayIdx];
-
-        float intersectionDistance = intersections[rayIdx];
         
         float3 color = dstTex.read(tid).xyz;
         
         if(shadowRay.maxDistance >= 0.0f) {
-            if(intersectionDistance < 0.0f) {
+            ray _ray;
+            _ray.direction = shadowRay.direction;
+            _ray.origin = shadowRay.origin;
+            _ray.max_distance = shadowRay.maxDistance;
+            _ray.min_distance = 1e-6f;
+            
+            intersection_params params;
+            params.force_opacity(forced_opacity::none);
+            params.assume_geometry_type(geometry_type::triangle);
+            params.accept_any_intersection(true);
+            
+            intersection_query<triangle_data> intersector(_ray, accelerationStructure, params);
+            
+            while(intersector.next()) {
+                bool accept = alphaTest(0, intersector.get_candidate_primitive_id(), intersector.get_candidate_triangle_barycentric_coord(), vertices, indicies, verticiesCount, indiciesCount, materials, primitiveDatas);
+                
+                if(accept) {
+                    intersector.commit_triangle_intersection();
+                }
+            }
+            
+            float intersectionDistance = intersector.get_committed_distance();
+            
+            if(intersectionDistance >= shadowRay.maxDistance) {
+                intersectionDistance = -1.0f;
+            }
+            
+            if(intersectionDistance <= 0.0f) {
                 color += shadowRay.color;
             } else{
                 color += shadowRay.color * uniforms.ambient;

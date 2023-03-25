@@ -33,6 +33,7 @@ class StaticRTScene: RTScene {
     var skyBox: MTLTexture!
     
     var accelerationStructure:      MPSTriangleAccelerationStructure!
+    var mtlAccelerationStrucutre:   MTLAccelerationStructure!
     var transformPipeline:          MTLComputePipelineState!
     var indexWrapperPipeline:       MTLComputePipelineState!
     
@@ -55,6 +56,10 @@ class StaticRTScene: RTScene {
         return accelerationStructure
     }
     
+    func getMTLAccelerationStructure() -> MTLAccelerationStructure {
+        return mtlAccelerationStrucutre
+    }
+    
     func updateObjects(deltaTime: Float) {}
     
     func updateScene(deltaTime: Float) {}
@@ -71,6 +76,7 @@ class StaticRTScene: RTScene {
     private func postBuildScene() {
         createBuffers()
         createAccelerationStructure()
+        createMTLAccelerationStructure()
         heap.initialize(textures: &textures, sourceTextureBuffer: &textureBuffer)
     }
     
@@ -197,5 +203,35 @@ class StaticRTScene: RTScene {
         accelerationStructure.maskBuffer = rayMaskBuffer
         accelerationStructure.triangleCount = indexBuffer.length / (3 * UInt32.stride)
         accelerationStructure.rebuild()
+    }
+    
+    private func createMTLAccelerationStructure() {
+        let accelerationStructureDescriptor = MTLPrimitiveAccelerationStructureDescriptor()
+        
+        let geometryDescriptor = MTLAccelerationStructureTriangleGeometryDescriptor()
+        
+        geometryDescriptor.vertexBuffer = vertexBuffer
+        geometryDescriptor.vertexStride = VertexIn.stride
+        geometryDescriptor.indexBuffer = indexBuffer
+        geometryDescriptor.indexType = .uint32
+        geometryDescriptor.triangleCount = indexBuffer.length / (3 * UInt32.stride)
+        
+        print("Triangle count \(indexBuffer.length / (3 * UInt32.stride))")
+        
+        accelerationStructureDescriptor.geometryDescriptors = [geometryDescriptor]
+        
+        let sizes = Engine.device.accelerationStructureSizes(descriptor: accelerationStructureDescriptor)
+        
+        mtlAccelerationStrucutre = Engine.device.makeAccelerationStructure(size: sizes.accelerationStructureSize)!
+        
+        let scratchBuffer = Engine.device.makeBuffer(length: sizes.buildScratchBufferSize, options: .storageModePrivate)!
+        
+        let commandBuffer = Engine.commandQueue.makeCommandBuffer()!
+        let commandEncoder = commandBuffer.makeAccelerationStructureCommandEncoder()!
+        
+        commandEncoder.build(accelerationStructure: mtlAccelerationStrucutre, descriptor: accelerationStructureDescriptor, scratchBuffer: scratchBuffer, scratchBufferOffset: 0)
+        
+        commandEncoder.endEncoding()
+        commandBuffer.commit()
     }
 }

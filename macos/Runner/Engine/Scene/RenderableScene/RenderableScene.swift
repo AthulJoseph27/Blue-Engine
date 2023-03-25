@@ -72,6 +72,7 @@ protocol RTScene: RenderableScene {
     var indexWrapperPipeline:       MTLComputePipelineState! { get set }
     
     func getAccelerationStructure() -> MPSAccelerationStructure
+    func getMTLAccelerationStructure() -> MTLAccelerationStructure
     
     var frameIndex: UInt32          { get set }
     var lightIndex: UInt32          { get set }

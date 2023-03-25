@@ -204,76 +204,15 @@ class RayTracingRenderer: Renderer {
 
         let width = Int(size.width)
         let height = Int(size.height)
-//        let w = rayPipeline.threadExecutionWidth
-//        let h = rayPipeline.maxTotalThreadsPerThreadgroup / w
-
-        let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
-
-        computeEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
-        computeEncoder.setBuffer(rayBuffer, offset: 0, index: 1)
-
-        computeEncoder.setTexture(randomTexture, index: 0)
-        computeEncoder.setTexture(renderTarget, index: 1)
-
-        computeEncoder.setComputePipelineState(rayPipeline)
-
         let threadsPerGrid = MTLSizeMake(width, height, 1)
-        computeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
 
-        computeEncoder.endEncoding()
+        generateRays(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
         
         let maxBounce = _renderSettings.maxBounce
-        for i in 0..<maxBounce {
-            intersector.intersectionDataType = scene.renderOptions.intersectionDataType
-            intersector.encodeIntersection(commandBuffer: commandBuffer,
-                                           intersectionType: .nearest,
-                                           rayBuffer: rayBuffer,
-                                           rayBufferOffset: 0,
-                                           intersectionBuffer: intersectionBuffer,
-                                           intersectionBufferOffset: 0,
-                                           rayCount: width * height,
-                                           accelerationStructure: scene.getAccelerationStructure())
-            guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
-            
-            let buffers = [scene.uniformBuffer, scene.lightBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, scene.vertexBuffer, scene.customIndexBuffer, scene.verticesCountBuffer, scene.indiciesCountBuffer, scene.maskBuffer, scene.materialBuffer, scene.textureBuffer]
-            let offsets: [Int] = [scene.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            
-            shadeEncoder.useHeap(scene.heap.heap)
-            shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
         
-            var bounce = UInt32(i)
-            shadeEncoder.setBytes(&bounce, length: UInt32.size, index: buffers.count)
-            
-            shadeEncoder.setTexture(randomTexture, index: 0)
-            shadeEncoder.setTexture(renderTarget, index: 1)
-            shadeEncoder.setTexture(scene.skyBox, index: 2)
-            
-            shadeEncoder.setSamplerState(textureSampler, index: 0)
-            shadeEncoder.setComputePipelineState(shadePipeline)
-            shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
-            shadeEncoder.endEncoding()
-            
-            intersector.intersectionDataType = .distance
-            intersector.encodeIntersection(commandBuffer: commandBuffer,
-                                           intersectionType: .any,
-                                           rayBuffer: shadowRayBuffer,
-                                           rayBufferOffset: 0,
-                                           intersectionBuffer: intersectionBuffer,
-                                           intersectionBufferOffset: 0,
-                                           rayCount: width * height,
-                                           accelerationStructure: scene.getAccelerationStructure())
-
-            guard let colorEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
-            colorEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
-            colorEncoder.setBuffer(shadowRayBuffer, offset: 0, index: 1)
-            colorEncoder.setBuffer(intersectionBuffer, offset: 0, index: 2)
-
-            colorEncoder.setTexture(renderTarget, index: 0)
-            colorEncoder.setComputePipelineState(shadowPipeline)
-            
-            colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
-            colorEncoder.endEncoding()
-            
+        for i in 0..<maxBounce {
+            reflectRays(bounce: i, commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
+            traceShadows(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
         }
         
         denoiseFrame(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
@@ -306,6 +245,85 @@ class RayTracingRenderer: Renderer {
                 }
             }
         }
+    }
+    
+    private func generateRays(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
+        let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
+
+        computeEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 0)
+        computeEncoder.setBuffer(rayBuffer, offset: 0, index: 1)
+
+        computeEncoder.setTexture(randomTexture, index: 0)
+        computeEncoder.setTexture(renderTarget, index: 1)
+
+        computeEncoder.setComputePipelineState(rayPipeline)
+
+        
+        computeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+
+        computeEncoder.endEncoding()
+    }
+    
+    private func reflectRays(bounce: Int, commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
+        intersector.intersectionDataType = scene.renderOptions.intersectionDataType
+        intersector.encodeIntersection(commandBuffer: commandBuffer,
+                                       intersectionType: .nearest,
+                                       rayBuffer: rayBuffer,
+                                       rayBufferOffset: 0,
+                                       intersectionBuffer: intersectionBuffer,
+                                       intersectionBufferOffset: 0,
+                                       rayCount: Int(size.width * size.height),
+                                       accelerationStructure: scene.getAccelerationStructure())
+        guard let shadeEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
+        
+        let buffers = [scene.uniformBuffer, scene.lightBuffer, rayBuffer, shadowRayBuffer, intersectionBuffer, scene.vertexBuffer, scene.customIndexBuffer, scene.verticesCountBuffer, scene.indiciesCountBuffer, scene.maskBuffer, scene.materialBuffer, scene.textureBuffer]
+        let offsets: [Int] = [scene.uniformBufferOffset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        
+        shadeEncoder.useHeap(scene.heap.heap)
+        shadeEncoder.setBuffers(buffers, offsets: offsets, range: 0..<buffers.count)
+    
+        var _bounce = UInt32(bounce)
+        shadeEncoder.setBytes(&_bounce, length: UInt32.size, index: buffers.count)
+        
+        shadeEncoder.setTexture(randomTexture, index: 0)
+        shadeEncoder.setTexture(renderTarget, index: 1)
+        shadeEncoder.setTexture(scene.skyBox, index: 2)
+        
+        shadeEncoder.setSamplerState(textureSampler, index: 0)
+        shadeEncoder.setComputePipelineState(shadePipeline)
+        shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        shadeEncoder.endEncoding()
+    }
+    
+    private func traceShadows(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
+        
+//        intersector.intersectionDataType = scene.renderOptions.intersectionDataType
+//        intersector.encodeIntersection(commandBuffer: commandBuffer,
+//                                       intersectionType: .any,
+//                                       rayBuffer: rayBuffer,
+//                                       rayBufferOffset: 0,
+//                                       intersectionBuffer: intersectionBuffer,
+//                                       intersectionBufferOffset: 0,
+//                                       rayCount: Int(size.width * size.height),
+//                                       accelerationStructure: scene.getAccelerationStructure())
+        
+//        print("Materials : \(scene.materialBuffer.length / Material.stride)")
+        guard let colorEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
+        colorEncoder.setAccelerationStructure(scene.getMTLAccelerationStructure(), bufferIndex: 0)
+        colorEncoder.setBuffer(scene.uniformBuffer, offset: scene.uniformBufferOffset, index: 1)
+        colorEncoder.setBuffer(shadowRayBuffer, offset: 0, index: 2)
+        colorEncoder.setBuffer(scene.vertexBuffer, offset: 0, index: 3);
+        colorEncoder.setBuffer(scene.customIndexBuffer, offset: 0, index: 4);
+        colorEncoder.setBuffer(scene.verticesCountBuffer, offset: 0, index: 5);
+        colorEncoder.setBuffer(scene.indiciesCountBuffer, offset: 0, index: 6);
+        colorEncoder.setBuffer(scene.materialBuffer, offset: 0, index: 7);
+        colorEncoder.setBuffer(scene.textureBuffer, offset: 0, index: 8);
+
+        colorEncoder.setTexture(renderTarget, index: 0)
+        colorEncoder.setComputePipelineState(shadowPipeline)
+        
+        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        colorEncoder.endEncoding()
     }
     
     private func denoiseFrame(commandBuffer: MTLCommandBuffer, threadsPerGrid: MTLSize) {
