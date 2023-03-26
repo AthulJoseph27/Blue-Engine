@@ -39,7 +39,7 @@ class RendererManager {
         viewPortType = .StaticRT
         SceneManager.initialize(scene: sceneType, rendererType: .StaticRT)
         
-        setupDefaultCamera()
+        CameraManager.setCamera(.Debug)
         
         counterView.stringValue = ""
         counterView.textColor = .white
@@ -171,13 +171,6 @@ class RendererManager {
         renderers[viewPortType]!.onResume()
         renderers[viewPortType]!.updateViewPort()
         mtkViews[viewPortType]!.isPaused = false
-    }
-    
-    private static func setupDefaultCamera() {
-        let camera = DebugCamera()
-        camera.position = SIMD3<Float>(0, 1, 3.38)
-        CameraManager.registerCamera(camera: camera)
-        CameraManager.setCamera(.Debug)
     }
     
     private static func setRenderer(mtkView: MTKView, rendererType: RendererType, viewPortType: RenderViewPortType) {

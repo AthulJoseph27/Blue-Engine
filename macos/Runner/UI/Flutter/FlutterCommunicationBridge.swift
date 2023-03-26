@@ -8,6 +8,7 @@ enum FlutterBridgingMethod: String {
 enum SwiftBridgingMethodName: String {
     case renderImage = "renderImage"
     case renderAnimation = "renderAnimation"
+    case switchCamera = "switchCamera"
     case updateViewportSettings = "updateViewportSettings"
     case updateSceneSettings = "updateSceneSettings"
     case updateCameraSettings = "updateCameraSettings"
@@ -41,6 +42,10 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                     SwiftBridgingMethods.renderImage(arguments: args)
                     result(true)
                     break
+            case SwiftBridgingMethodName.renderAnimation.rawValue:
+                SwiftBridgingMethods.renderAnimation(arguments: args)
+                result(true)
+                break
                 case SwiftBridgingMethodName.updateViewportSettings.rawValue:
                     SwiftBridgingMethods.updateViewportSettings(arguments: args)
                     result(true)
@@ -56,6 +61,9 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                 case SwiftBridgingMethodName.importSkybox.rawValue:
                     let _result = SwiftBridgingMethods.importSkybox(arguments: args)
                     result(_result)
+                    break
+                case SwiftBridgingMethodName.switchCamera.rawValue:  SwiftBridgingMethods.switchCamera(arguments: args)
+                    result(true)
                     break
                 default:
                     result(FlutterMethodNotImplemented)
@@ -129,14 +137,14 @@ class SwiftBridgingMethods {
         
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: model.resolution.x, height: model.resolution.y),
                               styleMask: [.titled, .miniaturizable],
-                                          backing: .buffered,
-                                          defer: false)
-
+                              backing: .buffered,
+                              defer: false)
+        
         let rendererType = (model.renderEngine == .aurora) ? RendererType.StaticRT : RendererType.PhongShader
         window.center()
         window.title = "Rendering"
         window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: rendererType, settings: model.getRenderingSettings()))
-
+        
         let windowController = NSWindowController(window: window)
         windowController.showWindow(nil)
         RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
@@ -145,6 +153,61 @@ class SwiftBridgingMethods {
                 RenderImageModel.rendering = false
                 window.close()
             }
+        }
+    }
+    
+    static func renderAnimation(arguments: [String: Any]) {
+        if RenderAnimationModel.rendering {
+            return
+        }
+        
+        let model = RenderAnimationModel(json: arguments)
+        
+        let camera =  CameraManager.currentCamera as! AnimationCamera
+        var keyframes = camera.getKeyframes()
+        
+//        CameraManager.setCamera(.Debug)
+        
+        let offsetTime = keyframes[0].time
+        
+        if !keyframes.isEmpty {
+            for i in 0..<keyframes.count {
+                let frame = KeyFrame(time: keyframes[i].time - offsetTime, position: keyframes[i].position, rotation: keyframes[i].rotation)
+                keyframes[i] = frame
+            }
+        }
+        
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: model.resolution.x, height: model.resolution.y),
+                              styleMask: [.titled, .miniaturizable],
+                              backing: .buffered,
+                              defer: false)
+        
+        window.center()
+        window.title = "Rendering"
+        
+        let rendererType = (model.renderEngine == .aurora) ? RendererType.StaticRT : RendererType.PhongShader
+        window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: rendererType, settings: model.getRenderingSettings()))
+        
+        let windowController = NSWindowController(window: window)
+        windowController.showWindow(nil)
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let renderingQueue = DispatchQueue(label: "com.Blue4.renderingQueue")
+        
+        renderingQueue.async {
+            renderAnimationLoop(model: model, keyframes: keyframes, semaphore: semaphore, window: window)
+        }
+        
+    }
+    
+    static func switchCamera(arguments: [String: Any]) {
+        let recordMode = arguments["recordMode"] as? Bool ?? false
+        
+        if recordMode {
+            CameraManager.setCamera(.Animation)
+        } else {
+            CameraManager.setCamera(.Debug)
         }
     }
     
@@ -205,4 +268,42 @@ class SwiftBridgingMethods {
         }
     }
     
+    private static func renderAnimationLoop(model: RenderAnimationModel, keyframes: [KeyFrame], semaphore: DispatchSemaphore, window: NSWindow) {
+        
+        let rendererType = (model.renderEngine == .aurora) ? RendererType.StaticRT : RendererType.PhongShader
+        
+        let deltaTime = 1.0 / Double(model.fps)
+        let endTime = keyframes.last!.time
+        
+        var iter = 0
+        var time = 0.0
+        
+        while(time <= endTime) {
+            time += deltaTime
+            iter += 1
+            
+            let keyframe = RenderAnimationModel.getKeyframeAt(at: time, keyframes: keyframes)
+            
+            CameraManager.currentCamera.position = keyframe.position
+            CameraManager.currentCamera.rotation = keyframe.rotation
+            
+            
+            RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
+                model.saveRenderImage()
+                DispatchQueue.main.async {
+                    window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: rendererType, settings: model.getRenderingSettings()))
+                    semaphore.signal()
+                }
+            }
+            
+            semaphore.wait()
+        }
+        
+        RenderAnimationModel.rendering = false
+        model.saveVideo()
+        
+        DispatchQueue.main.async {
+            window.close()
+        }
+    }
 }

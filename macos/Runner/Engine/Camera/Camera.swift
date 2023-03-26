@@ -2,6 +2,7 @@ import simd
 
 enum CameraTypes {
     case Debug
+    case Animation
 }
 
 protocol SceneCamera {
@@ -13,6 +14,7 @@ protocol SceneCamera {
     var projectionMatrix: matrix_float4x4       { get }
     var controllSensitivity: ControllSensitivity { get set }
     func update(deltaTime: Float)
+    func reset()
 }
 
 extension SceneCamera {

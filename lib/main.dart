@@ -1,10 +1,10 @@
 import 'package:blue_engine/Screens/SplashScreen.dart';
-import 'package:blue_engine/screens/RenderAnimation.dart';
 import 'package:blue_engine/screens/RenderImage/RenderImageView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Screens/Loading.dart';
+import 'Screens/RenderAnimation/RenderAnimationView.dart';
 import 'Screens/Settings/SettingsView.dart';
 import 'SwiftCommunicationBridge.dart';
 import 'globals.dart';
@@ -18,7 +18,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

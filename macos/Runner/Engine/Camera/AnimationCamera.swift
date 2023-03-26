@@ -1,7 +1,8 @@
 import simd
+import Foundation
 
-class DebugCamera: SceneCamera {
-    var cameraType: CameraTypes = .Debug
+class AnimationCamera: SceneCamera {
+    var cameraType: CameraTypes = .Animation
     var controllSensitivity = ControllSensitivity()
     
     var position = SIMD3<Float>(0, 70, 405)
@@ -14,9 +15,50 @@ class DebugCamera: SceneCamera {
         return matrix_float4x4.prespective(degreeFov: 45, aspectRatio: 1.6, near: 0.1, far: 1000)
     }
     
-    func reset() {}
+    private var keyframes: [KeyFrame] = []
+    private var FPS: uint = 24
+    private var record: Bool = false
+    
+    func getKeyframes() -> [KeyFrame] {
+        return keyframes
+    }
+    
+    func clearKeyframes() {
+        keyframes = []
+    }
+    
+    func setFPS(fps: uint) {
+        FPS = fps
+    }
+    
+    func resumeRecording() {
+        record = true
+        if keyframes.isEmpty {
+            keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
+        }
+    }
+    
+    func pauseRecording() {
+        record = false
+    }
+    
+    func reset() {
+        keyframes = []
+        FPS = 24
+        record = false
+    }
     
     func update(deltaTime: Float) {
+        
+        if(Keyboard.isKeyPressed(.p)) {
+            pauseRecording()
+            return
+        }
+        
+        if(Keyboard.isKeyPressed(.r)) {
+            resumeRecording()
+            return
+        }
         
         var _deltaPosition = SIMD3<Float>(0, 0, 0)
         
@@ -72,6 +114,12 @@ class DebugCamera: SceneCamera {
         
         deltaPosition = (transform * _deltaPosition.simd4(w: 1)).xyz
         position += deltaPosition
+        
+        if record {
+            if !(!keyframes.isEmpty && keyframes.last!.rotation == rotation && keyframes.last!.position == position) {
+                keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
+            }
+        }
     }
     
     

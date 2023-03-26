@@ -181,6 +181,12 @@ struct VertexShadingSettings: RenderingSettings {
     
 }
 
+struct KeyFrame {
+    var time: Double
+    var position: SIMD3<Float>
+    var rotation: SIMD3<Float>
+}
+
 enum RenderMode {
     case display
     case render
@@ -210,3 +216,4 @@ enum RenderViewPortType : String, CaseIterable {
     case PhongShader
     case Render
 }
+

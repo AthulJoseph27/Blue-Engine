@@ -3,12 +3,24 @@ class CameraManager {
     private static var locked = false
     public static var currentCamera: SceneCamera!
     
+    public static func initialize() {
+        let debugCamera = DebugCamera()
+        debugCamera.position = SIMD3<Float>(0, 1, 3.38)
+        CameraManager.registerCamera(camera: debugCamera)
+        
+        
+        let animCamera = AnimationCamera()
+        animCamera.position = SIMD3<Float>(0, 1, 3.38)
+        CameraManager.registerCamera(camera: animCamera)
+    }
+    
     public static func registerCamera(camera: SceneCamera) {
         _cameras.updateValue(camera, forKey: camera.cameraType)
     }
     
     public static func setCamera(_ cameraType: CameraTypes) {
         currentCamera = _cameras[cameraType]
+        currentCamera.reset()
     }
     
     public static func setCameraControllSensitivity(_ settings: ControllSensitivity) {
@@ -25,9 +37,7 @@ class CameraManager {
     
     internal static func update(deltaTime: Float) {
         if !locked {
-            for camera in _cameras.values {
-                camera.update(deltaTime: deltaTime)
-            }
+            currentCamera.update(deltaTime: deltaTime)
         }
     }
 }

@@ -20,6 +20,7 @@ class Engine {
         RenderPipelineStateLibrary.initialize()
         MeshLibrary.initialize()
         Skyboxibrary.initialize()
+        CameraManager.initialize()
     }
 }
 

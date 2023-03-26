@@ -11,6 +11,7 @@ const String eventChannelName = "flutter_event_channel";
 enum SwiftMethods {
   renderImage,
   renderAnimation,
+  switchCamera,
   updateViewportSettings,
   updateSceneSettings,
   updateCameraSettings,
