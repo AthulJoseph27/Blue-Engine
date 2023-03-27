@@ -14,10 +14,13 @@ class AnimationCamera: SceneCamera {
     var projectionMatrix: matrix_float4x4 {
         return matrix_float4x4.prespective(degreeFov: 45, aspectRatio: 1.6, near: 0.1, far: 1000)
     }
+    var record: Bool {
+        return _record
+    }
     
     private var keyframes: [KeyFrame] = []
     private var FPS: uint = 24
-    private var record: Bool = false
+    private var _record: Bool = false
     
     func getKeyframes() -> [KeyFrame] {
         return keyframes
@@ -32,20 +35,22 @@ class AnimationCamera: SceneCamera {
     }
     
     func resumeRecording() {
-        record = true
+        _record = true
+        RendererManager.updateAnimCameraToolBar(recording: _record)
         if keyframes.isEmpty {
             keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
         }
     }
     
     func pauseRecording() {
-        record = false
+        _record = false
+        RendererManager.updateAnimCameraToolBar(recording: _record)
     }
     
     func reset() {
         keyframes = []
         FPS = 24
-        record = false
+        _record = false
     }
     
     func update(deltaTime: Float) {
@@ -115,7 +120,7 @@ class AnimationCamera: SceneCamera {
         deltaPosition = (transform * _deltaPosition.simd4(w: 1)).xyz
         position += deltaPosition
         
-        if record {
+        if _record {
             if !(!keyframes.isEmpty && keyframes.last!.rotation == rotation && keyframes.last!.position == position) {
                 keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
             }

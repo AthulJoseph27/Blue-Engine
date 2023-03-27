@@ -131,6 +131,10 @@ class RendererManager {
         
         self.viewPortType = viewPortType
         
+        if let camera = CameraManager.currentCamera as? AnimationCamera {
+            updateAnimCameraToolBar(recording: camera.record)
+        }
+        
         pauseAllRenderingLoop()
         SceneManager.updateRenderableScene(viewPortToRendererMap[viewPortType]!)
         resumeRenderingLoop(viewPortType: viewPortType)
@@ -165,6 +169,30 @@ class RendererManager {
         setRenderer(mtkView: mtkViews[.Render]!, rendererType: rendererType, viewPortType: .Render)
         renderers[.Render]!.switchToRenderMode(settings: settings)
         return MetalView(gameViewControllers[.Render]!)
+    }
+    
+    public static func clearAnimCameraToolBar() {
+        for viewport in RenderViewPortType.allCases {
+            if viewport == .Render {
+                continue
+            }
+            
+            for subview in mtkViews[viewport]!.subviews {
+                subview.removeFromSuperview()
+            }
+            
+        }
+    }
+    
+    public static func updateAnimCameraToolBar(recording: Bool) {
+        
+        clearAnimCameraToolBar()
+        
+        let iconImageView = recording ? NSImageView(image: NSImage(named: NSImage.touchBarPauseTemplateName)!) : NSImageView(image: NSImage(named: NSImage.touchBarPlayTemplateName)!)
+        
+        iconImageView.frame = NSRect(x: 10, y: 10, width: 30, height: 30)
+        
+        mtkViews[viewPortType]!.addSubview(iconImageView)
     }
     
     private static func resumeRenderingLoop(viewPortType: RenderViewPortType) {

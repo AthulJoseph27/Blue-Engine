@@ -234,6 +234,7 @@ class SwiftBridgingMethods {
         
         if recordMode {
             CameraManager.setCamera(.Animation)
+            RendererManager.updateAnimCameraToolBar(recording: false)
         } else {
             if let camera = CameraManager.currentCamera as? AnimationCamera {
                 camera.clearKeyframes()
