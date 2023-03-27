@@ -4,11 +4,6 @@ import simd
 import os
 
 class RayTracingRenderer: Renderer {
-    private static let qualityIterationCountMap: [RenderQuality: Int] = [
-        .high : 1024,
-        .medium : 256,
-        .low : 8,
-    ]
     var intersector: MPSRayIntersector!
     
     var rayBuffer:          MTLBuffer!
@@ -45,7 +40,7 @@ class RayTracingRenderer: Renderer {
     
     var scene: RTScene!
     
-    private var _renderSettings: RayTracingSettings = RayTracingSettings(maxBounce: 4, alphaTesting: false)
+    private var _renderSettings: RayTracingSettings = RayTracingSettings(samples: 400, maxBounce: 4, alphaTesting: false)
     
     override func initialize() {
         self.updateViewPort()
@@ -185,7 +180,7 @@ class RayTracingRenderer: Renderer {
         } else {
             iterationCount += 1
             
-            if iterationCount > RayTracingRenderer.qualityIterationCountMap[renderQuality]! {
+            if iterationCount > (_renderSettings.samples + 2) {
                 renderMode = .display
                 RendererManager.onRenderingComplete()
             }
@@ -362,10 +357,5 @@ class RayTracingRenderer: Renderer {
         denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         denoiseEncoder.endEncoding()
     }
-    
-//    private func denoiseDynamicScene(commandBuffer: MTLCommandBuffer) {
-//
-//        denoiser.encode(commandBuffer: commandBuffer, sourceTexture: renderTarget, motionVectorTexture: , depthNormalTexture: , previousDepthNormalTexture: )
-//    }
     
 }

@@ -47,6 +47,7 @@ class AuroraViewPortController {
 
   void onAlphaTestingChanged(bool value) {
     ViewportModel.auroraViewportModel.alphaTesting = value;
+    alphaTestingStreamController.sink.add(value);
     ViewportSettingsController.onViewportSettingsUpdated();
   }
 

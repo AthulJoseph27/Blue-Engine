@@ -84,9 +84,9 @@ class SceneSettingsController {
         SceneSettingsModel.hasImportedScene = true;
         SceneSettingsModel.scene = SceneSettingsModel.scenes.last;
         sceneController.sink.add(SceneSettingsModel.scene);
-        settingsScaffoldMessengerKey.currentState?.showSnackBar(showSnackBar('Model imported successfully.'));
+        settingsScaffoldMessengerKey.currentState?.showSnackBar(getSnackBar('Model imported successfully.'));
       } else {
-        settingsScaffoldMessengerKey.currentState?.showSnackBar(showSnackBar('Failed to import model.'));
+        settingsScaffoldMessengerKey.currentState?.showSnackBar(getSnackBar('Failed to import model.'));
       }
     }
   }
@@ -100,9 +100,9 @@ class SceneSettingsController {
         SceneSettingsModel.hasImportedSkybox = true;
         SceneSettingsModel.skybox = SceneSettingsModel.skyBoxes.last;
         skyboxController.sink.add(SceneSettingsModel.skybox);
-        settingsScaffoldMessengerKey.currentState?.showSnackBar(showSnackBar('Skybox imported successfully.'));
+        settingsScaffoldMessengerKey.currentState?.showSnackBar(getSnackBar('Skybox imported successfully.'));
       } else {
-        settingsScaffoldMessengerKey.currentState?.showSnackBar(showSnackBar('Failed to import skybox.'));
+        settingsScaffoldMessengerKey.currentState?.showSnackBar(getSnackBar('Failed to import skybox.'));
       }
     }
   }

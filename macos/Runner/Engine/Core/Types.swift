@@ -173,6 +173,7 @@ protocol RenderingSettings {
 }
 
 struct RayTracingSettings: RenderingSettings {
+    var samples: Int
     var maxBounce: Int
     var alphaTesting: Bool
 }

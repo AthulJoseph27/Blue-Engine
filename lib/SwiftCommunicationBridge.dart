@@ -12,6 +12,7 @@ enum SwiftMethods {
   renderImage,
   renderAnimation,
   switchCamera,
+  queryKeyframeCount,
   updateViewportSettings,
   updateSceneSettings,
   updateCameraSettings,
@@ -29,7 +30,7 @@ const methodChannel = MethodChannel(methodChannelName);
 const eventChannel = EventChannel(eventChannelName);
 final pageController = StreamController<dynamic>();
 
-Future<bool> invokePlatformMethod(SwiftMethods function, Map<String, dynamic> arguments) async {
+Future<dynamic> invokePlatformMethod(SwiftMethods function, Map<String, dynamic> arguments) async {
   try {
     var result = await methodChannel.invokeMethod(function.name, jsonEncode(arguments));
     return result ?? false;

@@ -2,9 +2,11 @@ import 'package:blue_engine/globals.dart';
 
 class RenderAnimationModel {
   static var renderEngine = RenderEngine.aurora;
-  static var quality = RenderQuality.medium;
+  static var samples = 400;
   static var resolution = Int2(x: 1080, y: 720);
   static var maxBounce = 6;
+  static var fps = 24;
+  static var alphaTesting = false;
   static var record = false;
   static var saveLocation = '/Users/athuljoseph/Downloads/Animation/';
 
@@ -18,9 +20,11 @@ class RenderAnimationModel {
 
   static Map<String, dynamic> toJson()=> {
     'renderEngine' : renderEngine.name,
-    'quality' :  quality.name,
+    'alphaTesting' : alphaTesting,
+    'samples': samples,
     'resolution' : resolution.toJson(),
     'maxBounce' : maxBounce,
+    'fps' : fps,
     'saveLocation' : saveLocation,
   };
 

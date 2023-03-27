@@ -59,45 +59,6 @@ class _RenderImagePageState extends State<RenderImagePage> {
             ),
             SettingsRow(
               firstChild: Text(
-                'Quality :',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              secondChild: MaterialSegmentedControl<RenderQuality>(
-                selectedColor: CupertinoColors.activeBlue,
-                groupValue: RenderImageModel.quality,
-                onValueChanged: (RenderQuality value) {
-                  setState(() {
-                    RenderImageModel.quality = value;
-                  });
-                },
-                children: const <RenderQuality, Widget>{
-                  RenderQuality.high: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'High',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  RenderQuality.medium: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Medium',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  RenderQuality.low: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Low',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                },
-              ),
-              spacingRatio: spacingRatio,
-            ),
-            SettingsRow(
-              firstChild: Text(
                 'Resolution :',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
@@ -128,6 +89,40 @@ class _RenderImagePageState extends State<RenderImagePage> {
                     ),
                   ),
                 ],
+              ),
+              spacingRatio: spacingRatio,
+            ),
+            SettingsRow(
+              firstChild: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: Text(
+                  'Samples :',
+                  style: (RenderImageModel.renderEngine == RenderEngine.aurora) ? Theme.of(context).textTheme.titleMedium
+                      :
+                  const TextStyle(
+                    fontSize: 16,
+                    color: CupertinoColors.systemGrey3,
+                  ) ,
+                ),
+              ),
+              secondChild: Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: SizedBox(
+                  width: 80,
+                  child: StreamBuilder<int>(
+                      stream: controller.samplesStreamController.stream,
+                      builder: (context, snapshot) {
+                        return CupertinoTextField(
+                          enabled: RenderImageModel.renderEngine == RenderEngine.aurora,
+                          controller: controller.samplesController,
+                          focusNode: controller.samplesFocusNode,
+                          onChanged: controller.setSamples,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        );
+                      }
+                  ),
+                ),
               ),
               spacingRatio: spacingRatio,
             ),
@@ -167,6 +162,39 @@ class _RenderImagePageState extends State<RenderImagePage> {
             ),
             SettingsRow(
               firstChild: Text(
+                'Alpha Testing :',
+                style: (RenderImageModel.renderEngine == RenderEngine.aurora) ? Theme.of(context).textTheme.titleMedium
+                    :
+                const TextStyle(
+                  fontSize: 16,
+                  color: CupertinoColors.systemGrey3,
+                ) ,
+              ),
+              secondChild: SizedBox(
+                width: 80,
+                child: StreamBuilder<bool>(
+                    stream: controller.alphaTestingStreamController.stream,
+                    builder: (context, snapshot) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: SizedBox(
+                          height: 32,
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: CupertinoSwitch(
+                              activeColor: Theme.of(context).primaryColor,
+                              value: RenderImageModel.alphaTesting,
+                              onChanged: (RenderImageModel.renderEngine == RenderEngine.aurora) ? controller.onAlphaTestingChanged : null,
+                            ),
+                          ),
+                        ),);
+                    }
+                ),
+              ),
+              spacingRatio: spacingRatio,
+            ),
+            SettingsRow(
+              firstChild: Text(
                 'Save Location :',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
@@ -179,29 +207,6 @@ class _RenderImagePageState extends State<RenderImagePage> {
                   ),
                 ),
               ),
-              spacingRatio: spacingRatio,
-            ),
-            SettingsRow(
-              firstChild: Text(
-                'Persistent render window:',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              secondChild: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: SizedBox(
-                    height: 32,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: CupertinoSwitch(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: RenderImageModel.keepAlive,
-                          onChanged: (value) {
-                            setState(() {
-                              RenderImageModel.keepAlive = value;
-                            });
-                          }),
-                    ),
-                  ),),
               spacingRatio: spacingRatio,
             ),
             Center(

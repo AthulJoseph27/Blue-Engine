@@ -36,8 +36,9 @@ class Double3 {
 }
 
 final GlobalKey<ScaffoldMessengerState> settingsScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> renderAnimationScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-SnackBar showSnackBar(String message, {bool error = false}) {
+SnackBar getSnackBar(String message, {bool error = false}) {
   return SnackBar(
     backgroundColor: error ? CupertinoColors.systemRed : const Color(0xff04cfb5),
     content: Text(

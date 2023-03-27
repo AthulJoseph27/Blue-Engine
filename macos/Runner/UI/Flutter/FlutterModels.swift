@@ -13,30 +13,30 @@ enum InterpolationCurve {
 class RenderImageModel {
     static var rendering = false
     var renderEngine = RenderEngine.comet
-    var quality = RenderQuality.low
+//    var quality = RenderQuality.low
+    var samples = 400
     var resolution = SIMD2<Int>(x: 512, y: 512)
     var maxBounce = 1
     var alphaTesting = false
     var saveLocation = "/Users/athuljoseph/Downloads/"
-    var keepAlive = false
     
     init(json: [String : Any]) {
         renderEngine = RenderEngine(rawValue: (json["renderEngine"] as? String) ?? "") ?? renderEngine
-        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
-        
+//        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
+      
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
         
+        samples = (json["samples"] as? Int) ?? samples
         maxBounce = (json["maxBounce"] as? Int) ?? maxBounce
         saveLocation = (json["saveLocation"] as? String) ?? saveLocation
-        keepAlive = (json["keepAlive"] as? Bool) ?? keepAlive
     }
     
     func getRenderingSettings() -> RenderingSettings {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
         }
     }
     
@@ -63,22 +63,23 @@ class RenderImageModel {
 class RenderAnimationModel {
     static var rendering = false
     var renderEngine = RenderEngine.comet
-    var quality = RenderQuality.low
+//    var quality = RenderQuality.low
+    var samples = 400
     var resolution = SIMD2<Int>(x: 512, y: 512)
     var maxBounce = 1
     var fps = 24
     var alphaTesting = false
     var saveLocation = "/Users/athuljoseph/Downloads/Animation/";
-    var keepAlive = false
     var videoFrames: [CGImage] = []
     
     init(json: [String : Any]) {
         renderEngine = RenderEngine(rawValue: (json["renderEngine"] as? String) ?? "") ?? renderEngine
-        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
+//        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
         
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
         
+        samples = (json["samples"] as? Int) ?? samples
         fps = (json["fps"] as? Int) ?? fps
         maxBounce = (json["maxBounce"] as? Int) ?? maxBounce
         saveLocation = (json["saveLocation"] as? String) ?? saveLocation
@@ -88,7 +89,7 @@ class RenderAnimationModel {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
         }
     }
     
