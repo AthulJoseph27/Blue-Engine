@@ -22,11 +22,11 @@ class RenderImageModel {
     
     init(json: [String : Any]) {
         renderEngine = RenderEngine(rawValue: (json["renderEngine"] as? String) ?? "") ?? renderEngine
-//        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
       
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
         
+        alphaTesting = (json["alphaTesting"] as? Bool) ?? false
         samples = (json["samples"] as? Int) ?? samples
         maxBounce = (json["maxBounce"] as? Int) ?? maxBounce
         saveLocation = (json["saveLocation"] as? String) ?? saveLocation
@@ -63,14 +63,13 @@ class RenderImageModel {
 class RenderAnimationModel {
     static var rendering = false
     var renderEngine = RenderEngine.comet
-//    var quality = RenderQuality.low
     var samples = 400
     var resolution = SIMD2<Int>(x: 512, y: 512)
     var maxBounce = 1
     var fps = 24
     var alphaTesting = false
     var saveLocation = "/Users/athuljoseph/Downloads/Animation/";
-    var videoFrames: [CGImage] = []
+    var videoFrameCount = 0
     
     init(json: [String : Any]) {
         renderEngine = RenderEngine(rawValue: (json["renderEngine"] as? String) ?? "") ?? renderEngine
@@ -79,6 +78,7 @@ class RenderAnimationModel {
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
         
+        alphaTesting = (json["alphaTesting"] as? Bool) ?? false
         samples = (json["samples"] as? Int) ?? samples
         fps = (json["fps"] as? Int) ?? fps
         maxBounce = (json["maxBounce"] as? Int) ?? maxBounce
@@ -93,16 +93,39 @@ class RenderAnimationModel {
         }
     }
     
-    func saveRenderImage() {
+    func saveRenderImage(frame: Int) {
         guard let texture = RendererManager.getRenderedTexture() else { return }
         
-        if let image = texture.toCGImage()?.copy() {
-            videoFrames.append(image)
+        let image = texture.toCGImage()
+        
+        let bitmap = NSBitmapImageRep(cgImage: image!)
+        let pngData = bitmap.representation(using: .png, properties: [:])
+        
+        videoFrameCount = frame
+        
+        let directoryPath = "\(NSTemporaryDirectory())tmp"
+        
+        if !FileManager.default.fileExists(atPath: directoryPath) {
+            do {
+                try FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print("Error creating directory: \(error)")
+            }
+        }
+        
+        do {
+            if #available(macOS 13.0, *) {
+                try pngData?.write(to: URL(filePath: "\(NSTemporaryDirectory())tmp/\(frame).png"))
+            } else {
+                print("Couldn't save image, URL version error. min required macOS 13.0")
+            }
+        } catch {
+            print("\(error)")
         }
     }
     
     func saveVideo() {
-        let outputURL = URL(fileURLWithPath: "\(saveLocation)/output.mp4")
+        let outputURL = URL(fileURLWithPath: "\(saveLocation)/\(Date().timeIntervalSince1970).mp4")
         
         let videoSettings: [String: Any] = [
             AVVideoCodecKey: AVVideoCodecType.h264,
@@ -119,21 +142,46 @@ class RenderAnimationModel {
             assetWriter.startWriting()
             assetWriter.startSession(atSourceTime: CMTime.zero)
             
-            for i in 0..<videoFrames.count {
+            print("Saved frames: \(videoFrameCount)")
+            
+            for i in 1..<(videoFrameCount + 1) {
                 let presentationTime = CMTimeMake(value: Int64(i), timescale: Int32(fps))
-                    let cgImage = videoFrames[i]
-                    
+                
+                let url = URL(fileURLWithPath: "\(NSTemporaryDirectory())tmp/\(i).png")
+                
+                if let image = NSImage(contentsOf: url) {
+                    let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
                     if videoInput.isReadyForMoreMediaData {
                         let pixelBuffer = try pixelBufferFromCGImage(cgImage: cgImage, size: resolution)
                         videoInputAdaptor.append(pixelBuffer, withPresentationTime: presentationTime)
                     }
+                } else {
+                    print("Unable to load image from URL")
+                }
             }
                 
             // Finish writing the video
             videoInput.markAsFinished()
-            assetWriter.finishWriting {}
+            assetWriter.finishWriting {
+                switch assetWriter.status {
+                    case .completed:
+                        print("Video creation completed")
+                    case .failed:
+                        print("Video creation failed: \(String(describing: assetWriter.error))")
+                    case .cancelled:
+                        print("Video creation cancelled")
+                    default:
+                        break
+                    }
+            }
             
-            videoFrames = []
+//            do {
+//                try FileManager.default.removeItem(atPath: "\(NSTemporaryDirectory())tmp/")
+//            } catch {
+//                print("Error removing file: \(error)")
+//            }
+            
+            videoFrameCount = 0
         } catch {
             // Handle errors
         }

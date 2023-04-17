@@ -332,7 +332,7 @@ class SwiftBridgingMethods {
             
             
             RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
-                model.saveRenderImage()
+                model.saveRenderImage(frame: iter)
                 DispatchQueue.main.async {
                     window.contentView = NSHostingView(rootView: RendererManager.getRendererView(rendererType: rendererType, settings: model.getRenderingSettings()))
                     
@@ -379,7 +379,7 @@ class SwiftBridgingMethods {
     
     private static func formatEstimatedTime(time: Int) -> String {
         let hour = time / 3600
-        let min = time / 60
+        let min = (time % 3600) / 60
         let sec = time % 60
         
         var label = ""

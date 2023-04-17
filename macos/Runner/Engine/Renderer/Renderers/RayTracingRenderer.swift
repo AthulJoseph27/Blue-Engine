@@ -180,7 +180,13 @@ class RayTracingRenderer: Renderer {
         } else {
             iterationCount += 1
             
-            if iterationCount > (_renderSettings.samples + 2) {
+            if iterationCount == 4 {
+                // Textures initially are not loaded properly so skipping first few frames
+                // else final image may have a tint of purple
+                scene.frameIndex = 0
+            }
+            
+            if iterationCount > (_renderSettings.samples + 6) {
                 renderMode = .display
                 RendererManager.onRenderingComplete()
             }
@@ -335,7 +341,7 @@ class RayTracingRenderer: Renderer {
         colorEncoder.setBuffer(scene.textureBuffer, offset: 0, index: 8);
 
         colorEncoder.setTexture(renderTarget, index: 0)
-        colorEncoder.setComputePipelineState(shadowPipeline)
+        colorEncoder.setComputePipelineState(shadowWithAlphaTestingPipeline)
         
         colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         colorEncoder.endEncoding()

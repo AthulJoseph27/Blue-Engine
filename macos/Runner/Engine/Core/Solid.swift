@@ -28,6 +28,8 @@ extension Solid {
     
     public func setRoughness(_ roughness: Float) {
         mesh.materials[0].roughness = roughness
+        mesh.materials[0].specular = SIMD3<Float>(repeating: (1.0 - roughness))
+        
     }
     
     public func setOpticalDensity(_ opticalDensity: Float) {
