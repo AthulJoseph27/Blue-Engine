@@ -15,7 +15,7 @@ Consists of two engines: <br/>
 ![Preview Image 5](assets/Preview/5.png)
 ![Preview Image 6](assets/Preview/6.png)
 
-## Render Images
+## Renders
 
 ![Render Image 1](assets/Renders/1.png)
 ![Render Image 2](assets/Renders/2.png)
