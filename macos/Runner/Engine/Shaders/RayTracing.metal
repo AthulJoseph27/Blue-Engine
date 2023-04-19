@@ -645,7 +645,7 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     
     float3 color = tex.sample(sam, in.uv).xyz;
     
-//    color = color / (1.0f + color);
+    color = color / (1.0f + color);
     
     return float4(color, 1.0f);
 }
