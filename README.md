@@ -9,27 +9,27 @@ Consists of two engines: <br/>
 ## Preview Images
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  <img src="assets/assets-reduced/Preview/1.png" alt="Preview Image 1" width="45%">
-  <img src="assets/assets-reduced/Preview/2.png" alt="Preview Image 2" width="45%">
-  <img src="assets/assets-reduced/Preview/3.png" alt="Preview Image 3" width="45%">
-  <img src="assets/assets-reduced/Preview/4.png" alt="Preview Image 4" width="45%">
-  <img src="assets/assets-reduced/Preview/5.png" alt="Preview Image 5" width="45%">
-  <img src="assets/assets-reduced/Preview/6.png" alt="Preview Image 6" width="45%">
+  <img src="assets/assets-reduced/Preview/1.png" alt="Preview Image 1" width="30%">
+  <img src="assets/assets-reduced/Preview/2.png" alt="Preview Image 2" width="30%">
+  <img src="assets/assets-reduced/Preview/3.png" alt="Preview Image 3" width="30%">
+  <img src="assets/assets-reduced/Preview/4.png" alt="Preview Image 4" width="30%">
+  <img src="assets/assets-reduced/Preview/5.png" alt="Preview Image 5" width="30%">
+  <img src="assets/assets-reduced/Preview/6.png" alt="Preview Image 6" width="30%">
 </div>
 
 ## Renders
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  <img src="assets/assets-reduced/Renders/1.png" alt="Render Image 1" width="45%">
-  <img src="assets/assets-reduced/Renders/2.png" alt="Render Image 2" width="45%">
-  <img src="assets/assets-reduced/Renders/3.png" alt="Render Image 3" width="45%">
-  <img src="assets/assets-reduced/Renders/4.png" alt="Render Image 4" width="45%">
-  <img src="assets/assets-reduced/Renders/5.png" alt="Render Image 5" width="45%">
-  <img src="assets/assets-reduced/Renders/6.png" alt="Render Image 6" width="45%">
-  <img src="assets/assets-reduced/Renders/7.png" alt="Render Image 7" width="45%">
-  <img src="assets/assets-reduced/Renders/8.png" alt="Render Image 8" width="45%">
-  <img src="assets/assets-reduced/Renders/9.png" alt="Render Image 9" width="45%">
-  <img src="assets/assets-reduced/Renders/10.png" alt="Render Image 10" width="45%">
+  <img src="assets/assets-reduced/Renders/1.png" alt="Render Image 1" width="30%">
+  <img src="assets/assets-reduced/Renders/2.png" alt="Render Image 2" width="30%">
+  <img src="assets/assets-reduced/Renders/3.png" alt="Render Image 3" width="30%">
+  <img src="assets/assets-reduced/Renders/4.png" alt="Render Image 4" width="30%">
+  <img src="assets/assets-reduced/Renders/5.png" alt="Render Image 5" width="30%">
+  <img src="assets/assets-reduced/Renders/6.png" alt="Render Image 6" width="30%">
+  <img src="assets/assets-reduced/Renders/7.png" alt="Render Image 7" width="30%">
+  <img src="assets/assets-reduced/Renders/8.png" alt="Render Image 8" width="30%">
+  <img src="assets/assets-reduced/Renders/9.png" alt="Render Image 9" width="30%">
+  <img src="assets/assets-reduced/Renders/10.png" alt="Render Image 10" width="30%">
 </div>
 
 
