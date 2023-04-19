@@ -6,7 +6,7 @@ Consists of two engines: <br/>
     - Aurora (Ray Tracing Engine) <br/>
     - Comet (Rasterization Engine)
 
-## Preview Images
+## App Preview
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="assets/assets-reduced/Preview/1.png" alt="Preview Image 1" width="30%">
