@@ -3,6 +3,7 @@ import 'package:blue_engine/globals.dart';
 class CameraSettingsModel {
   static var position = const Double3(x: 0, y: 1, z: 3.38);
   static var rotation = const Double3(x: 0, y: 0, z: 0);
+  static var focalLength = 50.0;
 
   static void fromJson(Map<String, dynamic> json) {
       position = Double3.fromJson(json['position']);
@@ -11,6 +12,7 @@ class CameraSettingsModel {
   }
 
   static Map<String, dynamic> toJson() => {
+    'focalLength': focalLength,
     'position': position,
     'rotation': Double3(x: toRadians(rotation.x), y: toRadians(rotation.y), z: toRadians(rotation.z)),
   };

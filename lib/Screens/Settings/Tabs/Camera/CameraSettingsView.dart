@@ -4,6 +4,7 @@ import 'package:blue_engine/Widgets/XYZInputBoxWidget.dart';
 import 'package:blue_engine/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CameraSettingsView extends StatefulWidget {
   const CameraSettingsView({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class CameraSettingsView extends StatefulWidget {
 
 class _CameraSettingsViewState extends State<CameraSettingsView> {
   final controller = CameraSettingsController();
-  final spacingRatio = 0.56;
+  final spacingRatio = 0.57;
 
   @override
   void initState() {
@@ -47,11 +48,7 @@ class _CameraSettingsViewState extends State<CameraSettingsView> {
                 'Position : ',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: const SizedBox(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 112),
-              child: StreamBuilder<Double3>(
+              secondChild: StreamBuilder<Double3>(
                   stream: controller.positionController.stream,
                   builder: (context, snapshot) {
                     return getXYZInputBox(
@@ -67,20 +64,17 @@ class _CameraSettingsViewState extends State<CameraSettingsView> {
                         controller.onPositionZChanged);
                   }),
             ),
+
             const SizedBox(
               height: 24,
             ),
             SettingsRow(
               spacingRatio: spacingRatio,
               firstChild: Text(
-                'Direction : ',
+                'Rotation : ',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              secondChild: const SizedBox(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 112),
-              child: StreamBuilder<Double3>(
+              secondChild: StreamBuilder<Double3>(
                   stream: controller.rotationController.stream,
                   builder: (context, snapshot) {
                     return getXYZInputBox(
@@ -98,6 +92,33 @@ class _CameraSettingsViewState extends State<CameraSettingsView> {
             ),
             const SizedBox(
               height: 24,
+            ),
+            SettingsRow(
+              firstChild: Text(
+                'Focal Length :',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              secondChild: Padding(
+                padding: const EdgeInsets.only(left: 48),
+                child: SizedBox(
+                  width: 80,
+                  child: StreamBuilder<double>(
+                      stream: controller.focalLengthController.stream,
+                      builder: (context, snapshot) {
+                        return CupertinoTextField(
+                          controller: controller.focalLengthTextController,
+                          focusNode: controller.focalLengthFocusNode,
+                          onChanged: controller.setFocalLength,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.allow(
+                            RegExp(r"\d+(\.\d+)?"),
+                          )],
+                        );
+                      }
+                  ),
+                ),
+              ),
+              spacingRatio: spacingRatio,
             ),
           ],
         ),

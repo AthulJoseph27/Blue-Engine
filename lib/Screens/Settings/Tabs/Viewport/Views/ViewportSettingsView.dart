@@ -3,6 +3,7 @@ import 'package:blue_engine/Screens/Settings/Tabs/Viewport/Controllers/ViewportS
 import 'package:blue_engine/Widgets/MaterialSegmentedControl.dart';
 import 'package:blue_engine/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'AuroraViewportSettingsView.dart';
 import 'CometViewportSettingsView.dart';
@@ -53,7 +54,6 @@ class _ViewportSettingsViewState extends State<ViewportSettingsView> {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              padding: const EdgeInsets.only(top: 12),
               height: size.height - 140,
               child: Align(
                 alignment: Alignment.topCenter,

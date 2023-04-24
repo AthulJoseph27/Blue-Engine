@@ -9,18 +9,23 @@ import 'package:flutter/cupertino.dart';
 class CameraSettingsController {
   final positionController = StreamController<Double3>();
   final rotationController = StreamController<Double3>();
+  final focalLengthController = StreamController<double>();
+
   final pX = TextEditingController();
   final pY = TextEditingController();
   final pZ = TextEditingController();
   final rX = TextEditingController();
   final rY = TextEditingController();
   final rZ = TextEditingController();
+  final focalLengthTextController = TextEditingController(text: '50');
+
   final pXFocus = FocusNode();
   final pYFocus = FocusNode();
   final pZFocus = FocusNode();
   final rXFocus = FocusNode();
   final rYFocus = FocusNode();
   final rZFocus = FocusNode();
+  final focalLengthFocusNode = FocusNode();
 
   void onPositionChanged(Double3 value) {
     CameraSettingsModel.position = value;
@@ -68,9 +73,16 @@ class CameraSettingsController {
     invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
   }
 
+  void setFocalLength(String value) {
+    double fl = double.tryParse(value) ?? CameraSettingsModel.focalLength;
+    CameraSettingsModel.focalLength = fl;
+    invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
+  }
+
   Future<void> updateCameraSettings() async {
     var json = jsonDecode(await invokePlatformMethod(SwiftMethods.getCameraSettings, {}));
     CameraSettingsModel.fromJson(json);
+    focalLengthTextController.text = CameraSettingsModel.focalLength.toString();
     pX.text = CameraSettingsModel.position.x.toString();
     pY.text = CameraSettingsModel.position.y.toString();
     pZ.text = CameraSettingsModel.position.z.toString();

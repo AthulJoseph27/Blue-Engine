@@ -62,6 +62,7 @@ struct ContentView: View {
                             
                             Image(systemName: "sidebar.right")
                                 .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.blue)
                             
                         })
                         .padding(.all, 12)
