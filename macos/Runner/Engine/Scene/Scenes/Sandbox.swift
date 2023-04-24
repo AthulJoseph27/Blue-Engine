@@ -25,13 +25,13 @@ class Sandbox: GameScene {
         createCube(faceMask: Masks.FACE_MASK_POSITIVE_X, color: SIMD3<Float>([0.14, 0.45, 0.091]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: uint(TRIANGLE_MASK_GEOMETRY))
         
         //         Short box
-        let monkey = Solid(.Cube)
+        let monkey = Solid(.Monkey)
         monkey.position = SIMD3<Float>(0.3275, 0.3, 0.3725)
         monkey.rotation = SIMD3<Float>(0, -0.3, 0)
         monkey.scale = SIMD3<Float>(0.3, 0.3, 0.3)
-//        monkey.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
-        monkey.setOpticalDensity(1.01)
-//        monkey.setRoughness(0.0)
+        monkey.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
+//        monkey.setOpticalDensity(1.01)
+        monkey.setRoughness(1.0)
         monkey.enableTexture(false)
 //        monkey.animated = true
         

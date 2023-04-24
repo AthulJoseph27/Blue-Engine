@@ -1,3 +1,4 @@
+import 'package:blue_engine/Screens/Settings/Tabs/Camera/CameraSettingsView.dart';
 import 'package:blue_engine/Screens/Settings/Tabs/Scene/SceneSettingsView.dart';
 import 'package:blue_engine/Widgets/MaterialSlidingSegmentedControl.dart';
 import 'package:blue_engine/globals.dart';
@@ -20,12 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   var tabs = [
     const ViewportSettingsView(),
     const SceneSettingsView(),
-    Container(
-      color: CupertinoColors.white,
-    ),
-    Container(
-      color: CupertinoColors.white,
-    )
+    const CameraSettingsView(),
   ];
 
   @override

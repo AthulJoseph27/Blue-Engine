@@ -13,11 +13,13 @@ enum SwiftMethods {
   renderAnimation,
   switchCamera,
   queryKeyframeCount,
+  getCameraSettings,
   updateViewportSettings,
   updateSceneSettings,
   updateCameraSettings,
   importScene,
-  importSkybox, updateSceneLighting,
+  importSkybox,
+  updateSceneLighting,
 }
 
 enum SwiftEvents {

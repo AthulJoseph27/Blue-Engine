@@ -12,8 +12,8 @@ enum InterpolationCurve {
 
 class RenderImageModel {
     static var rendering = false
+    let quality = RenderQuality.high
     var renderEngine = RenderEngine.comet
-//    var quality = RenderQuality.low
     var samples = 400
     var resolution = SIMD2<Int>(x: 512, y: 512)
     var maxBounce = 1
@@ -36,7 +36,7 @@ class RenderImageModel {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
         }
     }
     
@@ -62,6 +62,7 @@ class RenderImageModel {
 
 class RenderAnimationModel {
     static var rendering = false
+    let quality = RenderQuality.high
     var renderEngine = RenderEngine.comet
     var samples = 400
     var resolution = SIMD2<Int>(x: 512, y: 512)
@@ -73,7 +74,6 @@ class RenderAnimationModel {
     
     init(json: [String : Any]) {
         renderEngine = RenderEngine(rawValue: (json["renderEngine"] as? String) ?? "") ?? renderEngine
-//        quality = RenderQuality(rawValue: (json["quality"] as? String) ?? "") ?? quality
         
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
@@ -89,7 +89,7 @@ class RenderAnimationModel {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
         }
     }
     
@@ -175,11 +175,11 @@ class RenderAnimationModel {
                     }
             }
             
-//            do {
-//                try FileManager.default.removeItem(atPath: "\(NSTemporaryDirectory())tmp/")
-//            } catch {
-//                print("Error removing file: \(error)")
-//            }
+            do {
+                try FileManager.default.removeItem(atPath: "\(NSTemporaryDirectory())tmp/")
+            } catch {
+                print("Error removing file: \(error)")
+            }
             
             videoFrameCount = 0
         } catch {

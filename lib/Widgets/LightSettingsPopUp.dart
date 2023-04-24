@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import 'MaterialSegmentedControl.dart';
+import 'XYZInputBoxWidget.dart';
 
 Future<dynamic> editLightSettings(BuildContext context, SceneLight light, {String heading = 'Edit Light'}) {
   return showDialog(
@@ -209,7 +210,7 @@ Future<dynamic> editLightSettings(BuildContext context, SceneLight light, {Strin
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 112),
-                      child: _getXYZInputBox(context, pX, pY, pZ, pXFocus, pYFocus, pZFocus, (val) {
+                      child: getXYZInputBox(context, pX, pY, pZ, pXFocus, pYFocus, pZFocus, (val) {
                         var x = double.tryParse(val) ?? 0.0;
                         setState(() {
                           sceneLight.position = Double3(x: x, y: sceneLight.position.y, z: sceneLight.position.z);
@@ -239,7 +240,7 @@ Future<dynamic> editLightSettings(BuildContext context, SceneLight light, {Strin
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 112),
-                      child: _getXYZInputBox(
+                      child: getXYZInputBox(
                           context, dX, dY, dZ, dXFocus, dYFocus, dZFocus, (val) {
                         var x = double.tryParse(val) ?? 0.0;
                         setState(() {
@@ -286,80 +287,6 @@ Future<dynamic> editLightSettings(BuildContext context, SceneLight light, {Strin
         ),
       );
     },
-  );
-}
-
-Widget _getXYZInputBox(BuildContext context, TextEditingController x, TextEditingController y, TextEditingController z, FocusNode fx, FocusNode fy, FocusNode fz, Function(String) onXChanged,
-    Function(String) onYChanged, Function(String) onZChanged) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 16),
-    child: Row(
-      children: [
-        Text(
-          'x :',
-          style: Theme.of(context).textTheme.caption,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            width: 80,
-            child: CupertinoTextField(
-              focusNode: fx,
-              controller: x,
-              keyboardType: TextInputType.number,
-              onChanged: onXChanged,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
-                )
-              ],
-            ),
-          ),
-        ),
-        Text(
-          'y :',
-          style: Theme.of(context).textTheme.caption,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            width: 80,
-            child: CupertinoTextField(
-              focusNode: fy,
-              controller: y,
-              onChanged: onYChanged,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
-                )
-              ],
-            ),
-          ),
-        ),
-        Text(
-          'z :',
-          style: Theme.of(context).textTheme.caption,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            width: 80,
-            child: CupertinoTextField(
-              focusNode: fz,
-              controller: z,
-              onChanged: onZChanged,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r"^-?(?:\d+\.?\d*|\.\d+)?$|^-$"),
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
   );
 }
 

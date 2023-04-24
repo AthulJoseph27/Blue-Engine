@@ -102,6 +102,11 @@ kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+        dstTex.write(float4(0.0f, 0.0f, 0.0f, 0.0f), tid);
+        
+        if(rayIdx % uniforms.qualityControll != 0) {
+            return;
+        }
 
         device Ray & ray = rays[rayIdx];
         
@@ -131,7 +136,6 @@ kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
         
         ray.color = float3(1.0f, 1.0f, 1.0f);
         
-        dstTex.write(float4(0.0f, 0.0f, 0.0f, 0.0f), tid);
     }
 }
 
@@ -301,7 +305,6 @@ inline void refractRay(device Ray & ray, float3 normal, float refractiveIndex, f
         n1 = n2;
         n2 = t;
     } else if(frameIndex != 0 && frameIndex % 2 == 0) {
-//        color /= 2.0; // Reducign the intensity of reflection
         return fresnelEffect(ray, normal, color, n1, n2, reflectivity);
     }
     
@@ -336,7 +339,12 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
     // TODO: randomize light index, else frensel effect may be dominating for some colors
     
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
-           unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+            unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+            
+            if(rayIdx % uniforms.qualityControll != 0) {
+                return;
+            }
+        
            device Ray & ray = rays[rayIdx];
            device Ray & shadowRay = shadowRays[rayIdx];
            device Intersection & intersection = intersections[rayIdx];
@@ -518,6 +526,10 @@ kernel void shadowKernelWithAlphaTesting(uint2 tid [[thread_position_in_grid]],
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+        if(rayIdx % uniforms.qualityControll != 0) {
+            return;
+        }
+        
         device Ray & shadowRay = shadowRays[rayIdx];
         
         float3 color = dstTex.read(tid).xyz;
@@ -571,6 +583,10 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
+        if(rayIdx % uniforms.qualityControll != 0) {
+            return;
+        }
+        
         device Ray & shadowRay = shadowRays[rayIdx];
 
         float intersectionDistance = intersections[rayIdx];
@@ -645,7 +661,7 @@ fragment float4 copyFragment(CopyVertexOut in [[stage_in]],
     
     float3 color = tex.sample(sam, in.uv).xyz;
     
-    color = color / (1.0f + color);
+//    color = color / (1.0f + color);
     
     return float4(color, 1.0f);
 }

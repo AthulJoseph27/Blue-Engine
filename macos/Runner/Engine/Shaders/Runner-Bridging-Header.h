@@ -46,6 +46,7 @@ struct Uniforms
     unsigned int frameIndex;
     unsigned int lightCount;
     unsigned int lightIndex;
+    unsigned int qualityControll;
     float ambient;
     struct Camera camera;
 };

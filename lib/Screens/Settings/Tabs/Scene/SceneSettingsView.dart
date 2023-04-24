@@ -27,8 +27,9 @@ class _SceneSettingsViewState extends State<SceneSettingsView> {
     return Center(
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: CupertinoColors.systemGrey5)),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: CupertinoColors.systemGrey5),
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
         padding: const EdgeInsets.only(top: 30),
         height: size.height - 180,

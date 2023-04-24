@@ -1,4 +1,5 @@
 import MetalKit
+import SceneKit
 
 class Mesh {
     private var modelName:  String!

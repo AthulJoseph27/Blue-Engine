@@ -10,6 +10,7 @@ enum SwiftBridgingMethodName: String {
     case renderAnimation = "renderAnimation"
     case switchCamera = "switchCamera"
     case queryKeyframeCount = "queryKeyframeCount"
+    case getCameraSettings = "getCameraSettings"
     case updateViewportSettings = "updateViewportSettings"
     case updateSceneSettings = "updateSceneSettings"
     case updateCameraSettings = "updateCameraSettings"
@@ -51,12 +52,20 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                     let keyframeCount = SwiftBridgingMethods.queryKeyframeCount()
                     result(keyframeCount)
                     break
+                case SwiftBridgingMethodName.getCameraSettings.rawValue:
+                    let json = SwiftBridgingMethods.getCameraSettings()
+                    result(encodeArguments(json))
+                    break
                 case SwiftBridgingMethodName.updateViewportSettings.rawValue:
                     SwiftBridgingMethods.updateViewportSettings(arguments: args)
                     result(true)
                     break
                 case SwiftBridgingMethodName.updateSceneSettings.rawValue:
                     SwiftBridgingMethods.updateScenetSettings(arguments: args)
+                    result(true)
+                    break
+                case SwiftBridgingMethodName.updateCameraSettings.rawValue:
+                    SwiftBridgingMethods.updateCameraSettings(arguments: args)
                     result(true)
                     break
                 case SwiftBridgingMethodName.importScene.rawValue:
@@ -251,6 +260,28 @@ class SwiftBridgingMethods {
         return 0
     }
     
+    static func getCameraSettings() -> [String: Any] {
+        var json: [String: Any] = [:]
+        var positionObject: [String: Float] = [:]
+        var rotationObject: [String: Float] = [:]
+        
+        let position = CameraManager.currentCamera.position
+        let rotation = CameraManager.currentCamera.rotation
+        
+        positionObject["x"] = position.x
+        positionObject["y"] = position.y
+        positionObject["z"] = position.z
+        
+        rotationObject["x"] = rotation.x
+        rotationObject["y"] = rotation.y
+        rotationObject["z"] = rotation.z
+        
+        json["position"] = positionObject
+        json["rotation"] = rotationObject
+        
+        return json
+    }
+    
     static func updateScenetSettings(arguments: [String: Any]) {
         SceneManager.updateSceneSettings(arguments: arguments)
     }
@@ -258,6 +289,24 @@ class SwiftBridgingMethods {
     static func updateViewportSettings(arguments: [String: Any]) {
         updateAuroraViewportSettings(arguments: arguments["aurora"] as? ([String: Any]))
         updateCometViewportSettings(arguments: arguments["comet"] as? ([String: Any]))
+    }
+    
+    static func updateCameraSettings(arguments: [String: Any]) {
+        var position = CameraManager.currentCamera.position
+        if let positionObject = arguments["position"] as? [String: Any] {
+            position.x = (positionObject["x"] as? Float) ?? position.x
+            position.y = (positionObject["y"] as? Float) ?? position.y
+            position.z = (positionObject["z"] as? Float) ?? position.z
+            CameraManager.currentCamera.position = position
+        }
+        
+        var rotation = CameraManager.currentCamera.rotation
+        if let rotationObject = arguments["rotation"] as? [String: Any] {
+            rotation.x = Float((rotationObject["x"] as? Double) ?? Double(rotation.x))
+            rotation.y = Float((rotationObject["y"] as? Double) ?? Double(rotation.y))
+            rotation.z = Float((rotationObject["z"] as? Double) ?? Double(rotation.z))
+            CameraManager.currentCamera.rotation = rotation
+        }
     }
     
     static func importScene(arguments: [String: Any]) -> Bool {
@@ -286,12 +335,11 @@ class SwiftBridgingMethods {
     
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {
         if let json = arguments {
+            let maxBounce = max((json["maxBounce"] as? Int ?? 6), 1)
+            let alphaTesting = json["alphaTesting"] as? Bool ?? false
+            let quality = RenderQuality(rawValue: json["resolution"] as? String ?? "high") ?? .high
             
-            if let bounce = json["maxBounce"] as? Int {
-                let maxBounce = max(bounce, 1)
-                let alphaTesting = json["alphaTesting"] as? Bool ?? false
-                RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
-            }
+            RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
             
             let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
             

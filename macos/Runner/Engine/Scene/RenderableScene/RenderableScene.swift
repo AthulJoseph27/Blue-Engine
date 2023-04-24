@@ -80,11 +80,25 @@ protocol RTScene: RenderableScene {
 
 extension RTScene {
     
-    mutating func updateUniforms(size: CGSize) {
+    mutating func updateUniforms(size: CGSize, renderQuality: RenderQuality? = .high) {
         uniformBufferOffset = renderOptions.alignedUniformsSize * uniformBufferIndex
         
         let uniformsPointer = uniformBuffer.contents().advanced(by: uniformBufferOffset)
         let uniforms = uniformsPointer.bindMemory(to: Uniforms.self, capacity: 1)
+        
+        switch(renderQuality) {
+            case .high:
+                uniforms.pointee.qualityControll = 1
+                break
+            case .medium:
+                uniforms.pointee.qualityControll = 19
+                break
+            case .low:
+                uniforms.pointee.qualityControll = 67
+                break
+            case .none:
+                assert(false)
+        }
         
         let currentCam = CameraManager.currentCamera!
         uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition

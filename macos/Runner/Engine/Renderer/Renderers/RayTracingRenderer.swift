@@ -40,7 +40,7 @@ class RayTracingRenderer: Renderer {
     
     var scene: RTScene!
     
-    private var _renderSettings: RayTracingSettings = RayTracingSettings(samples: 400, maxBounce: 4, alphaTesting: false)
+    private var _renderSettings: RayTracingSettings = RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false)
     
     override func initialize() {
         self.updateViewPort()
@@ -204,7 +204,7 @@ class RayTracingRenderer: Renderer {
         }
 
         SceneManager.tickScene(deltaTime: 1.0/Float(view.preferredFramesPerSecond))
-        scene.updateUniforms(size: view.drawableSize)
+        scene.updateUniforms(size: view.drawableSize, renderQuality: _renderSettings.quality)
 
         let width = Int(size.width)
         let height = Int(size.height)

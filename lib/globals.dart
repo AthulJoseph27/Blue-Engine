@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 enum RenderEngine {
   aurora,
@@ -28,11 +29,24 @@ class Double3 {
   final double x, y, z;
   const Double3({required this.x, required this.y, required this.z});
 
+  Double3.fromJson(Map<String, dynamic> json)
+      : x = (json['x'] ?? 0).toDouble(),
+        y = (json['y'] ?? 0).toDouble(),
+        z = (json['z'] ?? 0).toDouble();
+
   Map<String, dynamic> toJson() => {
     'x' : x,
     'y' : y,
     'z' : z,
   };
+}
+
+double toRadians(double value) {
+  return value * math.pi / 180.0;
+}
+
+double toDegrees(double value) {
+  return value * 180.0 / math.pi;
 }
 
 final GlobalKey<ScaffoldMessengerState> settingsScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();

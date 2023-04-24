@@ -43,6 +43,10 @@ Consists of two engines: <br/>
 
 ## Version History
 
+* blue4.6
+  * Can control camera from the UI now, allowing more precise control over the camera (helpful for rendering).
+  * Added option to control render quality in view port, making the app usable with larger and complex OBJ files.
+<br></br>
 * blue4.5
   * The engine can now render animations
   * Added Alpha Testing
