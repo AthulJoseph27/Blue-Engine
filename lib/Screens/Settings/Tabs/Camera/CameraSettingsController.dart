@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:blue_engine/Screens/Settings/Tabs/Camera/CameraSettingsModel.dart';
 import 'package:blue_engine/SwiftCommunicationBridge.dart';
@@ -10,6 +11,7 @@ class CameraSettingsController {
   final positionController = StreamController<Double3>();
   final rotationController = StreamController<Double3>();
   final focalLengthController = StreamController<double>();
+  final dofBlurStrengthController = StreamController<double>();
 
   final pX = TextEditingController();
   final pY = TextEditingController();
@@ -17,7 +19,8 @@ class CameraSettingsController {
   final rX = TextEditingController();
   final rY = TextEditingController();
   final rZ = TextEditingController();
-  final focalLengthTextController = TextEditingController(text: '50');
+  final focalLengthTextController = TextEditingController(text: '1.0');
+  final dofBlurStrengthTextController = TextEditingController(text: '0.0');
 
   final pXFocus = FocusNode();
   final pYFocus = FocusNode();
@@ -26,6 +29,19 @@ class CameraSettingsController {
   final rYFocus = FocusNode();
   final rZFocus = FocusNode();
   final focalLengthFocusNode = FocusNode();
+  final dofBlurStrengthFocusNode = FocusNode();
+
+  CameraSettingsController() {
+    dofBlurStrengthFocusNode.addListener(() {
+      if(!dofBlurStrengthFocusNode.hasFocus) {
+        String value = dofBlurStrengthTextController.text;
+        if(value.isEmpty) {
+          value = CameraSettingsModel.dofBlurStrength.toString();
+        }
+        onDoFBlurStrengthTextEdited(value);
+      }
+    });
+  }
 
   void onPositionChanged(Double3 value) {
     CameraSettingsModel.position = value;
@@ -79,10 +95,43 @@ class CameraSettingsController {
     invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
   }
 
+  void onDoFBlurStrengthChanged(double strength) {
+    CameraSettingsModel.dofBlurStrength = strength;
+    dofBlurStrengthTextController.text = strength.toString();
+    dofBlurStrengthController.sink.add(strength);
+    invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
+  }
+
+  void onDoFBlurStrengthTextChanged(String? value) {
+    if(value == null || value.isEmpty) {
+      return;
+    }
+
+    double strength = min(max(double.tryParse(value) ?? 0.0, 0.0), 10.0);
+
+    CameraSettingsModel.dofBlurStrength = strength;
+    dofBlurStrengthController.sink.add(strength);
+    invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
+  }
+
+  void onDoFBlurStrengthTextEdited(String? value) {
+    if(value == null || value.isEmpty) {
+      return;
+    }
+
+    double strength = min(max(double.tryParse(value) ?? 0.0, 0.0), 10.0);
+
+    CameraSettingsModel.dofBlurStrength = strength;
+    dofBlurStrengthTextController.text = strength.toString();
+    dofBlurStrengthController.sink.add(strength);
+    invokePlatformMethod(SwiftMethods.updateCameraSettings, CameraSettingsModel.toJson());
+  }
+
   Future<void> updateCameraSettings() async {
     var json = jsonDecode(await invokePlatformMethod(SwiftMethods.getCameraSettings, {}));
     CameraSettingsModel.fromJson(json);
     focalLengthTextController.text = CameraSettingsModel.focalLength.toString();
+    dofBlurStrengthTextController.text = CameraSettingsModel.dofBlurStrength.toString();
     pX.text = CameraSettingsModel.position.x.toString();
     pY.text = CameraSettingsModel.position.y.toString();
     pZ.text = CameraSettingsModel.position.z.toString();

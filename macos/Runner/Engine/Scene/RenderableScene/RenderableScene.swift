@@ -102,6 +102,8 @@ extension RTScene {
         
         let currentCam = CameraManager.currentCamera!
         uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition
+        uniforms.pointee.camera.focalLength = currentCam.focalLength
+        uniforms.pointee.camera.dofBlurStrength = currentCam.dofBlurStrength
         
         if  abs(currentCam.deltaPosition.x) > 0 ||
             abs(currentCam.deltaPosition.y) > 0 ||

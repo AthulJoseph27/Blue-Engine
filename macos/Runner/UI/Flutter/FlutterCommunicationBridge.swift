@@ -180,8 +180,6 @@ class SwiftBridgingMethods {
         let camera =  CameraManager.currentCamera as! AnimationCamera
         var keyframes = camera.getKeyframes()
         
-//        CameraManager.setCamera(.Debug)
-        
         let offsetTime = keyframes[0].time
         
         if !keyframes.isEmpty {
@@ -279,6 +277,9 @@ class SwiftBridgingMethods {
         json["position"] = positionObject
         json["rotation"] = rotationObject
         
+        json["focalLength"] = CameraManager.currentCamera.focalLength
+        json["dofBlurStrength"] = CameraManager.currentCamera.dofBlurStrength
+        
         return json
     }
     
@@ -306,6 +307,14 @@ class SwiftBridgingMethods {
             rotation.y = Float((rotationObject["y"] as? Double) ?? Double(rotation.y))
             rotation.z = Float((rotationObject["z"] as? Double) ?? Double(rotation.z))
             CameraManager.currentCamera.rotation = rotation
+        }
+        
+        if let focalLength = arguments["focalLength"] as? Double {
+            CameraManager.currentCamera.focalLength = Float(focalLength)
+        }
+        
+        if let dofBlurStrength = arguments["dofBlurStrength"] as? Double {
+            CameraManager.currentCamera.dofBlurStrength = Float(dofBlurStrength)
         }
     }
     

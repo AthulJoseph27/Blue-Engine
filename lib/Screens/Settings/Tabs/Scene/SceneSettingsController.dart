@@ -58,6 +58,7 @@ class SceneSettingsController {
 
     double ambient = min(max(double.tryParse(value) ?? 0.0, 0.0), 1.0);
 
+    SceneSettingsModel.ambientBrightness = ambient;
     ambientLightController.sink.add(ambient);
     invokePlatformMethod(SwiftMethods.updateSceneSettings, SceneSettingsModel.toJson());
   }
@@ -69,6 +70,7 @@ class SceneSettingsController {
 
     double ambient = min(max(double.tryParse(value) ?? 0.0, 0.0), 1.0);
 
+    SceneSettingsModel.ambientBrightness = ambient;
     ambientLightTextController.text = ambient.toString();
     ambientLightController.sink.add(ambient);
     invokePlatformMethod(SwiftMethods.updateSceneSettings, SceneSettingsModel.toJson());

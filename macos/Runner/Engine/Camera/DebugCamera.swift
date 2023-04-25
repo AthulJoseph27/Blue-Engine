@@ -1,6 +1,9 @@
 import simd
 
 class DebugCamera: SceneCamera {
+    var focalLength: Float = 1.0
+    var dofBlurStrength: Float = 0.0
+    
     var cameraType: CameraTypes = .Debug
     var controllSensitivity = ControllSensitivity()
     

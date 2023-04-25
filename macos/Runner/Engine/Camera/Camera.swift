@@ -7,6 +7,8 @@ enum CameraTypes {
 
 protocol SceneCamera {
     var cameraType: CameraTypes                 { get }
+    var focalLength: Float                      { get set }
+    var dofBlurStrength: Float                  { get set }
     var position: SIMD3<Float>                  { get set }
     var deltaPosition: SIMD3<Float>             { get set }
     var rotation: SIMD3<Float>                  { get set }

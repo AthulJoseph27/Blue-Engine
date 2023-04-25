@@ -2,6 +2,9 @@ import simd
 import Foundation
 
 class AnimationCamera: SceneCamera {
+    var focalLength: Float = 1.0
+    var dofBlurStrength: Float = 0.0
+
     var cameraType: CameraTypes = .Animation
     var controllSensitivity = ControllSensitivity()
     

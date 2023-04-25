@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(brightness: Brightness.light, primaryColor: CupertinoColors.activeBlue),
+      theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: CupertinoColors.activeBlue),
       home: const FlutterUI(),
     );
   }
@@ -37,13 +39,14 @@ class FlutterUI extends StatefulWidget {
 
 class _FlutterUIState extends State<FlutterUI> {
   var page = '';
+  var settingsSelectedTab = SettingTab.viewPort;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: pageController.stream,
       builder: (context, snapshot) {
-        if(snapshot.hasData) {
+        if (snapshot.hasData) {
           page = snapshot.data['page'];
         }
         return SafeArea(child: getPage(page));
@@ -52,9 +55,15 @@ class _FlutterUIState extends State<FlutterUI> {
   }
 
   Widget getPage(String page) {
-    switch(page) {
+    switch (page) {
       case 'Settings':
-        return const SettingsPage();
+        return SettingsPage(
+          key: UniqueKey(),
+          tab: settingsSelectedTab,
+          onTabChanged: (tab) {
+            settingsSelectedTab = tab;
+          },
+        );
       case 'RenderImage':
         return const RenderImagePage();
       case 'RenderAnimation':

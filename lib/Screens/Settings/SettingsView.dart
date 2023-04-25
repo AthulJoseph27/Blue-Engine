@@ -10,19 +10,27 @@ import 'Tabs/Viewport/Views/ViewportSettingsView.dart';
 enum SettingTab { viewPort, scene, camera }
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  final SettingTab? tab;
+  final void Function(SettingTab)? onTabChanged;
+  const SettingsPage({Key? key, this.tab, this.onTabChanged}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var _selectedTab = SettingTab.viewPort;
+  late SettingTab _selectedTab;
   var tabs = [
-    const ViewportSettingsView(),
-    const SceneSettingsView(),
-    const CameraSettingsView(),
+    ViewportSettingsView(key: UniqueKey(),),
+    SceneSettingsView(key: UniqueKey(),),
+    CameraSettingsView(key: UniqueKey(),),
   ];
+
+  @override
+  void initState() {
+    _selectedTab = widget.tab ?? SettingTab.viewPort;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +50,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               backgroundColor: CupertinoColors.lightBackgroundGray,
                               thumbColor: CupertinoColors.white,
                               groupValue: _selectedTab,
-                              // Callback that sets the selected segmented control.
                               onValueChanged: (SettingTab? value) {
                                 if (value == null || value == _selectedTab) {
                                   return;
                                 }
+
+                                widget.onTabChanged?.call(value);
+
                                 setState(() {
                                   _selectedTab = value;
                                 });

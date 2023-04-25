@@ -19,6 +19,8 @@ struct Camera {
     vector_float3 right;
     vector_float3 up;
     vector_float3 forward;
+    float focalLength;
+    float dofBlurStrength;
 };
 
 struct Light {

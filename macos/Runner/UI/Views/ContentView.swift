@@ -67,7 +67,7 @@ struct ContentView: View {
                         })
                         .padding(.all, 12)
                         .buttonStyle(PlainButtonStyle())
-                        .opacity((contentData.showDrawerButton || contentData.showSideBar) ? 1 : 0)
+                        .opacity((contentData.showDrawerButton || contentData.showSideBar || !(contentData.selectedTab == .RayTracing || contentData.selectedTab == .VertexShader)) ? 1 : 0)
                         .onHover{ hover in
                             withAnimation {
                                 contentData.showDrawerButton = hover

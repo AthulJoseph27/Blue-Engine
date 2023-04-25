@@ -111,23 +111,27 @@ kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
         device Ray & ray = rays[rayIdx];
         
         unsigned int offset = randomTex.read(tid).x;
-        float2 r = float2(halton(offset + uniforms.frameIndex, 0),
+        float2 r0 = float2(halton(offset + uniforms.frameIndex, 0),
                           halton(offset + uniforms.frameIndex, 1));
         
+        float2 r1 = float2(halton(offset + uniforms.frameIndex, 2), halton(offset + uniforms.frameIndex, 3)) * uniforms.camera.dofBlurStrength * 0.2;
+        
         float2 pixel = (float2)tid;
-        pixel+=r; // Adding a small offset to pixel for anti-aliasing
+        pixel += r0; // Adding a small offset to pixel for anti-aliasing
 
         float2 uv = (float2)pixel / float2(uniforms.width, uniforms.height);
         uv = uv * 2.0f - 1.0f;
         
         constant Camera & camera = uniforms.camera;
         
-        ray.origin = camera.position;
+        float3 cameraPostionDelta = camera.right * r1.x + camera.up * r1.y;
         
-        float3 direction = normalize(uv.x * camera.right +
+        ray.origin = camera.position + cameraPostionDelta; // For Depth of Field
+        
+        float3 direction = normalize((uv.x * camera.right +
                                        uv.y * camera.up +
-                                       camera.forward);
-        
+                                       camera.forward) * camera.focalLength - cameraPostionDelta);
+
         ray.direction = direction;
         
         ray.mask = RAY_MASK_PRIMARY;
