@@ -26,7 +26,7 @@ class RendererManager {
         .DynamicRT : ControllSensitivity(),
         .PhongShader : ControllSensitivity()
     ]
-    private static var sceneType: GameScenes = .Sandbox
+    private static var sceneType: GameScenes = .CornellBox
     private static var viewPortType: RenderViewPortType = .StaticRT
     private static var renderMode: RenderMode = .display
     private static var viewPortSettings: [RenderViewPortType : RenderingSettings] = [
@@ -37,7 +37,7 @@ class RendererManager {
     private static var postRenderingCallback: (() -> Void)?
     
     public static func initialize() {
-        sceneType = .Sandbox
+        sceneType = .CornellBox
         viewPortType = currentRTViewPortType
         SceneManager.initialize(scene: sceneType, rendererType: viewPortToRendererMap[viewPortType]!)
         
@@ -119,7 +119,6 @@ class RendererManager {
     
     public static func updateCurrentScene(scene: GameScenes) {
         sceneType = scene
-        SceneManager.setScene(scene)
         renderers[viewPortType]!.updateScene(sceneType: sceneType)
     }
     

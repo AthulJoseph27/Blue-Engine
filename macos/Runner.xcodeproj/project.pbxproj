@@ -71,7 +71,6 @@
 		3C2B16812A166FB1006CDD75 /* HarmonicCubes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */; };
 		3C54789229B98D7D00D20911 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789129B98D7D00D20911 /* Custom.swift */; };
 		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
-		3CC2FAC729CEF49000A9CEC3 /* Sponza.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */; };
 		3CD0114629B3A8700009DEC6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114529B3A8700009DEC6 /* ContentView.swift */; };
 		3CD0114829B3B4D70009DEC6 /* FlutterCommunicationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */; };
 		3CD0114A29B3BE840009DEC6 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114929B3BE840009DEC6 /* ContentViewModel.swift */; };
@@ -253,7 +252,6 @@
 		3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarmonicCubes.swift; sourceTree = "<group>"; };
 		3C54789129B98D7D00D20911 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
-		3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sponza.swift; sourceTree = "<group>"; };
 		3CD0114529B3A8700009DEC6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterCommunicationBridge.swift; sourceTree = "<group>"; };
 		3CD0114929B3BE840009DEC6 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
@@ -556,7 +554,6 @@
 			children = (
 				3C1717F329B493CE00B19B27 /* Sandbox.swift */,
 				3C54789129B98D7D00D20911 /* Custom.swift */,
-				3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */,
 				3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */,
 			);
 			path = Scenes;
@@ -1070,7 +1067,6 @@
 				3C1717C929B4911400B19B27 /* DebugCamera.swift in Sources */,
 				3C1717BE29B490C200B19B27 /* KeyCodes.swift in Sources */,
 				3CD0114829B3B4D70009DEC6 /* FlutterCommunicationBridge.swift in Sources */,
-				3CC2FAC729CEF49000A9CEC3 /* Sponza.swift in Sources */,
 				3C1717D229B4917800B19B27 /* RenderPipelineDescriptor.swift in Sources */,
 				3C1717ED29B4938C00B19B27 /* StaticRTScene.swift in Sources */,
 				3C1717D029B4916800B19B27 /* RenderPipelineState.swift in Sources */,

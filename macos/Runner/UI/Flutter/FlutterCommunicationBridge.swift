@@ -367,6 +367,7 @@ class SwiftBridgingMethods {
             let quality = RenderQuality(rawValue: json["resolution"] as? String ?? "high") ?? .high
             
             RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
+            RendererManager.updateViewPortSettings(viewPortType: .DynamicRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
             
             let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
             

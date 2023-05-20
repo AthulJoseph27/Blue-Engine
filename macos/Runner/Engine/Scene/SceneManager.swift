@@ -3,8 +3,8 @@ import MetalKit
 class SceneManager {
     public static var currentRendererType: RendererType = .StaticRT
     
-    private static var _sceneSettings = SceneSettings(currentScene: .Sandbox, skybox: .Sky, ambientLighting: 0.1)
-    private static var _currentSceneName: GameScenes = .Sandbox
+    private static var _sceneSettings = SceneSettings(currentScene: .CornellBox, skybox: .Sky, ambientLighting: 0.1)
+    private static var _currentSceneName: GameScenes = .CornellBox
     private static var _currentScene: GameScene!
     private static var _currentRenderableScene: RenderableScene!
     static var currentRenderableScene: RenderableScene {
@@ -25,11 +25,11 @@ class SceneManager {
     
     public static func setScene(_ scene: GameScenes){
         switch scene {
-        case .Sandbox:
+        case .CornellBox:
             _currentScene = Sandbox(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
-        case .Sponza:
-            _currentScene = Sponza(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
+        case .HarmonicCubes:
+            _currentScene = HarmonicCubes(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
         case .Custom:
             _currentScene = Custom(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting, lights: _sceneSettings.sceneLights)
@@ -42,6 +42,7 @@ class SceneManager {
         let newSettings = _sceneSettings.fromJson(arguments)
         
         if newSettings.currentScene != _sceneSettings.currentScene {
+            SceneManager.setScene(newSettings.currentScene)
             RendererManager.updateCurrentScene(scene: newSettings.currentScene)
         }
         

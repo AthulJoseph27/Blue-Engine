@@ -43,7 +43,7 @@ class RayTracingRenderer: Renderer {
     private var _renderSettings: RayTracingSettings = RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false)
     
     override func initialize() {
-        print("Reintializing")
+
         self.updateViewPort()
         self.createPipelines()
         self.createIntersector()

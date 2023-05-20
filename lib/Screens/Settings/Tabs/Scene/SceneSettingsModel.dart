@@ -4,9 +4,8 @@ import 'package:blue_engine/globals.dart';
 
 class SceneSettingsModel {
   static const List<String> _scenes = [
-    'Cornell',
-    'Sponza',
-    'Fireplace Room',
+    'Cornell Box',
+    'Harmonic Cubes',
     'Custom'
   ];
   static const List<String> _skyBoxes = [

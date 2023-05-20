@@ -207,8 +207,8 @@ enum RendererType : CaseIterable {
 }
 
 enum GameScenes: String, CaseIterable {
-    case Sandbox = "Cornell"
-    case Sponza = "Sponza"
+    case CornellBox = "Cornell Box"
+    case HarmonicCubes = "Harmonic Cubes"
     case Custom = "Custom"
 }
 
