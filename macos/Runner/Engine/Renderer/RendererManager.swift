@@ -3,6 +3,8 @@ import simd
 import os
 
 class RendererManager {
+    public static var currentRTViewPortType = RenderViewPortType.StaticRT
+
     private static let rendererCount = RendererType.allCases.count
     private static let counterView = NSLabel(frame: NSRect(x: 10, y: 10, width: 150, height: 50))
     private static var display = { (value: Double) -> Void in
@@ -36,8 +38,8 @@ class RendererManager {
     
     public static func initialize() {
         sceneType = .Sandbox
-        viewPortType = .StaticRT
-        SceneManager.initialize(scene: sceneType, rendererType: .StaticRT)
+        viewPortType = currentRTViewPortType
+        SceneManager.initialize(scene: sceneType, rendererType: viewPortToRendererMap[viewPortType]!)
         
         CameraManager.setCamera(.Debug)
         
@@ -52,7 +54,7 @@ class RendererManager {
             initializeViewPort(viewPortType: viewPorts[i], rendererType: renderers[i])
         }
 
-        mtkViews[.StaticRT]!.isPaused = false
+        mtkViews[viewPortType]!.isPaused = false
     }
     
     public static func getStoryboard(_ viewPortType: RenderViewPortType) -> NSStoryboard {
@@ -129,6 +131,8 @@ class RendererManager {
             return
         }
         
+        let previousViewportType = self.viewPortType
+        
         self.viewPortType = viewPortType
         
         if let camera = CameraManager.currentCamera as? AnimationCamera {
@@ -137,6 +141,9 @@ class RendererManager {
         
         pauseAllRenderingLoop()
         SceneManager.updateRenderableScene(viewPortToRendererMap[viewPortType]!)
+        if previousViewportType != .PhongShader && viewPortType != .PhongShader {
+            renderers[viewPortType]!.initialize()
+        }
         resumeRenderingLoop(viewPortType: viewPortType)
     }
     

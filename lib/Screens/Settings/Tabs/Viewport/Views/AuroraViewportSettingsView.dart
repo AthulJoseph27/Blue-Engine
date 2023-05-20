@@ -21,249 +21,279 @@ class _AuroraViewportSettingsViewState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SettingsRow(
-          spacingRatio: spacingRatio,
-          firstChild: Text(
-            'Resolution :',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: CustomDropDownMenu(
-              list: const ['High', 'Medium', 'Low'],
-              onChanged: controller.onResolutionChanged,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SettingsRow(
+            spacingRatio: spacingRatio,
+            firstChild: Text(
+              'Resolution :',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-          ),
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Max Bounce :',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: SizedBox(
-              width: 80,
-              child: StreamBuilder<int>(
-                stream: controller.maxBounceStreamController.stream,
-                builder: (context, snapshot) {
-                  return CupertinoTextField(
-                    controller: controller.maxBounceController,
-                    focusNode: controller.maxBounceFocusNode,
-                    onChanged: controller.setMaxBounce,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  );
-                }
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: CustomDropDownMenu(
+                list: const ['High', 'Medium', 'Low'],
+                onChanged: controller.onResolutionChanged,
               ),
             ),
           ),
-          spacingRatio: spacingRatio,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Alpha Testing :',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          secondChild: SizedBox(
-            width: 80,
-            child: StreamBuilder<bool>(
-                stream: controller.alphaTestingStreamController.stream,
-                builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: SizedBox(
-                      height: 32,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: CupertinoSwitch(
-                            activeColor: Theme.of(context).primaryColor,
-                            value: ViewportModel.auroraViewportModel.alphaTesting,
-                            onChanged: controller.onAlphaTestingChanged,
-                        ),
-                      ),
-                    ),);
-                }
+          SettingsRow(
+            firstChild: Text(
+              'Max Bounce :',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: SizedBox(
+                width: 80,
+                child: StreamBuilder<int>(
+                  stream: controller.maxBounceStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CupertinoTextField(
+                      controller: controller.maxBounceController,
+                      focusNode: controller.maxBounceFocusNode,
+                      onChanged: controller.setMaxBounce,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    );
+                  }
+                ),
+              ),
+            ),
+            spacingRatio: spacingRatio,
           ),
-          spacingRatio: spacingRatio,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Tile Size :',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          secondChild: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StreamBuilder<int>(
-                  stream: controller.tileXStreamController.stream,
+          SettingsRow(
+            firstChild: Text(
+              'Dynamic Viewport :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: SizedBox(
+              width: 80,
+              child: StreamBuilder<bool>(
+                  stream: controller.isDynamicViewportStreamController.stream,
                   builder: (context, snapshot) {
                     return Padding(
-                      padding: const EdgeInsets.only(left: 24),
+                      padding: const EdgeInsets.only(left: 16),
                       child: SizedBox(
+                        height: 32,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: CupertinoSwitch(
+                            activeColor: Theme.of(context).primaryColor,
+                            value: ViewportModel.auroraViewportModel.isDynamicViewport,
+                            onChanged: controller.onViewportTypeChanged,
+                          ),
+                        ),
+                      ),);
+                  }
+              ),
+            ),
+            spacingRatio: spacingRatio,
+          ),
+          SettingsRow(
+            firstChild: Text(
+              'Alpha Testing :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: SizedBox(
+              width: 80,
+              child: StreamBuilder<bool>(
+                  stream: controller.alphaTestingStreamController.stream,
+                  builder: (context, snapshot) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: SizedBox(
+                        height: 32,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: CupertinoSwitch(
+                              activeColor: Theme.of(context).primaryColor,
+                              value: ViewportModel.auroraViewportModel.alphaTesting,
+                              onChanged: controller.onAlphaTestingChanged,
+                          ),
+                        ),
+                      ),);
+                  }
+              ),
+            ),
+            spacingRatio: spacingRatio,
+          ),
+          SettingsRow(
+            firstChild: Text(
+              'Tile Size :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StreamBuilder<int>(
+                    stream: controller.tileXStreamController.stream,
+                    builder: (context, snapshot) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: SizedBox(
+                          width: 80,
+                          child: CupertinoTextField(
+                            controller: controller.tileXController,
+                            focusNode: controller.tileXFocusNode,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('x'),
+                ),
+                StreamBuilder<int>(
+                    stream: controller.tileYStreamController.stream,
+                    builder: (context, snapshot) {
+                      return SizedBox(
                         width: 80,
                         child: CupertinoTextField(
-                          controller: controller.tileXController,
-                          focusNode: controller.tileXFocusNode,
+                          controller: controller.tileYController,
+                          focusNode: controller.tileYFocusNode,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly
                           ],
                         ),
-                      ),
-                    );
-                  }),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Text('x'),
-              ),
-              StreamBuilder<int>(
-                  stream: controller.tileYStreamController.stream,
-                  builder: (context, snapshot) {
-                    return SizedBox(
-                      width: 80,
-                      child: CupertinoTextField(
-                        controller: controller.tileYController,
-                        focusNode: controller.tileYFocusNode,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    );
-                  }),
-            ],
+                      );
+                    }),
+              ],
+            ),
+            spacingRatio: spacingRatio,
           ),
-          spacingRatio: spacingRatio,
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        Center(
-          child: Text(
-            'Keyboard Sensitivity',
-            style: Theme.of(context).textTheme.caption,
+          const SizedBox(
+            height: 24,
           ),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Translation :',
-            style: Theme.of(context).textTheme.titleMedium,
+          Center(
+            child: Text(
+              'Keyboard Sensitivity',
+              style: Theme.of(context).textTheme.caption,
+            ),
           ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: SizedBox(
-                width: 300,
-                child: StreamBuilder<double>(
-                  stream: controller.keyboardTranslationSensitivityController.stream,
-                  initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.translation,
-                  builder: (context, snapshot) {
-                    var value = snapshot.data ?? 1.0;
-                    return CupertinoSlider(
-                      value: value,
-                      onChanged: controller.onKeyboardTranslationSensitivityChanged,
-                      min: 0.001,
-                      max: 10,
-                    );
-                  }
-                )),
+          const SizedBox(
+            height: 24,
           ),
-          spacingRatio: spacingRatio,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Rotation :',
-            style: Theme.of(context).textTheme.titleMedium,
+          SettingsRow(
+            firstChild: Text(
+              'Translation :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: SizedBox(
+                  width: 300,
+                  child: StreamBuilder<double>(
+                    stream: controller.keyboardTranslationSensitivityController.stream,
+                    initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.translation,
+                    builder: (context, snapshot) {
+                      var value = snapshot.data ?? 1.0;
+                      return CupertinoSlider(
+                        value: value,
+                        onChanged: controller.onKeyboardTranslationSensitivityChanged,
+                        min: 0.001,
+                        max: 10,
+                      );
+                    }
+                  )),
+            ),
+            spacingRatio: spacingRatio,
           ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: SizedBox(
-                width: 300,
-                child: StreamBuilder<double>(
-                  stream: controller.keyboardRotationSensitivityController.stream,
-                  initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.rotation,
-                  builder: (context, snapshot) {
-                    var value = snapshot.data ?? 1.0;
-                    return CupertinoSlider(
-                      value: value,
-                      onChanged: controller.onKeyboardRotationSensitivityChanged,
-                      min: 1,
-                      max: 100,
-                    );
-                  }
-                )),
+          SettingsRow(
+            firstChild: Text(
+              'Rotation :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: SizedBox(
+                  width: 300,
+                  child: StreamBuilder<double>(
+                    stream: controller.keyboardRotationSensitivityController.stream,
+                    initialData: ViewportModel.auroraViewportModel.controlSensitivity.keyboardSensitivity.rotation,
+                    builder: (context, snapshot) {
+                      var value = snapshot.data ?? 1.0;
+                      return CupertinoSlider(
+                        value: value,
+                        onChanged: controller.onKeyboardRotationSensitivityChanged,
+                        min: 1,
+                        max: 100,
+                      );
+                    }
+                  )),
+            ),
+            spacingRatio: spacingRatio,
           ),
-          spacingRatio: spacingRatio,
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        Center(
-          child: Text(
-            'Trackpad Sensitivity',
-            style: Theme.of(context).textTheme.caption,
+          const SizedBox(
+            height: 24,
           ),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Rotation :',
-            style: Theme.of(context).textTheme.titleMedium,
+          Center(
+            child: Text(
+              'Trackpad Sensitivity',
+              style: Theme.of(context).textTheme.caption,
+            ),
           ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: SizedBox(
-                width: 300,
-                child: StreamBuilder<double>(
-                  stream: controller.trackpadRotationSensitivityController.stream,
-                  initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.rotation,
-                  builder: (context, snapshot) {
-                    var value = snapshot.data ?? 1.0;
-                    return CupertinoSlider(
-                      value: value,
-                      onChanged: controller.onTrackpadRotationSensitivityChanged,
-                      min: 0.01,
-                      max: 10,
-                    );
-                  }
-                )),
+          const SizedBox(
+            height: 24,
           ),
-          spacingRatio: spacingRatio,
-        ),
-        SettingsRow(
-          firstChild: Text(
-            'Zoom :',
-            style: Theme.of(context).textTheme.titleMedium,
+          SettingsRow(
+            firstChild: Text(
+              'Rotation :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: SizedBox(
+                  width: 300,
+                  child: StreamBuilder<double>(
+                    stream: controller.trackpadRotationSensitivityController.stream,
+                    initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.rotation,
+                    builder: (context, snapshot) {
+                      var value = snapshot.data ?? 1.0;
+                      return CupertinoSlider(
+                        value: value,
+                        onChanged: controller.onTrackpadRotationSensitivityChanged,
+                        min: 0.01,
+                        max: 10,
+                      );
+                    }
+                  )),
+            ),
+            spacingRatio: spacingRatio,
           ),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(left: 24),
-            child: SizedBox(
-                width: 300,
-                child: StreamBuilder<double>(
-                  stream: controller.trackpadZoomSensitivityController.stream,
-                  initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.zoom,
-                  builder: (context, snapshot) {
-                    var value = snapshot.data ?? 1.0;
-                    return CupertinoSlider(
-                      value: value,
-                      onChanged: controller.onTrackpadZoomSensitivityChanged,
-                      min: 1,
-                      max: 100,
-                    );
-                  }
-                )),
+          SettingsRow(
+            firstChild: Text(
+              'Zoom :',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: SizedBox(
+                  width: 300,
+                  child: StreamBuilder<double>(
+                    stream: controller.trackpadZoomSensitivityController.stream,
+                    initialData: ViewportModel.auroraViewportModel.controlSensitivity.trackpadSensitivity.zoom,
+                    builder: (context, snapshot) {
+                      var value = snapshot.data ?? 1.0;
+                      return CupertinoSlider(
+                        value: value,
+                        onChanged: controller.onTrackpadZoomSensitivityChanged,
+                        min: 1,
+                        max: 100,
+                      );
+                    }
+                  )),
+            ),
+            spacingRatio: spacingRatio,
           ),
-          spacingRatio: spacingRatio,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

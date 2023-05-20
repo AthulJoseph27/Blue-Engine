@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:blue_engine/Screens/Settings/Tabs/Viewport/Controllers/ViewportSettingsController.dart';
 import 'package:blue_engine/Screens/Settings/Tabs/Viewport/Models/ViewportModel.dart';
+import 'package:blue_engine/SwiftCommunicationBridge.dart';
 import 'package:blue_engine/globals.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class AuroraViewPortController {
   final maxBounceFocusNode = FocusNode();
 
   final alphaTestingStreamController = StreamController<bool>();
+  final isDynamicViewportStreamController = StreamController<bool>();
 
   final keyboardTranslationSensitivityController = StreamController<double>();
   final keyboardRotationSensitivityController = StreamController<double>();
@@ -49,6 +51,18 @@ class AuroraViewPortController {
     ViewportModel.auroraViewportModel.alphaTesting = value;
     alphaTestingStreamController.sink.add(value);
     ViewportSettingsController.onViewportSettingsUpdated();
+  }
+
+  void onViewportTypeChanged(bool value) {
+    ViewportModel.auroraViewportModel.isDynamicViewport = value;
+    isDynamicViewportStreamController.sink.add(value);
+    if(value) {
+      invokePlatformMethod(
+          SwiftMethods.switchToDynamicRTViewport, {});
+    } else {
+      invokePlatformMethod(
+          SwiftMethods.switchToStaticRTViewport, {});
+    }
   }
 
   void onResolutionChanged(String? value) {

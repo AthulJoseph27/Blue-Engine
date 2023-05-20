@@ -20,6 +20,8 @@ enum SwiftMethods {
   importScene,
   importSkybox,
   updateSceneLighting,
+  switchToStaticRTViewport,
+  switchToDynamicRTViewport,
 }
 
 enum SwiftEvents {

@@ -10,12 +10,10 @@ struct ContentView: View {
     @StateObject var contentData = ContentViewModel()
     @State var showSplashScreen = true
     var flutterView: WindowViewController
-    var RTView: MetalView
     var PSView: MetalView
     
     init() {
         flutterView = FlutterView.flutterView
-        RTView = RendererManager.getMetalView(.StaticRT)
         PSView = RendererManager.getMetalView(.PhongShader)
     }
     
@@ -32,8 +30,7 @@ struct ContentView: View {
                 switch contentData.selectedTab {
                     
                 case .RayTracing:
-                                     RTView
-                                         .edgesIgnoringSafeArea(.all)
+                    RendererManager.getMetalView(RendererManager.currentRTViewPortType).edgesIgnoringSafeArea(.all)
                     
                 case .VertexShader:
                                      PSView
@@ -87,7 +84,7 @@ struct ContentView: View {
                 }
                 
                 if contentData.selectedTab == .RayTracing {
-                    RendererManager.updateViewPort(viewPortType: .StaticRT)
+                    RendererManager.updateViewPort(viewPortType: RendererManager.currentRTViewPortType)
                 } else if contentData.selectedTab == .VertexShader{
                     RendererManager.updateViewPort(viewPortType: .PhongShader)
                 }

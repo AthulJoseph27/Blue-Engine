@@ -513,7 +513,7 @@ bool alphaTest(uint instanceIndex, uint primitiveIndex, float2 barycentricCoord,
     
     float alpha = alphaTexture.sample(sam, uvCoords).x;
     
-    return alpha >= 0.2;
+    return alpha >= 0.1;
 }
 
 kernel void shadowKernelWithAlphaTesting(uint2 tid [[thread_position_in_grid]],

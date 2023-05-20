@@ -16,6 +16,8 @@ enum SwiftBridgingMethodName: String {
     case updateCameraSettings = "updateCameraSettings"
     case importScene = "importScene"
     case importSkybox = "importSkybox"
+    case switchToStaticRTViewport = "switchToStaticRTViewport"
+    case switchToDynamicRTViewport = "switchToDynamicRTViewport"
 }
 
 enum SwiftBridgingEvents: String {
@@ -77,6 +79,14 @@ class FlutterCommunicationBridge: NSObject, FlutterPlugin, FlutterStreamHandler 
                     result(_result)
                     break
                 case SwiftBridgingMethodName.switchCamera.rawValue:  SwiftBridgingMethods.switchCamera(arguments: args)
+                    result(true)
+                    break
+                case SwiftBridgingMethodName.switchToStaticRTViewport.rawValue:
+                    SwiftBridgingMethods.switchToStaticRTViewPort()
+                    result(true)
+                    break
+                case SwiftBridgingMethodName.switchToDynamicRTViewport.rawValue:
+                    SwiftBridgingMethods.switchToDynamicRTViewPort()
                     result(true)
                     break
                 default:
@@ -340,6 +350,14 @@ class SwiftBridgingMethods {
         } catch {}
         
         return false
+    }
+    
+    static func switchToStaticRTViewPort() -> Void {
+        RendererManager.currentRTViewPortType = .StaticRT
+    }
+    
+    static func switchToDynamicRTViewPort() -> Void {
+        RendererManager.currentRTViewPortType = .DynamicRT
     }
     
     private static func updateAuroraViewportSettings(arguments: [String: Any]?) {

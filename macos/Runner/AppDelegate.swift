@@ -23,7 +23,7 @@ struct BlueApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 1080, minHeight: 720)
+                .frame(width: 1280, height: 690)
         }
         .windowStyle(.hiddenTitleBar)
     }

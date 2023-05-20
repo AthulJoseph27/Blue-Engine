@@ -68,6 +68,7 @@
 		3C17180F29B494C600B19B27 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C17180E29B494C600B19B27 /* GameView.swift */; };
 		3C17181129B494D800B19B27 /* MetalView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C17181029B494D800B19B27 /* MetalView.storyboard */; };
 		3C20588229D0287300423DA2 /* AnimationCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C20588129D0287300423DA2 /* AnimationCamera.swift */; };
+		3C2B16812A166FB1006CDD75 /* HarmonicCubes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */; };
 		3C54789229B98D7D00D20911 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789129B98D7D00D20911 /* Custom.swift */; };
 		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
 		3CC2FAC729CEF49000A9CEC3 /* Sponza.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */; };
@@ -249,6 +250,7 @@
 		3C17180E29B494C600B19B27 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		3C17181029B494D800B19B27 /* MetalView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MetalView.storyboard; sourceTree = "<group>"; };
 		3C20588129D0287300423DA2 /* AnimationCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCamera.swift; sourceTree = "<group>"; };
+		3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarmonicCubes.swift; sourceTree = "<group>"; };
 		3C54789129B98D7D00D20911 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
 		3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sponza.swift; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				3C1717F329B493CE00B19B27 /* Sandbox.swift */,
 				3C54789129B98D7D00D20911 /* Custom.swift */,
 				3CC2FAC629CEF49000A9CEC3 /* Sponza.swift */,
+				3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1100,6 +1103,7 @@
 				3C17180429B4946700B19B27 /* Renderer.swift in Sources */,
 				3C1717FE29B4941400B19B27 /* GameScene.swift in Sources */,
 				3C1717BB29B4907800B19B27 /* Solid.swift in Sources */,
+				3C2B16812A166FB1006CDD75 /* HarmonicCubes.swift in Sources */,
 				3C17180129B4945000B19B27 /* RendererManager.swift in Sources */,
 				3CD0114629B3A8700009DEC6 /* ContentView.swift in Sources */,
 				3C1717F129B493B500B19B27 /* PhongShadingScene.swift in Sources */,
