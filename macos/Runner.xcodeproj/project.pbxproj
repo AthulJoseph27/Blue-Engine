@@ -553,8 +553,8 @@
 			isa = PBXGroup;
 			children = (
 				3C1717F329B493CE00B19B27 /* Sandbox.swift */,
-				3C54789129B98D7D00D20911 /* Custom.swift */,
 				3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */,
+				3C54789129B98D7D00D20911 /* Custom.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";

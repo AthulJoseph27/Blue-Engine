@@ -63,6 +63,14 @@ class DebugCamera: SceneCamera {
             self.deltaRotation.x += deltaTime * controllSensitivity.keyboardRotation
         }
         
+        if(Keyboard.isKeyPressed(.c)) {
+            self.deltaRotation.z -= deltaTime * controllSensitivity.keyboardRotation
+        }
+        
+        if(Keyboard.isKeyPressed(.v)) {
+            self.deltaRotation.z += deltaTime * controllSensitivity.keyboardRotation
+        }
+        
         self.deltaRotation.y += Mouse.getDWheelX() / -1 * controllSensitivity.trackpadRotation
         self.deltaRotation.x += Mouse.getDWheelY() / -1 *  controllSensitivity.trackpadRotation
         

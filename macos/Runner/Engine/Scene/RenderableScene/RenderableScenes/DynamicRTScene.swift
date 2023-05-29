@@ -14,26 +14,31 @@ class DynamicRTScene: RTScene {
     var objects: [Solid] = []
     var lights:  [Light] = []
     var ambient: Float = 0
+    var sceneTime: Float = 0
     
     var accelerationStructures: [[MPSTriangleAccelerationStructure]] = []
     
-    var vertexBuffer:        MTLBuffer!
-    var indexBuffer:         MTLBuffer!
-    var customIndexBuffer:   MTLBuffer!
-    var lightBuffer:         MTLBuffer!
-    var textureBuffer:       MTLBuffer!
-    var materialBuffer:      MTLBuffer!
-    var verticesCountBuffer: MTLBuffer!
-    var indiciesCountBuffer: MTLBuffer!
-    var maskBuffer:          MTLBuffer!
-    var transformBuffer:     MTLBuffer!
-    var uniformBuffer:       MTLBuffer!
+    var vertexBuffer:         MTLBuffer!
+    var indexBuffer:          MTLBuffer!
+    var customIndexBuffer:    MTLBuffer!
+    var lightBuffer:          MTLBuffer!
+    var textureBuffer:        MTLBuffer!
+    var materialBuffer:       MTLBuffer!
+    var verticesCountBuffer:  MTLBuffer!
+    var indiciesCountBuffer:  MTLBuffer!
+    var maskBuffer:           MTLBuffer!
+    var transformBuffer:      MTLBuffer!
+    var uniformBuffer:        MTLBuffer!
+    
+    var instanceBuffer:                MTLBuffer!
+    var instanceTransformBuffer:       MTLBuffer!
+    var instanceNormalTransformBuffer: MTLBuffer!
+    var denoiserDataBuffer:       MTLBuffer!
+
     
     var skyBox: MTLTexture!
     
     var instanceAccelerationStructures: [MPSInstanceAccelerationStructure]!
-    
-    var instanceBuffer: MTLBuffer!
     
     var frameIndex: UInt32 = 0
     var lightIndex: UInt32 = 0
@@ -43,7 +48,10 @@ class DynamicRTScene: RTScene {
     
     var indexWrapperPipeline: MTLComputePipelineState!
     
-    var updateSceneSolids: (_ solids: [Solid], _ deltaTime: Float) -> Void
+    var uniforms: Uniforms?
+    var prevUniforms: Uniforms?
+    
+    var updateSceneSolids: (_ solids: [Solid], _ time: Float) -> Void
     
     init(scene: GameScene) {
         renderOptions = RTRenderOptions()
@@ -64,15 +72,13 @@ class DynamicRTScene: RTScene {
         fatalError("Function is not implemented!")
     }
     
-    func updateScene(deltaTime: Float) {}
-    
     func updateSceneSettings(sceneSettings: SceneSettings) {
         skyBox = Skyboxibrary.skybox(sceneSettings.skybox)
         ambient = sceneSettings.ambientLighting
     }
     
-    func updateObjects(deltaTime: Float) {
-        updateSceneSolids(objects, deltaTime)
+    func updateScene(time: Float? = nil) {
+        updateSceneSolids(objects, time ?? sceneTime)
         updateTransformBuffer()
         createAccelerationStructures()
     }
@@ -81,6 +87,47 @@ class DynamicRTScene: RTScene {
     
     func postSceneLightSet() {
         lightBuffer = Engine.device.makeBuffer(bytes: &self.lights, length: MemoryLayout<Light>.stride * lights.count, options: .storageModeShared)
+    }
+    
+    func getInstanceTransformsSize() -> Int {
+        let instanceTransformsSize = objects.count * float4x4.size;
+        
+        return (instanceTransformsSize + 255) & ~255;
+    }
+    
+    func getInstanceTransformsBufferSize() -> Int {
+        return getInstanceTransformsSize() * (renderOptions.maxFramesInFlight + 1)
+    }
+    
+    func getInstanceNormalTransformsSize() -> Int {
+        let instanceTransformsSize = objects.count * float3x3.size;
+        
+        return (instanceTransformsSize + 255) & ~255;
+    }
+    
+    func getInstanceNormalTransformsBufferSize() -> Int {
+        return getInstanceNormalTransformsSize() * (renderOptions.maxFramesInFlight + 1)
+    }
+    
+    func getInstanceBufferSize() -> Int {
+        let instancesSize = objects.count * __uint32_t.size
+        let alignedInstancesSize = (instancesSize + 255) & ~255;
+        return alignedInstancesSize
+    }
+    
+    func getInstanceTransformBufferOffset() -> Int {
+        return getInstanceTransformsSize() * (Int(frameIndex) % (renderOptions.maxFramesInFlight + 1))
+    }
+    
+    func getPreviousInstanceTransformBufferOffset() -> Int {
+        let index = Int(frameIndex) % (renderOptions.maxFramesInFlight + 1)
+        
+        // Wrap around backwards if needed
+        return getInstanceTransformsSize() * ((index != 0) ? index - 1 : renderOptions.maxFramesInFlight);
+    }
+
+    func getInstanceNormalTransformBufferOffset() -> Int {
+        return getInstanceNormalTransformsSize() * (Int(frameIndex) % (renderOptions.maxFramesInFlight + 1));
     }
     
     internal func addSolid(solid: Solid) {
@@ -157,6 +204,25 @@ class DynamicRTScene: RTScene {
         let storageOptions: MTLResourceOptions
         storageOptions = .storageModeShared
         
+        
+        instanceTransformBuffer = Engine.device.makeBuffer(length: getInstanceTransformsBufferSize(), options: storageOptions)
+        instanceNormalTransformBuffer = Engine.device.makeBuffer(length: getInstanceNormalTransformsBufferSize(), options: storageOptions)
+        instanceBuffer = Engine.device.makeBuffer(length: getInstanceBufferSize(), options: storageOptions)
+        
+        self.denoiserDataBuffer = Engine.device.makeBuffer(length: (vertexBuffer.length / VertexIn.stride) * DenoiserVertexData.stride, options: storageOptions)
+        
+        let vertexContents = vertexBuffer.contents()
+        let vertexCount = vertexBuffer.length / VertexIn.stride
+        let vertexPointer = vertexContents.bindMemory(to: VertexIn.self, capacity: vertexCount)
+        let denoiserDataPointer = denoiserDataBuffer.contents().bindMemory(to: DenoiserVertexData.self, capacity: vertexCount)
+        
+        for i in 0..<vertexCount{
+            denoiserDataPointer[i].position = vertexPointer[i].position
+            denoiserDataPointer[i].prevPosition = vertexPointer[i].position
+            denoiserDataPointer[i].normal = vertexPointer[i].normal
+        }
+        
+        
         // Other buffers
         verticesCountBuffer = Engine.device.makeBuffer(bytes: &verticesCount, length: UInt32.stride(verticesCount.count), options: storageOptions)
         indiciesCountBuffer = Engine.device.makeBuffer(bytes: &indiciesCount, length: UInt32.stride(indiciesCount.count), options: storageOptions)
@@ -169,6 +235,8 @@ class DynamicRTScene: RTScene {
         self.materialBuffer = Engine.device.makeBuffer(bytes: &materials, length: Material.stride(materials.count), options: storageOptions)
         self.maskBuffer = Engine.device.makeBuffer(bytes: &masks, length: uint.stride(masks.count), options: storageOptions)
     }
+    
+    func advanceFrame() {}
     
     private func createAccelerationStructures() {
         let group = MPSAccelerationStructureGroup(device: Engine.device)
@@ -237,6 +305,44 @@ class DynamicRTScene: RTScene {
         }
         
         self.transformBuffer = Engine.device.makeBuffer(bytes: &transforms, length: matrix_float4x4.stride(transforms.count), options: .storageModeShared)
+        
+        let instanceTransformsSize = getInstanceTransformsSize()
+//        let instanceNormalTransformsSize = getInstanceNormalTransformsSize()
+        
+        let instanceTransformBufferOffset = instanceTransformsSize * (Int(frameIndex) % (renderOptions.maxFramesInFlight + 1))
+        let instanceNormalTransformBufferOffset = getInstanceNormalTransformsSize() * (Int(frameIndex) % (renderOptions.maxFramesInFlight + 1))
+        
+        let accelerationStructure = instanceAccelerationStructures[Int(frameIndex) % renderOptions.maxFramesInFlight]
+        
+        accelerationStructure.transformBufferOffset = instanceTransformBufferOffset
+        
+        let transformsContent = instanceTransformBuffer.contents().advanced(by: instanceTransformBufferOffset)
+        let count = transforms.count
+        let transformPointer = transformsContent.bindMemory(to: float4x4.self, capacity: count)
+        
+        let normals = instanceNormalTransformBuffer.contents().advanced(by: instanceNormalTransformBufferOffset)
+        let normalPointer = normals.bindMemory(to: float3x3.self, capacity: count)
+        
+        for i in 0..<count {
+            transformPointer[i] = transforms[i]
+            normalPointer[i] = getNormalMatrix(transforms[i])
+        }
     }
     
+    private func getNormalMatrix(_ transform: float4x4) -> float3x3 {
+        // Get the inverse transpose of the transform matrix.
+        let inverseTranspose = transform.inverse.transpose
+        
+        // Create a new matrix that is the same size as the transform matrix.
+        var normalMatrix = float3x3()
+        
+        // For each row in the new matrix, multiply each component by the corresponding component in the inverse transpose of the transform matrix.
+        for i in 0 ..< 3 {
+            for j in 0 ..< 3 {
+                normalMatrix[i][j] = inverseTranspose[i][j]
+            }
+        }
+        
+        return normalMatrix
+    }
 }

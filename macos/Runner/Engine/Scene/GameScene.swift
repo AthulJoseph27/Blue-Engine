@@ -1,6 +1,7 @@
 import MetalKit
 
 class GameScene {
+    var sceneTick: Float? = nil
     var ambient : Float = 0
     var skybox: SkyboxTypes = .Sky
     
@@ -8,13 +9,13 @@ class GameScene {
     var lights: [Light] = []
     var cameraManager = CameraManager()
     
-    var updateSolids : (_ solids: [Solid], _ deltaTime: Float) -> Void
-    
+    var updateSolids : (_ solids: [Solid], _ time: Float) -> Void
+        
     init(skybox: SkyboxTypes = .Sky, ambient: Float = 0, lights: [Light] = []) {
         self.ambient = ambient
         self.skybox = skybox
         self.lights = lights
-        self.updateSolids = {(solids: [Solid], deltaTime: Float) -> Void in }
+        self.updateSolids = {(solids: [Solid], time: Float) -> Void in }
         buildScene()
     }
     
@@ -39,6 +40,8 @@ class GameScene {
     func updateSceneLights(lights: [Light]) {
         self.lights = lights
     }
+    
+    internal func animate(solids: [Solid], time: Float) {}
     
     func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {
         

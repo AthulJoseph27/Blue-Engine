@@ -16,6 +16,7 @@ class StaticRTScene: RTScene {
     var lights:  [Light] = []
     
     var ambient: Float = 0
+    var sceneTime: Float = 0
     
     var vertexBuffer:        MTLBuffer!
     var indexBuffer:         MTLBuffer!
@@ -43,6 +44,12 @@ class StaticRTScene: RTScene {
     var uniformBufferOffset: Int!
     var uniformBufferIndex: Int = 0
     
+    var uniforms: Uniforms?
+    var prevUniforms: Uniforms?
+    
+//    // Dynamic Scene Animation frames is rendered using StaticRTScene
+//    var updateSceneSolids: (_ solids: [Solid], _ time: Float) -> Void
+    
     init(scene: GameScene) {
         skyBox = Skyboxibrary.skybox(scene.skybox)
         ambient = scene.ambient
@@ -60,9 +67,11 @@ class StaticRTScene: RTScene {
         return mtlAccelerationStrucutre
     }
     
-    func updateObjects(deltaTime: Float) {}
+    func updateScene(time: Float?) {
+        
+    }
     
-    func updateScene(deltaTime: Float) {}
+    func advanceFrame() {}
     
     func updateSceneSettings(sceneSettings: SceneSettings) {
         skyBox = Skyboxibrary.skybox(sceneSettings.skybox)

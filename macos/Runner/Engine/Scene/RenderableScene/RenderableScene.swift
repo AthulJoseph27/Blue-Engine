@@ -1,3 +1,4 @@
+import simd
 import MetalKit
 import MetalPerformanceShaders
 
@@ -8,12 +9,11 @@ protocol RenderableScene {
     var lights:        [Light]      { get set }
     var textureBuffer: MTLBuffer!   { get set }
     var skyBox:        MTLTexture!  { get set }
+    var sceneTime:     Float        { get set }
     
     var ambient: Float { get set }
     
-    func updateObjects(deltaTime: Float)
-    
-    func updateScene(deltaTime: Float)
+    func updateScene(time: Float?)
     
     func createBuffers()
     
@@ -39,6 +39,10 @@ extension RenderableScene {
         for light in scene.lights {
             addLight(light: light)
         }
+    }
+    
+    mutating func tickScene(deltaTime: Float) {
+        sceneTime += deltaTime
     }
     
     mutating func updateSceneLights(lights: [Light]) {
@@ -74,36 +78,43 @@ protocol RTScene: RenderableScene {
     func getAccelerationStructure() -> MPSAccelerationStructure
     func getMTLAccelerationStructure() -> MTLAccelerationStructure
     
+    func advanceFrame() -> Void
+    
     var frameIndex: UInt32          { get set }
     var lightIndex: UInt32          { get set }
+    
+    var uniforms: Uniforms?         { get set }
+    var prevUniforms: Uniforms?     { get set }
 }
 
 extension RTScene {
     
     mutating func updateUniforms(size: CGSize, renderQuality: RenderQuality? = .high) {
+        prevUniforms = uniforms
+        
         uniformBufferOffset = renderOptions.alignedUniformsSize * uniformBufferIndex
         
         let uniformsPointer = uniformBuffer.contents().advanced(by: uniformBufferOffset)
-        let uniforms = uniformsPointer.bindMemory(to: Uniforms.self, capacity: 1)
+        let _uniforms = uniformsPointer.bindMemory(to: Uniforms.self, capacity: 1)
         
         switch(renderQuality) {
             case .high:
-                uniforms.pointee.qualityControll = 1
+                _uniforms.pointee.qualityControll = 1
                 break
             case .medium:
-                uniforms.pointee.qualityControll = 19
+                _uniforms.pointee.qualityControll = 19
                 break
             case .low:
-                uniforms.pointee.qualityControll = 67
+                _uniforms.pointee.qualityControll = 67
                 break
             case .none:
                 assert(false)
         }
         
         let currentCam = CameraManager.currentCamera!
-        uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition
-        uniforms.pointee.camera.focalLength = currentCam.focalLength
-        uniforms.pointee.camera.dofBlurStrength = currentCam.dofBlurStrength
+        _uniforms.pointee.camera.position = currentCam.position + currentCam.deltaPosition
+        _uniforms.pointee.camera.focalLength = currentCam.focalLength
+        _uniforms.pointee.camera.dofBlurStrength = currentCam.dofBlurStrength
         
         if  abs(currentCam.deltaPosition.x) > 0 ||
             abs(currentCam.deltaPosition.y) > 0 ||
@@ -117,6 +128,7 @@ extension RTScene {
         var transform = matrix_identity_float4x4
         transform.rotate(angle: currentCam.rotation.y + currentCam.deltaRotation.y, axis: SIMD3<Float>(0, 1, 0))
         transform.rotate(angle: currentCam.rotation.x + currentCam.deltaRotation.x, axis: SIMD3<Float>(1, 0, 0))
+        transform.rotate(angle: currentCam.rotation.z + currentCam.deltaRotation.z, axis: SIMD3<Float>(0, 0, 1))
         
         if  abs(currentCam.deltaRotation.x) > 0 ||
             abs(currentCam.deltaRotation.y) > 0 ||
@@ -131,31 +143,58 @@ extension RTScene {
         let newRigth = transform * SIMD4<Float>(1, 0, 0, 1)
         let newUp = transform * SIMD4<Float>(0, 1, 0, 1)
         
-        uniforms.pointee.camera.forward = SIMD3<Float>(newForward.x, newForward.y, newForward.z)
-        uniforms.pointee.camera.right = SIMD3<Float>(newRigth.x, newRigth.y, newRigth.z)
-        uniforms.pointee.camera.up = SIMD3<Float>(newUp.x, newUp.y, newUp.z)
+        _uniforms.pointee.camera.forward = SIMD3<Float>(newForward.x, newForward.y, newForward.z)
+        _uniforms.pointee.camera.right = SIMD3<Float>(newRigth.x, newRigth.y, newRigth.z)
+        _uniforms.pointee.camera.up = SIMD3<Float>(newUp.x, newUp.y, newUp.z)
         
-        uniforms.pointee.lightCount = UInt32(lights.count)
-        uniforms.pointee.lightIndex = lightIndex
+        _uniforms.pointee.lightCount = UInt32(lights.count)
+        _uniforms.pointee.lightIndex = lightIndex
         lightIndex = (lightIndex + 1) % UInt32(lights.count)
         
-        uniforms.pointee.ambient = ambient
+        _uniforms.pointee.ambient = ambient
 
         let fieldOfView = 45.0 * (Float.pi / 180.0)
         let aspectRatio = Float(size.width) / Float(size.height)
         let imagePlaneHeight = tanf(fieldOfView / 2.0)
         let imagePlaneWidth = aspectRatio * imagePlaneHeight
 
-        uniforms.pointee.camera.right *= imagePlaneWidth
-        uniforms.pointee.camera.up *= imagePlaneHeight
+        _uniforms.pointee.camera.right *= imagePlaneWidth
+        _uniforms.pointee.camera.up *= imagePlaneHeight
 
-        uniforms.pointee.width = UInt32(size.width)
-        uniforms.pointee.height = UInt32(size.height)
+        _uniforms.pointee.width = UInt32(size.width)
+        _uniforms.pointee.height = UInt32(size.height)
 
-        uniforms.pointee.blocksWide = (uniforms.pointee.width + 15) / 16
-        uniforms.pointee.frameIndex = frameIndex
+        _uniforms.pointee.blocksWide = (_uniforms.pointee.width + 15) / 16
+        _uniforms.pointee.frameIndex = frameIndex
+        
+        let position = currentCam.position
+//        let right = _uniforms.pointee.camera.right
+        let up = _uniforms.pointee.camera.up
+
+        let forward = _uniforms.pointee.camera.forward
+        let target = normalize(forward - position)
+                
+        let viewMatrix = matrix_float4x4.lookAt(position: position, target: target, up: up)
+        
+        var projectionMatrix = matrix_float4x4.perspective(fieldOfView: fieldOfView, aspectRatio: aspectRatio, nearZ: 0.1, farZ: 1000.0)
+        
+        let jitter = (haltonSamples[Int(frameIndex) % 16] * 2.0 - 1.0) / SIMD2<Float>(Float(size.width), Float(size.height))
+        
+        _uniforms.pointee.jitter = jitter * vector2(0.5, -0.5)
+        
+        projectionMatrix.columns.2.x += jitter.x
+        projectionMatrix.columns.2.y += jitter.y
+        
+        let viewProjectionMatrix = projectionMatrix * viewMatrix
+        
+        _uniforms.pointee.viewMatrix = viewMatrix
+        _uniforms.pointee.viewProjectionMatrix = viewProjectionMatrix;
+        
         frameIndex += 1
         
+        uniforms = _uniforms.pointee
+        
+        advanceFrame()
 
         uniformBufferIndex = (uniformBufferIndex + 1) % renderOptions.maxFramesInFlight
     }

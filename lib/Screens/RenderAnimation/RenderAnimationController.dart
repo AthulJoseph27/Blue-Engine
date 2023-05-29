@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:blue_engine/Screens/Settings/Tabs/Viewport/Models/ViewportModel.dart';
 import 'package:blue_engine/SwiftCommunicationBridge.dart';
 import 'package:blue_engine/globals.dart';
 import 'package:flutter/cupertino.dart';
@@ -102,6 +103,7 @@ class RenderAnimationController {
       renderAnimationScaffoldMessengerKey.currentState?.showSnackBar(getSnackBar('0 keyframes record. Try again after recording keyframes.', error: true));
       return;
     }
+    RenderAnimationModel.dynamicScene = ViewportModel.auroraViewportModel.isDynamicViewport;
     invokePlatformMethod(SwiftMethods.renderAnimation, RenderAnimationModel.toJson());
   }
 }

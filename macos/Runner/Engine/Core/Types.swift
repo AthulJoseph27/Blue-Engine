@@ -28,6 +28,7 @@ extension SIMD2: sizeable {}
 extension SIMD3: sizeable {}
 extension SIMD4: sizeable {}
 extension matrix_float4x4: sizeable {}
+extension matrix_float3x3: sizeable {}
 extension MPSIntersectionDistancePrimitiveIndexCoordinates: sizeable {}
 
 struct Vertex: sizeable{
@@ -43,6 +44,25 @@ struct VertexIn: sizeable{
     var tangent: SIMD3<Float>
     var bitangent: SIMD3<Float>
 }
+
+let haltonSamples: [SIMD2<Float>] = [
+    SIMD2<Float>(0.5, 0.333333333333),
+    SIMD2<Float>(0.25, 0.666666666667),
+    SIMD2<Float>(0.75, 0.111111111111),
+    SIMD2<Float>(0.125, 0.444444444444),
+    SIMD2<Float>(0.625, 0.777777777778),
+    SIMD2<Float>(0.375, 0.222222222222),
+    SIMD2<Float>(0.875, 0.555555555556),
+    SIMD2<Float>(0.0625, 0.888888888889),
+    SIMD2<Float>(0.5625, 0.037037037037),
+    SIMD2<Float>(0.3125, 0.37037037037),
+    SIMD2<Float>(0.8125, 0.703703703704),
+    SIMD2<Float>(0.1875, 0.148148148148),
+    SIMD2<Float>(0.6875, 0.481481481481),
+    SIMD2<Float>(0.4375, 0.814814814815),
+    SIMD2<Float>(0.9375, 0.259259259259),
+    SIMD2<Float>(0.03125, 0.592592592593),
+]
 
 //struct VertexOut: sizeable{
 //    var position: SIMD3<Float>
@@ -132,6 +152,12 @@ struct VertexIndex: sizeable {
     var submeshId: UInt32
 }
 
+struct DenoiserVertexData: sizeable {
+    var position: SIMD3<Float>
+    var normal: SIMD3<Float>
+    var prevPosition: SIMD3<Float>
+}
+
 class Masks {
     public static let FACE_MASK_NONE: uint = 0
     public static let FACE_MASK_NEGATIVE_X: uint = (1 << 0)
@@ -185,6 +211,7 @@ struct VertexShadingSettings: RenderingSettings {
 
 struct KeyFrame {
     var time: Double
+    var sceneTime: Float
     var position: SIMD3<Float>
     var rotation: SIMD3<Float>
 }

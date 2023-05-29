@@ -11,11 +11,7 @@ enum MeshTypes {
     case Cone
     case Torus
     case Monkey
-    case SpaceShip
     case Chest
-    case FireplaceRoom
-    case Sponza
-    case SanMiguel
     case Custom
 }
 
@@ -35,11 +31,7 @@ class MeshLibrary {
         meshes.updateValue(Mesh(modelName: "Cone"), forKey: .Cone)
         meshes.updateValue(Mesh(modelName: "Torus"), forKey: .Torus)
         meshes.updateValue(Mesh(modelName: "Monkey"), forKey: .Monkey)
-        meshes.updateValue(Mesh(modelName: "E 45 Aircraft_obj"), forKey: .SpaceShip)
         meshes.updateValue(Mesh(modelName: "chest"), forKey: .Chest)
-        meshes.updateValue(Mesh(modelName: "fireplace_room"), forKey: .FireplaceRoom)
-        meshes.updateValue(Mesh(modelName: "sponza"), forKey: .Sponza)
-//        meshes.updateValue(Mesh(modelName: "san-miguel"), forKey: .SanMiguel)
     }
     
     public static func loadMesh(filePath: String) throws {

@@ -7,6 +7,7 @@ class RenderAnimationModel {
   static var maxBounce = 6;
   static var fps = 24;
   static var alphaTesting = false;
+  static var dynamicScene = false;
   static var record = false;
   static var saveLocation = '/Users/athuljoseph/Downloads/Animation/';
 
@@ -21,6 +22,7 @@ class RenderAnimationModel {
   static Map<String, dynamic> toJson()=> {
     'renderEngine' : renderEngine.name,
     'alphaTesting' : alphaTesting,
+    'dynamicScene' : dynamicScene,
     'samples': samples,
     'resolution' : resolution.toJson(),
     'maxBounce' : maxBounce,

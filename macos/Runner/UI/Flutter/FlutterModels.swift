@@ -69,6 +69,7 @@ class RenderAnimationModel {
     var maxBounce = 1
     var fps = 24
     var alphaTesting = false
+    var dynamicScene = false
     var saveLocation = "/Users/athuljoseph/Downloads/Animation/";
     var videoFrameCount = 0
     
@@ -78,6 +79,7 @@ class RenderAnimationModel {
         let resolution = (json["resolution"] as? [String : Any]) ?? ["x" : 1080, "y": 720]
         self.resolution = SIMD2<Int>(resolution["x"] as! Int, resolution["y"] as! Int)
         
+        dynamicScene = (json["dynamicScene"] as? Bool) ?? false
         alphaTesting = (json["alphaTesting"] as? Bool) ?? false
         samples = (json["samples"] as? Int) ?? samples
         fps = (json["fps"] as? Int) ?? fps
@@ -193,11 +195,11 @@ class RenderAnimationModel {
         }
         
         if at >= keyframes.last!.time {
-            return KeyFrame(time: at, position: keyframes.last!.position, rotation: keyframes.last!.rotation)
+            return KeyFrame(time: at, sceneTime: keyframes.last!.sceneTime, position: keyframes.last!.position, rotation: keyframes.last!.rotation)
         }
         
         if at <= keyframes.first!.time {
-            return KeyFrame(time: at, position: keyframes.first!.position, rotation: keyframes.first!.rotation)
+            return KeyFrame(time: at, sceneTime: keyframes.first!.sceneTime, position: keyframes.first!.position, rotation: keyframes.first!.rotation)
         }
         
         // `at` time should be between any 2 keyframe
@@ -225,10 +227,22 @@ class RenderAnimationModel {
         
         let ratio = Float((at - prev.time) / (nxt.time - at))
         
-        return KeyFrame(time: at, position: interpolate(a: prev.position, b: nxt.position, ratio: ratio), rotation: interpolate(a: prev.rotation, b: nxt.rotation, ratio: ratio))
+        return KeyFrame(time: at, sceneTime: interpolate(a: prev.sceneTime, b: nxt.sceneTime, ratio: ratio), position: interpolate(a: prev.position, b: nxt.position, ratio: ratio), rotation: interpolate(a: prev.rotation, b: nxt.rotation, ratio: ratio))
     }
     
     private static func interpolate(a: SIMD3<Float>, b: SIMD3<Float>, ratio: Float, curve: InterpolationCurve = .linear) -> SIMD3<Float> {
+        
+        // A______.___________B -> r : 1
+        // P = (r * B + A) / (r + 1)
+        
+        if curve == .linear {
+            return (ratio * b + a) / (ratio + 1.0)
+        }
+        
+        fatalError("Unsupported Interpolation")
+    }
+    
+    private static func interpolate(a: Float, b: Float, ratio: Float, curve: InterpolationCurve = .linear) -> Float {
         
         // A______.___________B -> r : 1
         // P = (r * B + A) / (r + 1)

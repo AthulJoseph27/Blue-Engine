@@ -41,7 +41,7 @@ class AnimationCamera: SceneCamera {
         _record = true
         RendererManager.updateAnimCameraToolBar(recording: _record)
         if keyframes.isEmpty {
-            keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
+            keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, sceneTime: SceneManager.currentSceneTime, position: position, rotation: rotation))
         }
     }
     
@@ -124,8 +124,13 @@ class AnimationCamera: SceneCamera {
         position += deltaPosition
         
         if _record {
+            if Keyboard.isKeyPressed(.k) {
+                keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, sceneTime: SceneManager.currentSceneTime, position: position, rotation: rotation))
+                print(keyframes)
+            }
+            
             if !(!keyframes.isEmpty && keyframes.last!.rotation == rotation && keyframes.last!.position == position) {
-                keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, position: position, rotation: rotation))
+                keyframes.append(KeyFrame(time: Date().timeIntervalSince1970, sceneTime: SceneManager.currentSceneTime, position: position, rotation: rotation))
             }
         }
     }

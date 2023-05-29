@@ -26,7 +26,7 @@ class Sandbox: GameScene {
         
         //         Short box
         let monkey = Solid(.Monkey)
-        monkey.position = SIMD3<Float>(0.3275, 0.3, 0.3725)
+        monkey.position = SIMD3<Float>(0.3275, 0.4, 0.3725)
         monkey.rotation = SIMD3<Float>(0, -0.3, 0)
         monkey.scale = SIMD3<Float>(0.3, 0.3, 0.3)
         monkey.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
@@ -47,8 +47,9 @@ class Sandbox: GameScene {
         updateSolids = animate
     }
     
-    private func animate(solids: [Solid], deltaTime: Float) {
-        solids[solids.count-1].rotation.y += deltaTime
+    override func animate(solids: [Solid], time: Float) {
+        solids[solids.count-1].rotation.y = time
+        solids[solids.count-2].position.y = 0.4 + 0.1 * sin(time)
     }
     
 }

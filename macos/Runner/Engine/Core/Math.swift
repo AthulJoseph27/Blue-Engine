@@ -34,6 +34,20 @@ extension SIMD4<Float> {
     }
 }
 
+//extension SIMD3<Float> {
+//    mutating func rotateVector(vector: SIMD3<Float>, axis: SIMD3<Float>, angle: Float) {
+//        
+//        // Create a quaternion with the angle and axis.
+//        let quaternion = simd_quatf(angle: angle, axis: axis)
+//        
+//        // Apply the quaternion to the vector.
+//        let rotatedVector = quaternion.act(vector)
+//        
+//        // Return the rotated vector.
+//        self = rotatedVector
+//    }
+//}
+
 extension matrix_float4x4 {
     mutating func translate(direction: SIMD3<Float>) {
         var operation = matrix_identity_float4x4
@@ -125,5 +139,52 @@ extension matrix_float4x4 {
         )
         
         return result
+    }
+    
+    static func lookAt(position: SIMD3<Float>, target: SIMD3<Float>, up: SIMD3<Float>) -> float4x4 {
+        var viewMatrix = float4x4()
+
+        let z = normalize(target - position)
+        let x = normalize(cross(up, z))
+        let y = cross(z, x)
+
+        viewMatrix[0, 0] = x.x
+        viewMatrix[1, 0] = x.y
+        viewMatrix[2, 0] = x.z
+        viewMatrix[3, 0] = -dot(x, position)
+
+        viewMatrix[0, 1] = y.x
+        viewMatrix[1, 1] = y.y
+        viewMatrix[2, 1] = y.z
+        viewMatrix[3, 1] = -dot(y, position)
+
+        viewMatrix[0, 2] = z.x
+        viewMatrix[1, 2] = z.y
+        viewMatrix[2, 2] = z.z
+        viewMatrix[3, 2] = -dot(z, position)
+
+        viewMatrix[0, 3] = 0
+        viewMatrix[1, 3] = 0
+        viewMatrix[2, 3] = 0
+        viewMatrix[3, 3] = 1
+
+        return viewMatrix
+    }
+    
+    static func perspective(fieldOfView: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
+        var perspectiveMatrix = float4x4()
+
+        let yScale = 1.0 / tan(fieldOfView * 0.5)
+        let xScale = yScale / aspectRatio
+        let zRange = farZ - nearZ
+
+        perspectiveMatrix[0, 0] = xScale
+        perspectiveMatrix[1, 1] = yScale
+        perspectiveMatrix[2, 2] = -(farZ + nearZ) / zRange
+        perspectiveMatrix[2, 3] = -1.0
+        perspectiveMatrix[3, 2] = -2.0 * nearZ * farZ / zRange
+        perspectiveMatrix[3, 3] = 0.0
+
+        return perspectiveMatrix
     }
 }

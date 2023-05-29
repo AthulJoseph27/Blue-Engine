@@ -17,6 +17,11 @@ class SceneManager {
             return SceneManager._currentScene
         }
     }
+    static var currentSceneTime: Float {
+        get {
+            return SceneManager._currentRenderableScene.sceneTime
+        }
+    }
     
     public static func initialize(scene: GameScenes, rendererType: RendererType) {
         currentRendererType = rendererType
@@ -77,8 +82,12 @@ class SceneManager {
     }
     
     public static func tickScene(deltaTime: Float) {
-        _currentRenderableScene.updateScene(deltaTime: deltaTime)
+        _currentRenderableScene.tickScene(deltaTime: _currentScene.sceneTick ?? deltaTime)
         _currentRenderableScene.updateCameras(deltaTime: deltaTime)
-        _currentRenderableScene.updateObjects(deltaTime: deltaTime)
+        _currentRenderableScene.updateScene(time: nil)
+    }
+    
+    public static func setSceneToTick(time: Float) {
+        _currentRenderableScene.updateScene(time: time)
     }
 }

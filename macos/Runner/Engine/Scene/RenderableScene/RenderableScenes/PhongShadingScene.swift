@@ -2,7 +2,7 @@ import MetalKit
 import MetalPerformanceShaders
 
 class PhongShadingScene: RenderableScene {
-
+    
     var renderOptions: PSRenderOptions = PSRenderOptions()
     
     var heap = Heap()
@@ -11,6 +11,7 @@ class PhongShadingScene: RenderableScene {
     var objects: [Solid] = []
     var lights: [Light] = []
     var ambient: Float = 0
+    var sceneTime: Float = 0
     var PSLights: [PSLight] = []
     var randomValues: [UInt32] = []
     
@@ -26,6 +27,9 @@ class PhongShadingScene: RenderableScene {
     
     var sampler: MTLSamplerState?
     
+    var uniforms: Uniforms?
+    var prevUniforms: Uniforms?
+    
     init(scene: GameScene) {
         skyBox = Skyboxibrary.skybox(.Sky)
         createSampler()
@@ -35,11 +39,11 @@ class PhongShadingScene: RenderableScene {
         fillRandomValues()
     }
     
-    func updateObjects(deltaTime: Float) {}
-    
-    func updateScene(deltaTime: Float) {}
+    func updateScene(time: Float?) {}
     
     func postSceneLightSet() {}
+    
+    func advanceFrame() {}
     
     func updateSceneSettings(sceneSettings: SceneSettings) {
         skyBox = Skyboxibrary.skybox(sceneSettings.skybox)

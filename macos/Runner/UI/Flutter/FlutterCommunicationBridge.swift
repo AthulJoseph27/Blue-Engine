@@ -194,7 +194,7 @@ class SwiftBridgingMethods {
         
         if !keyframes.isEmpty {
             for i in 0..<keyframes.count {
-                let frame = KeyFrame(time: keyframes[i].time - offsetTime, position: keyframes[i].position, rotation: keyframes[i].rotation)
+                let frame = KeyFrame(time: keyframes[i].time - offsetTime, sceneTime: keyframes[i].sceneTime, position: keyframes[i].position, rotation: keyframes[i].rotation)
                 keyframes[i] = frame
             }
         }
@@ -386,7 +386,7 @@ class SwiftBridgingMethods {
     
     private static func renderAnimationLoop(model: RenderAnimationModel, keyframes: [KeyFrame], totalFrames: Int, semaphore: DispatchSemaphore, window: NSWindow, windowController: NSWindowController) {
         
-        let rendererType = (model.renderEngine == .aurora) ? RendererType.StaticRT : RendererType.PhongShader
+        let rendererType = (model.renderEngine == .aurora) ? (model.dynamicScene ? RendererType.DynamicRT : RendererType.StaticRT) : RendererType.PhongShader
         
         let deltaTime = 1.0 / Double(model.fps)
         let endTime = keyframes.last!.time
@@ -406,6 +406,7 @@ class SwiftBridgingMethods {
             CameraManager.currentCamera.position = keyframe.position
             CameraManager.currentCamera.rotation = keyframe.rotation
             
+            SceneManager.setSceneToTick(time: keyframe.sceneTime)
             
             RendererManager.setRenderMode(settings: model.getRenderingSettings()) {
                 model.saveRenderImage(frame: iter)
