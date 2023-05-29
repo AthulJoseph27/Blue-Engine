@@ -45,7 +45,8 @@ Consists of two engines: <br/>
 
 * blue4.7
   * Added Dynamic Ray Tracer.
-  
+  * Can render Dynamic Scenes as animation.
+<br></br>
 * blue4.6
   * Can control camera from the UI now, allowing more precise control over the camera (helpful for rendering).
   * Added option to control render quality in view port, making the app usable with larger and complex OBJ files.
