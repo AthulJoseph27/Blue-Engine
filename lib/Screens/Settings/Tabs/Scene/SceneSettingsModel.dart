@@ -6,6 +6,7 @@ class SceneSettingsModel {
   static const List<String> _scenes = [
     'Cornell Box',
     'Harmonic Cubes',
+    'Ocean',
     'Custom'
   ];
   static const List<String> _skyBoxes = [

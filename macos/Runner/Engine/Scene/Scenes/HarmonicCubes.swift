@@ -40,7 +40,6 @@ class HarmonicCubes: GameScene {
                 cube.scale = SIMD3<Float>(0.035, 0.035, 0.035)
                 cube.setRoughness(1.0)
                 cube.enableTexture(false)
-                cube.animated = true
                 cube.transformOrder = .RotateTranslateScale
                 temp.append(solids.count)
                 solids.append(cube)

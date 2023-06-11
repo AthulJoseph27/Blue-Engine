@@ -33,7 +33,6 @@ class DynamicRTScene: RTScene {
     var instanceBuffer:                MTLBuffer!
     var instanceTransformBuffer:       MTLBuffer!
     var instanceNormalTransformBuffer: MTLBuffer!
-    var denoiserDataBuffer:       MTLBuffer!
 
     
     var skyBox: MTLTexture!
@@ -80,7 +79,9 @@ class DynamicRTScene: RTScene {
     func updateScene(time: Float? = nil) {
         updateSceneSolids(objects, time ?? sceneTime)
         updateTransformBuffer()
-        createAccelerationStructures()
+//        refitAccelerationStructures()
+//        createAccelerationStructures()
+        updateInstanceAccelerationStructures()
     }
     
     func updateUniforms(size: CGSize) {}
@@ -154,7 +155,7 @@ class DynamicRTScene: RTScene {
         let commandBuffer = Engine.device.makeCommandQueue()?.makeCommandBuffer()
         commandBuffer?.label = "Buffer merge Command Buffer"
         let blitEncoder = commandBuffer?.makeBlitCommandEncoder()
-        blitEncoder?.label = "Buffer merge Blit Encoder";
+        blitEncoder?.label = "Buffer merge Blit Encoder"
         
         var vertexBuffers:       [MTLBuffer] = []
         var indexBuffers:        [MTLBuffer] = []
@@ -209,20 +210,6 @@ class DynamicRTScene: RTScene {
         instanceNormalTransformBuffer = Engine.device.makeBuffer(length: getInstanceNormalTransformsBufferSize(), options: storageOptions)
         instanceBuffer = Engine.device.makeBuffer(length: getInstanceBufferSize(), options: storageOptions)
         
-        self.denoiserDataBuffer = Engine.device.makeBuffer(length: (vertexBuffer.length / VertexIn.stride) * DenoiserVertexData.stride, options: storageOptions)
-        
-        let vertexContents = vertexBuffer.contents()
-        let vertexCount = vertexBuffer.length / VertexIn.stride
-        let vertexPointer = vertexContents.bindMemory(to: VertexIn.self, capacity: vertexCount)
-        let denoiserDataPointer = denoiserDataBuffer.contents().bindMemory(to: DenoiserVertexData.self, capacity: vertexCount)
-        
-        for i in 0..<vertexCount{
-            denoiserDataPointer[i].position = vertexPointer[i].position
-            denoiserDataPointer[i].prevPosition = vertexPointer[i].position
-            denoiserDataPointer[i].normal = vertexPointer[i].normal
-        }
-        
-        
         // Other buffers
         verticesCountBuffer = Engine.device.makeBuffer(bytes: &verticesCount, length: UInt32.stride(verticesCount.count), options: storageOptions)
         indiciesCountBuffer = Engine.device.makeBuffer(bytes: &indiciesCount, length: UInt32.stride(indiciesCount.count), options: storageOptions)
@@ -237,6 +224,29 @@ class DynamicRTScene: RTScene {
     }
     
     func advanceFrame() {}
+    
+    func refitAccelerationStructures() {
+        var vertexBufferOffset = 0
+        var indexBufferOffset = 0
+        
+        let commandBuffer = Engine.device.makeCommandQueue()!.makeCommandBuffer()!
+        commandBuffer.label = "Buffer update Command Buffer"
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.label = "Buffer update Blit Encoder"
+        
+        for i in 0..<objects.count {
+            let solid = objects[i]
+            for j in 0..<solid.mesh.submeshCount {
+                if solid.animated {
+                    blitEncoder.copy(from: solid.mesh.vertexBuffer, sourceOffset: 0, to: vertexBuffer, destinationOffset: vertexBufferOffset, size: solid.mesh.vertexBuffer.length)
+                    accelerationStructures[i][j].vertexBuffer = vertexBuffer
+                    accelerationStructures[i][j].encodeRefit(commandBuffer: commandBuffer)
+                }
+                indexBufferOffset += solid.mesh.indexBuffers[j].length
+            }
+            vertexBufferOffset += solid.mesh.vertexBuffer.length
+        }
+    }
     
     private func createAccelerationStructures() {
         let group = MPSAccelerationStructureGroup(device: Engine.device)
@@ -288,6 +298,13 @@ class DynamicRTScene: RTScene {
             
             instanceAccelerationStructures.append(instanceAcceleratedStructure)
         }
+    }
+    
+    private func updateInstanceAccelerationStructures() {
+        let index = (Int(frameIndex) % renderOptions.maxFramesInFlight)
+        instanceAccelerationStructures[index].transformBuffer = transformBuffer
+        instanceAccelerationStructures[index].transformBufferOffset = 0
+        instanceAccelerationStructures[index].rebuild()
     }
     
     private func postBuildScene() {

@@ -131,8 +131,8 @@ class RenderAnimationModel {
         
         let videoSettings: [String: Any] = [
             AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: resolution.x,
-            AVVideoHeightKey: resolution.y,
+            AVVideoWidthKey: resolution.x * 2,
+            AVVideoHeightKey: resolution.y * 2,
         ]
         
         do {
@@ -187,6 +187,8 @@ class RenderAnimationModel {
         } catch {
             // Handle errors
         }
+        
+        print("\(NSTemporaryDirectory())tmp/")
     }
     
     static func getKeyframeAt(at: Double, keyframes: [KeyFrame]) -> KeyFrame {

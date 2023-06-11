@@ -26,6 +26,10 @@ extension Solid {
         mesh.materials[0].diffuse = color
     }
     
+    public func setEmissionColor(_ color: SIMD3<Float>) {
+        mesh.materials[0].emissive = color
+    }
+    
     public func setRoughness(_ roughness: Float) {
         mesh.materials[0].roughness = roughness
         mesh.materials[0].specular = SIMD3<Float>(repeating: (1.0 - roughness))
@@ -41,7 +45,23 @@ extension Solid {
         mesh.materials[0].isTextureEnabled = enable
     }
     
-//    public func enableMaterial(_ enable: Bool) {
-//        mesh.materials[0].isLit = enable;
-//    }
+    public func enableNormalTexture(_ enable: Bool) {
+        mesh.materials[0].isNormalMapEnabled = enable
+    }
+    
+    public func enableEmission(_ enable: Bool) {
+        mesh.materials[0].isLit = enable
+    }
+    
+    public func updateBaseTexture(_ texture: MTLTexture) {
+        // Basic solids have no submeshes
+        mesh.baseColorTextures.removeAll()
+        mesh.baseColorTextures.append(texture)
+    }
+    
+    public func updateNormalTexture(_ texture: MTLTexture) {
+        // Basic solids have no submeshes
+        mesh.normalMapTextures.removeAll()
+        mesh.normalMapTextures.append(texture)
+    }
 }

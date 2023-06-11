@@ -580,14 +580,23 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        objectColor = material.diffuse;
                    }
                    
-                   color *= objectColor;
+                   if(material.isLit) {
+                       color += material.emissive;
+                       shadowRay.maxDistance = -1.0f;
+                   } else {
+                       color *= objectColor;
+                   }
 
                    shadowRay.origin = intersectionPoint + surfaceNormal * 1e-3f;
                    shadowRay.direction = lightDirection;
                    shadowRay.mask = RAY_MASK_SHADOW;
                    shadowRay.maxDistance = lightDistance - 1e-3f;
                    
-                   shadowRay.color = lightColor * color;
+                   if(material.isLit) {
+                       shadowRay.color = lightColor + color;
+                   } else {
+                       shadowRay.color = lightColor * color;
+                   }
 
                    float refractiveIndex = 0.0;
 
@@ -621,7 +630,11 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        sampleDirection = alignHemisphereWithNormal(sampleDirection, surfaceNormal);
 
                        ray.direction = sampleDirection;
-                       ray.color = color * (1.0f - roughness);
+                       if(material.isLit) {
+                           ray.color = color;
+                       } else {
+                           ray.color = color * (1.0f - roughness);
+                       }
                        ray.mask = RAY_MASK_SECONDARY;
                    }
                    
@@ -658,6 +671,10 @@ bool alphaTest(uint instanceIndex, uint primitiveIndex, float2 barycentricCoord,
     
     Material material = materials[submeshId];
     
+    if(material.isLit) {
+        return false;
+    }
+    
     if(!material.isTextureEnabled) {
         return true;
     }
@@ -686,8 +703,7 @@ kernel void shadowKernelWithAlphaTesting(uint2 tid [[thread_position_in_grid]],
                          device uint *indiciesCount,
                          device Material *materials,
                          device PrimitiveData *primitiveDatas,
-                         texture2d<float, access::read_write> dstTex,
-                         texture2d<float, access::write> shadowTexture)
+                         texture2d<float, access::read_write> dstTex)
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
@@ -729,13 +745,10 @@ kernel void shadowKernelWithAlphaTesting(uint2 tid [[thread_position_in_grid]],
             
             if(intersectionDistance <= 0.0f) {
                 color += shadowRay.color;
-                shadowTexture.write(float4(0.0f, 0.0f, 0.0f, 1.0f), tid);
             } else{
                 color += shadowRay.color * uniforms.ambient;
-                shadowTexture.write(float4(1.0f, 1.0f, 1.0f, 1.0f), tid);
             }
         } else if(shadowRay.maxDistance == RAY_HIT_SKYBOX) {
-            shadowTexture.write(float4(1.0f, 1.0f, 1.0f, 1.0f), tid);
             color += shadowRay.color;
         }
         
@@ -747,8 +760,7 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
                          constant Uniforms & uniforms,
                          device Ray *shadowRays,
                          device float *intersections,
-                         texture2d<float, access::read_write> dstTex,
-                         texture2d<float, access::write> shadowTexture)
+                         texture2d<float, access::read_write> dstTex)
 {
     if (tid.x < uniforms.width && tid.y < uniforms.height) {
         unsigned int rayIdx = tid.y * uniforms.width + tid.x;
@@ -765,16 +777,13 @@ kernel void shadowKernel(uint2 tid [[thread_position_in_grid]],
         if(shadowRay.maxDistance >= 0.0f) {
             if(intersectionDistance < 0.0f) {
                 color += shadowRay.color;
-                shadowTexture.write(float4(0.0f, 0.0f, 0.0f, 1.0f), tid);
             } else{
                 color += shadowRay.color * uniforms.ambient;
-                shadowTexture.write(float4(1.0f, 1.0f, 1.0f, 1.0f), tid);
             }
         }
         
         if(shadowRay.maxDistance == RAY_HIT_SKYBOX) {
             color += shadowRay.color;
-            shadowTexture.write(float4(1.0f, 1.0f, 1.0f, 1.0f), tid);
         }
         
         dstTex.write(float4(color, 1.0f), tid);
