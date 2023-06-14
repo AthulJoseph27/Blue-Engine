@@ -73,6 +73,8 @@
 		3C538FED2A3709A7000CC8C5 /* Ocean_100.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C538FEB2A3709A7000CC8C5 /* Ocean_100.obj */; };
 		3C54789229B98D7D00D20911 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789129B98D7D00D20911 /* Custom.swift */; };
 		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
+		3C8C03DE2A3A0AF8001F0058 /* Skybox.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C8C03DD2A3A0AF8001F0058 /* Skybox.metal */; };
+		3C8C03E02A3A12D5001F0058 /* EnchantingGlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8C03DF2A3A12D5001F0058 /* EnchantingGlow.swift */; };
 		3CA5D66D2A36D77900EF3ECC /* Ocean_20.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */; };
 		3CA5D66E2A36D77900EF3ECC /* Ocean_20.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */; };
 		3CA9C92E2A39A06F00B4DBED /* Ocean.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3CA9C92D2A39A06F00B4DBED /* Ocean.metal */; };
@@ -260,6 +262,8 @@
 		3C538FEB2A3709A7000CC8C5 /* Ocean_100.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_100.obj; sourceTree = "<group>"; };
 		3C54789129B98D7D00D20911 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
+		3C8C03DD2A3A0AF8001F0058 /* Skybox.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Skybox.metal; sourceTree = "<group>"; };
+		3C8C03DF2A3A12D5001F0058 /* EnchantingGlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnchantingGlow.swift; sourceTree = "<group>"; };
 		3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.mtl; sourceTree = "<group>"; };
 		3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.obj; sourceTree = "<group>"; };
 		3CA9C92D2A39A06F00B4DBED /* Ocean.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Ocean.metal; sourceTree = "<group>"; };
@@ -526,6 +530,7 @@
 				3C1717E029B491FC00B19B27 /* PhongShader.metal */,
 				3C1717E229B4921B00B19B27 /* Lighting.metal */,
 				3CA9C92D2A39A06F00B4DBED /* Ocean.metal */,
+				3C8C03DD2A3A0AF8001F0058 /* Skybox.metal */,
 				3C1717E629B4930C00B19B27 /* Runner-Bridging-Header.h */,
 			);
 			path = Shaders;
@@ -567,6 +572,7 @@
 			children = (
 				3C1717F329B493CE00B19B27 /* Sandbox.swift */,
 				3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */,
+				3C8C03DF2A3A12D5001F0058 /* EnchantingGlow.swift */,
 				3CC00A572A3444EF00602E75 /* Ocean.swift */,
 				3C54789129B98D7D00D20911 /* Custom.swift */,
 			);
@@ -1103,6 +1109,7 @@
 				3C17180829B4948800B19B27 /* PhongRenderer.swift in Sources */,
 				3C1717D429B4918D00B19B27 /* ComputePipelineState.swift in Sources */,
 				3C1717C229B490DF00B19B27 /* Keyboard.swift in Sources */,
+				3C8C03E02A3A12D5001F0058 /* EnchantingGlow.swift in Sources */,
 				3C1717B329B4903800B19B27 /* Preferences.swift in Sources */,
 				3C17180B29B494A800B19B27 /* RendererView.swift in Sources */,
 				3CC00A582A3444EF00602E75 /* Ocean.swift in Sources */,
@@ -1112,6 +1119,7 @@
 				3C1717DD29B491DF00B19B27 /* Transform.metal in Sources */,
 				3C1717E129B491FC00B19B27 /* PhongShader.metal in Sources */,
 				3CE728B129B629060073AC4C /* FlutterModels.swift in Sources */,
+				3C8C03DE2A3A0AF8001F0058 /* Skybox.metal in Sources */,
 				3C1717CC29B4914500B19B27 /* Skybox.swift in Sources */,
 				3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */,
 				3C1717AF29B4901000B19B27 /* Mesh.swift in Sources */,

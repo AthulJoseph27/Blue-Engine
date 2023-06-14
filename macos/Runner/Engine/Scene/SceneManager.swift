@@ -36,6 +36,9 @@ class SceneManager {
         case .HarmonicCubes:
             _currentScene = HarmonicCubes(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break
+        case .EnchantingGlow:
+            _currentScene = EnchantingGlow(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
+            break
         case .Ocean:
             _currentScene = Ocean(skybox: _sceneSettings.skybox, ambient: _sceneSettings.ambientLighting)
             break

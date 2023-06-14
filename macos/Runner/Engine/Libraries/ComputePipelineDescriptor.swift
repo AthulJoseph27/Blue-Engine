@@ -6,7 +6,6 @@ enum ComputePipelineDescriptorTypes {
     case IndexGenerator
     case IndexWrapper
     case RayTracing
-    case Compositing
 }
 
 class ComputePipelineDescriptorLibrary {
@@ -21,7 +20,6 @@ class ComputePipelineDescriptorLibrary {
         computePipelineDescriptors.updateValue(IndexGenerator_ComputePipelineDescriptor(), forKey: .IndexGenerator)
         computePipelineDescriptors.updateValue(IndexWrapper_ComputePipelineDescriptor(), forKey: .IndexWrapper)
         computePipelineDescriptors.updateValue(RayTracing_ComputePipelineDescriptor(), forKey: .RayTracing)
-        computePipelineDescriptors.updateValue(Compositing_ComputePipelineDescriptor(), forKey: .Compositing)
     }
     
     public static func descriptor(_ computePipelineDescriptorTypes: ComputePipelineDescriptorTypes)->MTLComputePipelineDescriptor {
@@ -66,16 +64,6 @@ public struct IndexWrapper_ComputePipelineDescriptor: ComputePipelineDescriptor 
 
 public struct RayTracing_ComputePipelineDescriptor: ComputePipelineDescriptor {
     var name: String = "RayTracing Compute Pipeline Descriptor"
-    var computePipelineDescriptor: MTLComputePipelineDescriptor!
-    
-    init() {
-        computePipelineDescriptor = MTLComputePipelineDescriptor()
-        computePipelineDescriptor.threadGroupSizeIsMultipleOfThreadExecutionWidth = true
-    }
-}
-
-public struct Compositing_ComputePipelineDescriptor: ComputePipelineDescriptor {
-    var name: String = "Compositing Compute Pipeline Descriptor"
     var computePipelineDescriptor: MTLComputePipelineDescriptor!
     
     init() {

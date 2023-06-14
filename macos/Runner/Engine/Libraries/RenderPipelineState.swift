@@ -4,7 +4,6 @@ enum RenderPipelineStateTypes {
     case Basic
     case RayTracing
     case Rendering
-    case DenoiserRasterizer
 }
 
 class RenderPipelineStateLibrary {
@@ -18,7 +17,6 @@ class RenderPipelineStateLibrary {
         renderPipelineStates.updateValue(Basic_RenderPipelineState(), forKey: .Basic)
         renderPipelineStates.updateValue(RayTracing_RenderPipelineState(), forKey: .RayTracing)
         renderPipelineStates.updateValue(OffScreen_RenderPipelineState(), forKey: .Rendering)
-        renderPipelineStates.updateValue(DenoiserRasterizer_RenderPipelineState(), forKey: .DenoiserRasterizer)
     }
     
     public static func addRenderPipelineState(_ renderPipeLineState: RenderPipelineState, renderPipelineStateType: RenderPipelineStateTypes) {
@@ -68,19 +66,6 @@ public struct OffScreen_RenderPipelineState: RenderPipelineState {
     init() {
         do{
             renderPipelineState = try Engine.device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.descriptor(.Rendering))
-        }catch let error as NSError{
-            print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
-        }
-    }
-}
-
-public struct DenoiserRasterizer_RenderPipelineState: RenderPipelineState {
-    var name: String = "Denoiser Rasterizer Render Pipeline State"
-    var renderPipelineState: MTLRenderPipelineState!
-    
-    init() {
-        do{
-            renderPipelineState = try Engine.device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.descriptor(.DenoiserRasterizer))
         }catch let error as NSError{
             print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
         }

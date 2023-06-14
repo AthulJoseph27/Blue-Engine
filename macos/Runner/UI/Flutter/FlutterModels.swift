@@ -36,7 +36,7 @@ class RenderImageModel {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting, tileSize: MTLSize(width: 16, height: 16, depth: 1))
         }
     }
     
@@ -91,7 +91,7 @@ class RenderAnimationModel {
         if renderEngine == .comet {
             return VertexShadingSettings()
         } else {
-            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting)
+            return RayTracingSettings(quality: quality, samples: samples, maxBounce: maxBounce, alphaTesting: alphaTesting, tileSize: MTLSize(width: 16, height: 16, depth: 1))
         }
     }
     

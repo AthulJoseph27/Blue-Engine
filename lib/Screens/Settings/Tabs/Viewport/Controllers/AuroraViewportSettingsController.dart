@@ -106,6 +106,8 @@ class AuroraViewPortController {
       var y = int.tryParse(tileYController.text) ?? 8;
 
       if(x != 0 && ((x * y) % 32) == 0) {
+        ViewportModel.auroraViewportModel.tileSize = Int2(x: x, y: y);
+        ViewportSettingsController.onViewportSettingsUpdated();
         return;
       }
 
@@ -130,6 +132,8 @@ class AuroraViewPortController {
       var y = int.tryParse(value) ?? 8;
 
       if(y != 0 && ((x * y) % 32) == 0) {
+        ViewportModel.auroraViewportModel.tileSize = Int2(x: x, y: y);
+        ViewportSettingsController.onViewportSettingsUpdated();
         return;
       }
 

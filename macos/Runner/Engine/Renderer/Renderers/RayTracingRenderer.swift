@@ -18,11 +18,7 @@ class RayTracingRenderer: Renderer {
     var accumulatePipeline: MTLComputePipelineState!
     var copyPipeline:       MTLRenderPipelineState!
     var renderPipeline:     MTLRenderPipelineState!
-    
-    var denoiserRasterizerPipeline: MTLRenderPipelineState!
-    var shadowDenoiserPipeline:     MTLComputePipelineState!
-    var compositePipeline:          MTLComputePipelineState!
-    
+        
     var shadowWithAlphaTestingPipeline:     MTLComputePipelineState!
     
     var renderTarget:               MTLTexture!
@@ -45,7 +41,7 @@ class RayTracingRenderer: Renderer {
     
     var scene: RTScene!
     
-    private var _renderSettings: RayTracingSettings = RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false)
+    private var _renderSettings: RayTracingSettings = RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false, tileSize: MTLSize(width: 16, height: 16, depth: 1))
     
     override func initialize() {
         
@@ -92,11 +88,6 @@ class RayTracingRenderer: Renderer {
         
         copyPipeline = RenderPipelineStateLibrary.pipelineState(.RayTracing)
         renderPipeline = RenderPipelineStateLibrary.pipelineState(.Rendering)
-        
-        if scene is DynamicRTScene {
-            denoiserRasterizerPipeline = RenderPipelineStateLibrary.pipelineState(.DenoiserRasterizer)
-            compositePipeline = ComputePipelineStateLibrary.pipelineState(.Compositing).computePipelineState
-        }
     }
     
     private func createIntersector() {
@@ -277,7 +268,7 @@ class RayTracingRenderer: Renderer {
         computeEncoder.setComputePipelineState(rayPipeline)
 
         
-        computeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        computeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: _renderSettings.tileSize)
 
         computeEncoder.endEncoding()
     }
@@ -310,7 +301,7 @@ class RayTracingRenderer: Renderer {
         
         shadeEncoder.setSamplerState(textureSampler, index: 0)
         shadeEncoder.setComputePipelineState(shadePipeline)
-        shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        shadeEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: _renderSettings.tileSize)
         shadeEncoder.endEncoding()
     }
     
@@ -334,7 +325,7 @@ class RayTracingRenderer: Renderer {
         colorEncoder.setTexture(shadowTexture, index: 1)
         colorEncoder.setComputePipelineState(shadowPipeline)
         
-        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: _renderSettings.tileSize)
         colorEncoder.endEncoding()
     }
     
@@ -355,7 +346,7 @@ class RayTracingRenderer: Renderer {
         colorEncoder.setTexture(shadowTexture, index: 1)
         colorEncoder.setComputePipelineState(shadowWithAlphaTestingPipeline)
         
-        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        colorEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: _renderSettings.tileSize)
         colorEncoder.endEncoding()
     }
     
@@ -372,7 +363,7 @@ class RayTracingRenderer: Renderer {
         denoiseEncoder.setTexture(accumulationTarget, index: 1)
         
         denoiseEncoder.setComputePipelineState(accumulatePipeline)
-        denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        denoiseEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: _renderSettings.tileSize)
         denoiseEncoder.endEncoding()
     }
 }

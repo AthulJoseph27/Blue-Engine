@@ -14,6 +14,8 @@
 #define LIGHT_TYPE_SPOT   1
 #define LIGHT_TYPE_SUN    2
 
+#define PI 3.14159265359
+
 struct Camera {
     vector_float3 position;
     vector_float3 right;

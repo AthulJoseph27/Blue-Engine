@@ -366,8 +366,14 @@ class SwiftBridgingMethods {
             let alphaTesting = json["alphaTesting"] as? Bool ?? false
             let quality = RenderQuality(rawValue: json["resolution"] as? String ?? "high") ?? .high
             
-            RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
-            RendererManager.updateViewPortSettings(viewPortType: .DynamicRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting))
+            var tileSize = MTLSize(width: 16, height: 16, depth: 1)
+            if let tileSizeJson = json["tileSize"] as? [String: Any] {
+                tileSize.width = Int(tileSizeJson["x"] as? Int ?? 16)
+                tileSize.height = Int(tileSizeJson["y"] as? Int ?? 16)
+            }
+            
+            RendererManager.updateViewPortSettings(viewPortType: .StaticRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting, tileSize: tileSize))
+            RendererManager.updateViewPortSettings(viewPortType: .DynamicRT, settings: RayTracingSettings(quality: quality, samples: 400, maxBounce: maxBounce, alphaTesting: alphaTesting, tileSize: tileSize))
             
             let settings = ControllSensitivity.fromJson(json: json["controlSensitivity"] as? [String: Any] ?? [:])
             

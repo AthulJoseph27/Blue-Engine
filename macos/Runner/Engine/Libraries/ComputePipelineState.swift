@@ -9,7 +9,6 @@ enum ComputePipelineStateTypes {
     case Shadow
     case ShadowWithAlphaTesting
     case Accumulate
-    case Compositing
 }
 
 class ComputePipelineStateLibrary {
@@ -29,7 +28,6 @@ class ComputePipelineStateLibrary {
         computePipelineStates.updateValue(Shadow_ComputePipelineState(), forKey: .Shadow)
         computePipelineStates.updateValue(ShadowWithAlphaTesting_ComputePipelineState(), forKey: .ShadowWithAlphaTesting)
         computePipelineStates.updateValue(Accumulate_ComputePipelineState(), forKey: .Accumulate)
-        computePipelineStates.updateValue(Compositing_ComputePipelineState(), forKey: .Compositing)
     }
 
     public static func pipelineState(_ computePipelineStateTypes: ComputePipelineStateTypes)->ComputePipelineState {
@@ -164,21 +162,6 @@ public struct Accumulate_ComputePipelineState: ComputePipelineState {
         do{
             ComputePipelineDescriptorLibrary.descriptor(.RayTracing).computeFunction = Engine.defaultLibrary.makeFunction(name: "accumulateKernel")
             computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.RayTracing), options: [], reflection: nil)
-        }catch let error as NSError{
-            print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
-            return;
-        }
-    }
-}
-
-public struct Compositing_ComputePipelineState: ComputePipelineState {
-    var name: String = "Compositing Tracing Compute Pipeline State"
-    var computePipelineState: MTLComputePipelineState!
-    
-    init() {
-        do{
-            ComputePipelineDescriptorLibrary.descriptor(.Compositing).computeFunction = Engine.defaultLibrary.makeFunction(name: "compositeKernel")
-            computePipelineState = try Engine.device.makeComputePipelineState(descriptor: ComputePipelineDescriptorLibrary.descriptor(.Compositing), options: [], reflection: nil)
         }catch let error as NSError{
             print("ERROR::CREATE::COMPUTE_PIPELINE_STATE::__\(name)__::\(error)")
             return;

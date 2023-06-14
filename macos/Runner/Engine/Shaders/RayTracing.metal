@@ -2,13 +2,13 @@
 #include <simd/simd.h>
 
 #include "Lighting.metal"
-#include "Ocean.metal"
+#include "Skybox.metal"
+#include "Ocean.metal" // Temperory Solution
 #import "Runner-Bridging-Header.h"
 
 using namespace metal;
 using namespace raytracing;
 
-#define PI 3.14159265359
 #define FRENEL_ANGLE 7*PI/8
 
 #define RAY_HIT_LIGHT -4
@@ -119,141 +119,6 @@ float halton(unsigned int i, unsigned int d) {
     }
     
     return r;
-}
-
-// Maps two uniformly random numbers to a uniform distribution within a cone
-float3 sampleCone(float2 u, float cosAngle) {
-    float phi = 2.0f * M_PI_F * u.x;
-    
-    float cos_phi;
-    float sin_phi = sincos(phi, cos_phi);
-    
-    float cos_theta = 1.0f - u.y + u.y * cosAngle;
-    float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
-    
-    return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
-}
-
-// Aligns a direction such that the "up" direction (0, 1, 0) maps to the given
-// surface normal direction
-float3 alignWithNormal(float3 sample, float3 normal) {
-    // Set the "up" vector to the normal
-    float3 up = normal;
-    
-    // Find an arbitrary direction perpendicular to the normal. This will become the
-    // "right" vector.
-    float3 right = normalize(cross(normal, float3(0.0072f, 1.0f, 0.0034f)));
-    
-    // Find a third vector perpendicular to the previous two. This will be the
-    // "forward" vector.
-    float3 forward = cross(right, up);
-    
-    // Map the direction on the unit hemisphere to the coordinate system aligned
-    // with the normal.
-    return sample.x * right + sample.y * up + sample.z * forward;
-}
-
-// Vertex shader for the rasterization pass
-vertex VertexOut denoiserVertexPass(const DenoiserVertexData denoiserData [[ stage_in ]],
-                                constant Uniforms & uniforms,
-                                constant Uniforms & prevUniforms,
-                                const device float4x4 *instanceTransforms,
-                                const device float4x4 *prevInstanceTransforms,
-                                const device float3x3 *instanceNormalTransforms,
-                                constant unsigned int & instanceIndex)
-{
-    // Look up vertex position and normal
-    float3 prevPosition = denoiserData.prevPosition;
-    float3 position = denoiserData.position;
-    float3 normal = denoiserData.normal;
-    
-    // Look up transformation matrices
-    float4x4 prevTransform = prevInstanceTransforms[instanceIndex];
-    float4x4 transform = instanceTransforms[instanceIndex];
-    float3x3 normalTransform = instanceNormalTransforms[instanceIndex];
-    
-    // Compute the world space position for the current and previous frame
-    float4 prevWorldPosition = prevTransform * float4(prevPosition, 1.0f);
-    float4 worldPosition = transform * float4(position, 1.0f);
-    
-    VertexOut out;
-    
-    // Compute the vertex position in NDC space for the current and previous frame
-    out.position = uniforms.viewProjectionMatrix * worldPosition;
-    out.prevPosition = prevUniforms.viewProjectionMatrix * prevWorldPosition;
-    
-    // Also output the world space and view space positions for shading
-    out.worldPosition = worldPosition.xyz;
-    out.viewPosition = (uniforms.viewMatrix * worldPosition).xyz;
-    
-    // Finally, transform and output the normal vector
-    out.normal = normalTransform * normal;
-    
-    return out;
-}
-
-// Fragment shader for the rasterization pass
-fragment FragmentOut denoiserFragmentPass(VertexOut in [[stage_in]],
-                                      constant Uniforms & uniforms,          // Current frame's uniform data
-                                      constant Uniforms & prevUniforms,      // Previous frame's uniform data
-                                      texture2d<unsigned int> randomTexture) // Texture containing a random value for each pixel
-{
-    uint2 pixel = (uint2)in.position.xy;
-    
-    // The rasterizer will have interpolated the world space position and normal for the fragment
-    float3 P = in.worldPosition;
-    float3 N = normalize(in.normal);
-    
-    float2 motionVector = 0.0f;
-    
-    // Compute motion vectors
-    if (uniforms.frameIndex > 0) {
-        // Map current pixel location to 0..1
-        float2 uv = in.position.xy / float2(uniforms.width, uniforms.height);
-        
-        // Unproject the position from the previous frame then transform it from
-        // NDC space to 0..1
-        float2 prevUV = in.prevPosition.xy / in.prevPosition.w * float2(0.5f, -0.5f) + 0.5f;
-        
-        // Next, remove the jittering which was applied for antialiasing from both
-        // sets of coordinates
-        uv -= uniforms.jitter;
-        prevUV -= prevUniforms.jitter;
-        
-        // Then the motion vector is simply the difference between the two
-        motionVector = uv - prevUV;
-    }
-    
-    unsigned int offset = randomTexture.read(pixel).x;
-    
-    // Look up two uniformly random numbers for this thread using a low discrepancy Halton
-    // sequence. This sequence will ensure good coverage of the light source.
-    float2 r = haltonSamples[(offset + uniforms.frameIndex) % 16];
-    
-    float3 lightDirection = normalize(float3(-0.6f, 1.0f, 0.2f));
-    
-    // Compute the lighting using a simple diffuse reflection model
-    float3 radiance = saturate(dot(N, lightDirection));
-    
-    // Choose a shadow ray within a small cone aligned with the light direction.
-    // This simulates a light source with some non-zero area such as the sun
-    // diffused through the atmosphere or a spherical light source.
-    float3 sample = sampleCone(r, cos(5.0f / 180.0f * M_PI_F));
-    
-    lightDirection = alignWithNormal(sample, lightDirection);
-    
-    // Finally, write out all of the computed values to the render target textures
-    FragmentOut out;
-    
-    out.color = float4(radiance, 1.0f);
-    out.depthNormal = float4(length(in.viewPosition), N);
-    out.motionVector = motionVector;
-    // Add a small offset to the intersection point to avoid intersecting the same
-    // triangle again.
-    out.originMinDistance = float4(P + N * 1e-3f, 0.0f);
-    out.directionMaxDistance = float4(lightDirection, INFINITY);
-    
-    return out;
 }
 
 kernel void rayKernel(uint2 tid                     [[thread_position_in_grid]],
@@ -653,7 +518,10 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                }
            }
            else {
-               float3 skyColor = getSkyBoxColor(ray.direction, skyBox);
+//               float3 skyColor = getSkyBoxColor(ray.direction, skyBox);
+               uint2 offset = randomTex.read(tid).xy;
+
+               float3 skyColor = Skybox::nightSky(ray.direction, offset);
                if(ray.maxDistance >= 0.0f && ray.mask == RAY_MASK_PRIMARY){
                    dstTex.write(float4(skyColor, 1), tid);
                }

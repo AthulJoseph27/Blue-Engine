@@ -43,7 +43,7 @@ class GameScene {
     
     internal func animate(solids: [Solid], time: Float) {}
     
-    func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32) {
+    func createCube(faceMask: uint32, color: SIMD3<Float>, reflectivity: Float, refractiveIndex: Float = -1, transform: matrix_float4x4, inwardNormals: Bool, triangleMask: uint32, material: Material? = nil) {
         
         var cubeVertices = [
             SIMD3<Float>(-0.5, -0.5, -0.5),
@@ -66,28 +66,58 @@ class GameScene {
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_X) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 4, 6, 2, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 4, 6, 2, inwardNormals, triangleMask, material: material)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_X) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 1, 3, 7, 5, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 1, 3, 7, 5, inwardNormals, triangleMask, material: material)
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_Y) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 1, 5, 4, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 1, 5, 4, inwardNormals, triangleMask, material: material)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_Y) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 2, 6, 7, 3, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 2, 6, 7, 3, inwardNormals, triangleMask, material: material)
         }
         
         if ((faceMask & Masks.FACE_MASK_NEGATIVE_Z) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 2, 3, 1, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 0, 2, 3, 1, inwardNormals, triangleMask, material: material)
         }
         
         if ((faceMask & Masks.FACE_MASK_POSITIVE_Z) != 0) {
-            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 4, 5, 7, 6, inwardNormals, triangleMask)
+            createCubeFace(cubeVertices, color, reflectivity, refractiveIndex, 4, 5, 7, 6, inwardNormals, triangleMask, material: material)
         }
+    }
+    
+    private func createCubeFace(_ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32, material: Material? = nil) {
+        
+        let v0 = cubeVertices[i0]
+        let v1 = cubeVertices[i1]
+        let v2 = cubeVertices[i2]
+        let v3 = cubeVertices[i3]
+        
+        var n0 = getTriangleNormal(v0: v0, v1: v1, S: v2)
+        var n1 = getTriangleNormal(v0: v0, v1: v2, S: v3)
+        
+        if (inwardNormals) {
+            n0 = -n0;
+            n1 = -n1;
+        }
+        
+        var opacity = 1.0
+        if refractiveIndex >= 1.0 {
+            opacity = 0
+        }
+        var _material = material ?? Material(isLit: false, diffuse: color, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
+            
+        if triangleMask == TRIANGLE_MASK_LIGHT {
+            _material.isLit = true
+            _material.emissive = color
+        }
+        
+        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: &_material, triangleMaks: triangleMask)
+        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: &_material, triangleMaks: triangleMask)
     }
     
     private func addTriangle(v0: SIMD3<Float>, v1: SIMD3<Float>, v2: SIMD3<Float>, n0: SIMD3<Float>, material: inout Material, triangleMaks: UInt32) {
@@ -118,36 +148,6 @@ class GameScene {
         solid.mesh.materials = [material]
         
         solids.append(solid)
-    }
-    
-    private func createCubeFace(_ cubeVertices: [SIMD3<Float>],_ color: SIMD3<Float>,_ reflectivity: Float, _ refractiveIndex: Float, _ i0: Int,_ i1: Int,_ i2: Int,_ i3: Int,_ inwardNormals: Bool,_ triangleMask: uint32) {
-        
-        let v0 = cubeVertices[i0]
-        let v1 = cubeVertices[i1]
-        let v2 = cubeVertices[i2]
-        let v3 = cubeVertices[i3]
-        
-        var n0 = getTriangleNormal(v0: v0, v1: v1, S: v2)
-        var n1 = getTriangleNormal(v0: v0, v1: v2, S: v3)
-        
-        if (inwardNormals) {
-            n0 = -n0;
-            n1 = -n1;
-        }
-        
-        var opacity = 1.0
-        if refractiveIndex >= 1.0 {
-            opacity = 0
-        }
-        var material = Material(isLit: false, diffuse: color, opacity: Float(opacity), opticalDensity: refractiveIndex,  roughness: 1.0 - reflectivity, isTextureEnabled: false, isNormalMapEnabled: false, isMetallicMapEnabled: false, isRoughnessMapEnabled: false)
-        
-        if triangleMask == TRIANGLE_MASK_LIGHT {
-            material.isLit = true
-            material.emissive = color
-        }
-        
-        addTriangle(v0: v0, v1: v1, v2: v2, n0: n0, material: &material, triangleMaks: triangleMask)
-        addTriangle(v0: v0, v1: v2, v2: v3, n0: n1, material: &material, triangleMaks: triangleMask)
     }
     
     private func getTriangleNormal(v0: SIMD3<Float>, v1: SIMD3<Float>, S v2: SIMD3<Float>) -> SIMD3<Float> {

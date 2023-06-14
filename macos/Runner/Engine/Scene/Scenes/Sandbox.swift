@@ -26,16 +26,12 @@ class Sandbox: GameScene {
         
         //         Short box
         let monkey = Solid(.Monkey)
-        monkey.enableEmission(true)
-        monkey.setEmissionColor(SIMD3<Float>(2, 2, 8))
         monkey.position = SIMD3<Float>(0.3275, 0.4, 0.3725)
         monkey.rotation = SIMD3<Float>(0, -0.3, 0)
         monkey.scale = SIMD3<Float>(0.3, 0.3, 0.3)
         monkey.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
-//        monkey.setOpticalDensity(1.01)
         monkey.setRoughness(1.0)
         monkey.enableTexture(false)
-//        monkey.animated = true
         
         solids.append(monkey)
         

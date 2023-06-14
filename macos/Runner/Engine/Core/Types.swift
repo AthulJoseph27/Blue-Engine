@@ -187,6 +187,7 @@ struct RayTracingSettings: RenderingSettings {
     var samples: Int
     var maxBounce: Int
     var alphaTesting: Bool
+    var tileSize: MTLSize
 }
 
 struct VertexShadingSettings: RenderingSettings {
@@ -220,6 +221,7 @@ enum RendererType : CaseIterable {
 enum GameScenes: String, CaseIterable {
     case CornellBox = "Cornell Box"
     case HarmonicCubes = "Harmonic Cubes"
+    case EnchantingGlow = "Enchanting Glow"
     case Ocean = "Ocean"
     case Custom = "Custom"
 }

@@ -30,8 +30,8 @@ class RendererManager {
     private static var viewPortType: RenderViewPortType = .StaticRT
     private static var renderMode: RenderMode = .display
     private static var viewPortSettings: [RenderViewPortType : RenderingSettings] = [
-        .StaticRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false),
-        .DynamicRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 2, alphaTesting: false),
+        .StaticRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false, tileSize: MTLSize(width: 16, height: 16, depth: 1)),
+        .DynamicRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 2, alphaTesting: false, tileSize: MTLSize(width: 16, height: 16, depth: 1)),
         .PhongShader : VertexShadingSettings()
     ]
     private static var postRenderingCallback: (() -> Void)?
