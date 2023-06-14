@@ -304,10 +304,11 @@ class DynamicRTScene: RTScene {
     }
     
     private func updateInstanceAccelerationStructures() {
-        let index = (Int(frameIndex) % renderOptions.maxFramesInFlight)
-        instanceAccelerationStructures[index].transformBuffer = transformBuffer
-        instanceAccelerationStructures[index].transformBufferOffset = 0
-        instanceAccelerationStructures[index].rebuild()
+        for i in 0..<renderOptions.maxFramesInFlight {
+            instanceAccelerationStructures[i].transformBuffer = transformBuffer
+            instanceAccelerationStructures[i].transformBufferOffset = 0
+            instanceAccelerationStructures[i].rebuild()
+        }
     }
     
     private func postBuildScene() {

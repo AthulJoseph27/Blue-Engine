@@ -64,14 +64,6 @@ let haltonSamples: [SIMD2<Float>] = [
     SIMD2<Float>(0.03125, 0.592592592593),
 ]
 
-//struct VertexOut: sizeable{
-//    var position: SIMD3<Float>
-//    var uvCoordinate: SIMD2<Float>
-//    var normal: SIMD3<Float>
-//    var tangent: SIMD3<Float>
-//    var bitangent: SIMD3<Float>
-//}
-
 struct PrimitiveData: sizeable {
     var texture: MTLTexture?
 }
@@ -80,15 +72,6 @@ struct AlphaTestingPrimitiveData: sizeable {
     var texture: MTLTexture?
     var uvCoordinates: [SIMD2<Float>] = Array(repeating: SIMD2(repeating: 0), count: 3)
 }
-
-//struct Light: sizeable {
-//    var type: UInt32
-//    var position: SIMD3<Float>
-//    var forward: SIMD3<Float>
-//    var right: SIMD3<Float>
-//    var up: SIMD3<Float>
-//    var color: SIMD3<Float>
-//}
 
 struct LightData: sizeable {
     var position = SIMD3<Float>(repeating: 0)
@@ -116,6 +99,7 @@ struct Material: sizeable {
     var isNormalMapEnabled: Bool = true
     var isMetallicMapEnabled: Bool = true
     var isRoughnessMapEnabled: Bool = true
+    var isProceduralTextureEnabled: Bool = false
 }
 
 struct RotationMatrix: sizeable {

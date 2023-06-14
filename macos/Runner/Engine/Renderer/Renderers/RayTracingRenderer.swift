@@ -34,13 +34,6 @@ class RayTracingRenderer: Renderer {
     var intersectionTexture:        MTLTexture!
     var randomTexture:              MTLTexture!
     
-    var depthStencilState: MTLDepthStencilState!
-    
-    var svgf: MPSSVGF!
-    var textureAllocator: MPSSVGFDefaultTextureAllocator!
-    var TAA: MPSTemporalAA!
-    var denoiser: MPSSVGFDenoiser!
-    
     var semaphore: DispatchSemaphore!
     var size: CGSize!
     var threadsPerThreadgroup = MTLSizeMake(16, 16, 1)
@@ -59,17 +52,6 @@ class RayTracingRenderer: Renderer {
         self.updateViewPort()
         self.createPipelines()
         self.createIntersector()
-        
-        if scene is DynamicRTScene {
-            self.loadMPSSVGF()
-
-            let depthStencilDescriptor = MTLDepthStencilDescriptor()
-            
-            depthStencilDescriptor.isDepthWriteEnabled = true
-            depthStencilDescriptor.depthCompareFunction = .less
-            
-            depthStencilState = Engine.device.makeDepthStencilState(descriptor: depthStencilDescriptor)
-        }
         
         semaphore = DispatchSemaphore(value: scene.renderOptions.maxFramesInFlight)
         
@@ -122,20 +104,6 @@ class RayTracingRenderer: Renderer {
         intersector.rayDataType = .originMaskDirectionMaxDistance
         intersector.rayStride = scene.renderOptions.rayStride
         intersector.rayMaskOptions = scene.renderOptions.rayMaskOptions
-    }
-    
-    private func loadMPSSVGF() {
-        svgf = MPSSVGF(device: device)
-        svgf.channelCount = 1
-        svgf.temporalWeighting = .exponentialMovingAverage
-        svgf.temporalReprojectionBlendFactor = 0.1
-        
-        textureAllocator = MPSSVGFDefaultTextureAllocator(device: device)
-        denoiser = MPSSVGFDenoiser(SVGF: svgf, textureAllocator: textureAllocator)
-        denoiser.bilateralFilterIterations = 5;
-        
-        TAA = MPSTemporalAA(device: Engine.device)
-        
     }
     
     override func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -258,7 +226,7 @@ class RayTracingRenderer: Renderer {
         for i in 0..<maxBounce {
             reflectRays(bounce: i, commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
             
-            if _renderSettings.alphaTesting {
+            if !(scene is DynamicRTScene) && _renderSettings.alphaTesting {
                 traceShadowsWithAlphaTesting(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)
             } else {
                 traceShadows(commandBuffer: commandBuffer, threadsPerGrid: threadsPerGrid)

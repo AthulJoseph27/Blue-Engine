@@ -75,6 +75,7 @@
 		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
 		3CA5D66D2A36D77900EF3ECC /* Ocean_20.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */; };
 		3CA5D66E2A36D77900EF3ECC /* Ocean_20.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */; };
+		3CA9C92E2A39A06F00B4DBED /* Ocean.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3CA9C92D2A39A06F00B4DBED /* Ocean.metal */; };
 		3CC00A582A3444EF00602E75 /* Ocean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC00A572A3444EF00602E75 /* Ocean.swift */; };
 		3CD0114629B3A8700009DEC6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114529B3A8700009DEC6 /* ContentView.swift */; };
 		3CD0114829B3B4D70009DEC6 /* FlutterCommunicationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */; };
@@ -261,6 +262,7 @@
 		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
 		3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.mtl; sourceTree = "<group>"; };
 		3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.obj; sourceTree = "<group>"; };
+		3CA9C92D2A39A06F00B4DBED /* Ocean.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Ocean.metal; sourceTree = "<group>"; };
 		3CC00A572A3444EF00602E75 /* Ocean.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ocean.swift; sourceTree = "<group>"; };
 		3CD0114529B3A8700009DEC6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterCommunicationBridge.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				3C1717DE29B491EF00B19B27 /* RayTracing.metal */,
 				3C1717E029B491FC00B19B27 /* PhongShader.metal */,
 				3C1717E229B4921B00B19B27 /* Lighting.metal */,
+				3CA9C92D2A39A06F00B4DBED /* Ocean.metal */,
 				3C1717E629B4930C00B19B27 /* Runner-Bridging-Header.h */,
 			);
 			path = Shaders;
@@ -1139,6 +1142,7 @@
 				3C1717B929B4906700B19B27 /* Node.swift in Sources */,
 				3C1717FC29B4940900B19B27 /* SceneManager.swift in Sources */,
 				3CD0114C29B3BED60009DEC6 /* Sidebar.swift in Sources */,
+				3CA9C92E2A39A06F00B4DBED /* Ocean.metal in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 				3C1717AD29B48FFA00B19B27 /* Math.swift in Sources */,
 				3C54789229B98D7D00D20911 /* Custom.swift in Sources */,

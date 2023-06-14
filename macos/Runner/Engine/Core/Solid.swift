@@ -49,6 +49,10 @@ extension Solid {
         mesh.materials[0].isNormalMapEnabled = enable
     }
     
+    public func enableProceduralTexture(_ enable: Bool) {
+        mesh.materials[0].isProceduralTextureEnabled = enable
+    }
+    
     public func enableEmission(_ enable: Bool) {
         mesh.materials[0].isLit = enable
     }

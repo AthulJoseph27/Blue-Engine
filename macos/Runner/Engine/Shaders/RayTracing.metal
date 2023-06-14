@@ -2,6 +2,7 @@
 #include <simd/simd.h>
 
 #include "Lighting.metal"
+#include "Ocean.metal"
 #import "Runner-Bridging-Header.h"
 
 using namespace metal;
@@ -15,19 +16,20 @@ using namespace raytracing;
 #define RAY_HIT_TRANSPARENT -2
 
 struct Material {
-    bool isLit                 [[ attribute(0)  ]];
-    float3 ambient             [[ attribute(1)  ]];
-    float3 diffuse             [[ attribute(2)  ]];
-    float3 specular            [[ attribute(3)  ]];
-    float3 emissive            [[ attribute(4)  ]];
-    float shininess            [[ attribute(5)  ]];
-    float opacity              [[ attribute(6)  ]];
-    float opticalDensity       [[ attribute(7)  ]];
-    float roughness            [[ attribute(8)  ]];
-    bool isTextureEnabled      [[ attribute(9)  ]];
-    bool isNormalMapEnabled    [[ attribute(10) ]];
-    bool isMetallicMapEnabled  [[ attribute(11) ]];
-    bool isRoughnessMapEnabled [[ attribute(12) ]];
+    bool isLit                      [[ attribute(0)  ]];
+    float3 ambient                  [[ attribute(1)  ]];
+    float3 diffuse                  [[ attribute(2)  ]];
+    float3 specular                 [[ attribute(3)  ]];
+    float3 emissive                 [[ attribute(4)  ]];
+    float shininess                 [[ attribute(5)  ]];
+    float opacity                   [[ attribute(6)  ]];
+    float opticalDensity            [[ attribute(7)  ]];
+    float roughness                 [[ attribute(8)  ]];
+    bool isTextureEnabled           [[ attribute(9)  ]];
+    bool isNormalMapEnabled         [[ attribute(10) ]];
+    bool isMetallicMapEnabled       [[ attribute(11) ]];
+    bool isRoughnessMapEnabled      [[ attribute(12) ]];
+    bool isProceduralTextureEnabled [[ attribute(13) ]];
 };
 
 struct PrimitiveData {
@@ -563,7 +565,9 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                                          lightColor, lightDistance);
                    lightColor *= saturate(dot(surfaceNormal, lightDirection));
                    
-                   if(material.isTextureEnabled){
+                   if(material.isProceduralTextureEnabled) {
+                       objectColor = Ocean::sampleColor(intersectionPoint);
+                   } else if(material.isTextureEnabled){
                        float4 sampledColor = primitiveData[submeshId].texture.sample(sampler2d, uvCoord);
                        if(sampledColor.a < 0.1) {
                            ray.origin = intersectionPoint + ray.direction * 1e-3f;

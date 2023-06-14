@@ -16,8 +16,9 @@ class Ocean: GameScene {
         let plane = Solid(.Ocean)
         plane.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
         plane.position = SIMD3<Float>(0, 0.5, 0)
+        plane.enableProceduralTexture(true)
         plane.setRoughness(1.0)
-//        plane.setOpticalDensity(1.5)
+        plane.setOpticalDensity(1.5)
         plane.enableTexture(false)
         plane.animated = true
         addSolid(solid: plane)
@@ -29,8 +30,8 @@ class Ocean: GameScene {
             originalPositions.append(vertices[i].position)
         }
         
-        CameraManager.currentCamera.position = SIMD3<Float>(-0.11, 0.55, 0.93)
-        CameraManager.currentCamera.rotation = SIMD3<Float>(-5.71, -21.2, 0) * Float.pi / 180.0
+//        CameraManager.currentCamera.position = SIMD3<Float>(-0.11, 0.55, 0.93)
+//        CameraManager.currentCamera.rotation = SIMD3<Float>(-5.71, -21.2, 0) * Float.pi / 180.0
         updateSolids = animate
     }
     
@@ -43,19 +44,19 @@ class Ocean: GameScene {
                 var vertex = vertices[i]
                 
                 var delta =
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 1), λ: 1.2, steepness: 0.25)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 0.6), λ: 0.31, steepness: 0.25)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 1.3), λ: 0.25, steepness: 0.18)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.7, 1.3), λ: 0.2, steepness: 0.28)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 0.3), λ: 0.05, steepness: 0.18)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.8, 0.3), λ: 0.1, steepness: 0.18)
-                +
-                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.1, 0.36), λ: 0.15, steepness: 0.28)
+                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 1), λ: 0.67, steepness: 0.25)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(1, 0.6), λ: 0.31, steepness: 0.25)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.87, 1.3), λ: 0.25, steepness: 0.18)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.7, 0.2), λ: 0.2, steepness: 0.08)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.93, 0.3), λ: 0.05, steepness: 0.18)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.8, 0.3), λ: 0.1, steepness: 0.18)
+//                +
+//                TrochoidalWave(index: i, position: vertex.position, t: time / 100.0, direction: SIMD2<Float>(0.1, 0.36), λ: 0.15, steepness: 0.08)
                 
                 
                 for l in 3..<delta.count {

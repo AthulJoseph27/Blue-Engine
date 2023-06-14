@@ -13,7 +13,7 @@ class HarmonicCubes: GameScene {
         transform.scale(axis: SIMD3<Float>(0.5, 1.98, 0.5))
         
         createCube(faceMask: Masks.FACE_MASK_POSITIVE_Y, color: SIMD3<Float>([1, 1, 1]), reflectivity: 0.0, transform: transform, inwardNormals: true, triangleMask: UInt32(TRIANGLE_MASK_LIGHT))
-        addLight(light: Light(type: UInt32(LIGHT_TYPE_AREA), position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(4, 4, 4)))
+        addLight(light: Light(type: UInt32(LIGHT_TYPE_AREA), position: SIMD3<Float>(0, 1.98, 0), forward: SIMD3<Float>(0, -1, 0), right: SIMD3<Float>(0.25, 0, 0), up: SIMD3<Float>(0, 0, 0.25), color: SIMD3<Float>(0.1, 0.1, 0.1)))
         
         //         Top, bottom, back
         transform = matrix_identity_float4x4
@@ -36,9 +36,11 @@ class HarmonicCubes: GameScene {
             for z in -8..<9 {
                 let cube = Solid(.Cube)
                 cube.position = SIMD3<Float>(Float(x) / 20, 0.7, Float(z) / 20)
-                cube.setColor(SIMD3<Float>(0.2, 0.2, 0.8))
+                cube.setColor(SIMD3<Float>(0.0118, 0.8980, 0.9760))
                 cube.scale = SIMD3<Float>(0.035, 0.035, 0.035)
                 cube.setRoughness(1.0)
+                cube.enableEmission(true)
+                cube.setEmissionColor(SIMD3<Float>(1, 1, 4))
                 cube.enableTexture(false)
                 cube.transformOrder = .RotateTranslateScale
                 temp.append(solids.count)
@@ -51,7 +53,7 @@ class HarmonicCubes: GameScene {
     }
     
     override internal func animate(solids: [Solid], time: Float) {
-        let offSet = time
+        let offSet = time / 5.0
                 
         for r in 0..<17 {
             for i in 0..<17 {

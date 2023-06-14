@@ -131,9 +131,12 @@ class RenderAnimationModel {
         
         let videoSettings: [String: Any] = [
             AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: resolution.x * 2,
-            AVVideoHeightKey: resolution.y * 2,
+            AVVideoWidthKey: resolution.x,
+            AVVideoHeightKey: resolution.y,
         ]
+        
+        print(resolution.x)
+        print(resolution.y)
         
         do {
             let assetWriter = try AVAssetWriter(outputURL: outputURL, fileType: AVFileType.mp4)
@@ -177,11 +180,11 @@ class RenderAnimationModel {
                     }
             }
             
-            do {
-                try FileManager.default.removeItem(atPath: "\(NSTemporaryDirectory())tmp/")
-            } catch {
-                print("Error removing file: \(error)")
-            }
+//            do {
+//                try FileManager.default.removeItem(atPath: "\(NSTemporaryDirectory())tmp/")
+//            } catch {
+//                print("Error removing file: \(error)")
+//            }
             
             videoFrameCount = 0
         } catch {
