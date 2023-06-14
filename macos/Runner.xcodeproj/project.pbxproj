@@ -69,8 +69,12 @@
 		3C17181129B494D800B19B27 /* MetalView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C17181029B494D800B19B27 /* MetalView.storyboard */; };
 		3C20588229D0287300423DA2 /* AnimationCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C20588129D0287300423DA2 /* AnimationCamera.swift */; };
 		3C2B16812A166FB1006CDD75 /* HarmonicCubes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */; };
+		3C538FEC2A3709A7000CC8C5 /* Ocean_100.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3C538FEA2A3709A7000CC8C5 /* Ocean_100.mtl */; };
+		3C538FED2A3709A7000CC8C5 /* Ocean_100.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3C538FEB2A3709A7000CC8C5 /* Ocean_100.obj */; };
 		3C54789229B98D7D00D20911 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789129B98D7D00D20911 /* Custom.swift */; };
 		3C54789429B98E0900D20911 /* SceneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54789329B98E0900D20911 /* SceneSettings.swift */; };
+		3CA5D66D2A36D77900EF3ECC /* Ocean_20.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */; };
+		3CA5D66E2A36D77900EF3ECC /* Ocean_20.obj in Resources */ = {isa = PBXBuildFile; fileRef = 3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */; };
 		3CC00A582A3444EF00602E75 /* Ocean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC00A572A3444EF00602E75 /* Ocean.swift */; };
 		3CD0114629B3A8700009DEC6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114529B3A8700009DEC6 /* ContentView.swift */; };
 		3CD0114829B3B4D70009DEC6 /* FlutterCommunicationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */; };
@@ -251,8 +255,12 @@
 		3C17181029B494D800B19B27 /* MetalView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MetalView.storyboard; sourceTree = "<group>"; };
 		3C20588129D0287300423DA2 /* AnimationCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCamera.swift; sourceTree = "<group>"; };
 		3C2B16802A166FB1006CDD75 /* HarmonicCubes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarmonicCubes.swift; sourceTree = "<group>"; };
+		3C538FEA2A3709A7000CC8C5 /* Ocean_100.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_100.mtl; sourceTree = "<group>"; };
+		3C538FEB2A3709A7000CC8C5 /* Ocean_100.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_100.obj; sourceTree = "<group>"; };
 		3C54789129B98D7D00D20911 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		3C54789329B98E0900D20911 /* SceneSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSettings.swift; sourceTree = "<group>"; };
+		3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.mtl; sourceTree = "<group>"; };
+		3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ocean_20.obj; sourceTree = "<group>"; };
 		3CC00A572A3444EF00602E75 /* Ocean.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ocean.swift; sourceTree = "<group>"; };
 		3CD0114529B3A8700009DEC6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CD0114729B3B4D70009DEC6 /* FlutterCommunicationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterCommunicationBridge.swift; sourceTree = "<group>"; };
@@ -629,16 +637,27 @@
 			path = Widgets;
 			sourceTree = "<group>";
 		};
+		3CE44B682A35FB6B0088BEBF /* Ocean */ = {
+			isa = PBXGroup;
+			children = (
+				3C538FEA2A3709A7000CC8C5 /* Ocean_100.mtl */,
+				3C538FEB2A3709A7000CC8C5 /* Ocean_100.obj */,
+				3CA5D66B2A36D77900EF3ECC /* Ocean_20.mtl */,
+				3CA5D66C2A36D77900EF3ECC /* Ocean_20.obj */,
+			);
+			path = Ocean;
+			sourceTree = "<group>";
+		};
 		3CFEA9DE29B4F23500440CF5 /* res */ = {
 			isa = PBXGroup;
 			children = (
-				3CFEAB3129B4F23500440CF5 /* sponza */,
-				3CFEAB8E29B4F23500440CF5 /* chest */,
-				3CFEAB7329B4F23500440CF5 /* Meshes */,
 				3CFEAB8C29B4F23500440CF5 /* Jungle.jpg */,
 				3CFEAB8D29B4F23500440CF5 /* Sky.jpg */,
 				3CFEAB7229B4F23500440CF5 /* Beach.jpeg */,
 				3CFEAB2629B4F23500440CF5 /* NightCity.jpg */,
+				3CFEAB3129B4F23500440CF5 /* sponza */,
+				3CFEAB8E29B4F23500440CF5 /* chest */,
+				3CFEAB7329B4F23500440CF5 /* Meshes */,
 			);
 			path = res;
 			sourceTree = "<group>";
@@ -710,14 +729,15 @@
 		3CFEAB7329B4F23500440CF5 /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
-				3CFEAB7429B4F23500440CF5 /* Icosphere */,
-				3CFEAB7729B4F23500440CF5 /* Torus */,
-				3CFEAB7A29B4F23500440CF5 /* Cube */,
-				3CFEAB7D29B4F23500440CF5 /* Cone */,
-				3CFEAB8029B4F23500440CF5 /* Sphere */,
 				3CFEAB8329B4F23500440CF5 /* Plane */,
+				3CFEAB7A29B4F23500440CF5 /* Cube */,
+				3CFEAB8029B4F23500440CF5 /* Sphere */,
+				3CFEAB7729B4F23500440CF5 /* Torus */,
+				3CFEAB7D29B4F23500440CF5 /* Cone */,
 				3CFEAB8629B4F23500440CF5 /* Monkey */,
 				3CFEAB8929B4F23500440CF5 /* Cylinder */,
+				3CFEAB7429B4F23500440CF5 /* Icosphere */,
+				3CE44B682A35FB6B0088BEBF /* Ocean */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -931,6 +951,7 @@
 				3CFEAD0329B4F23600440CF5 /* sponza_roof_diff.png in Resources */,
 				3CFEACE929B4F23600440CF5 /* vase_plant_mask.png in Resources */,
 				3CFEAD1C29B4F23600440CF5 /* sponza_fabric_purple.png in Resources */,
+				3CA5D66D2A36D77900EF3ECC /* Ocean_20.mtl in Resources */,
 				3CFEAD3D29B4F23600440CF5 /* chest_01_Roughness.png in Resources */,
 				3CFEACEA29B4F23600440CF5 /* spnza_bricks_a_spec.png in Resources */,
 				3CFEAD0C29B4F23600440CF5 /* sponza.obj in Resources */,
@@ -944,6 +965,7 @@
 				3CFEAD3029B4F23600440CF5 /* Cone.mtl in Resources */,
 				3CFEAD3529B4F23600440CF5 /* Monkey.mtl in Resources */,
 				3CFEAD1829B4F23600440CF5 /* sponza_floor_a_diff.png in Resources */,
+				3C538FEC2A3709A7000CC8C5 /* Ocean_100.mtl in Resources */,
 				3CFEAD2C29B4F23600440CF5 /* Torus.mtl in Resources */,
 				3CFEACEE29B4F23600440CF5 /* chain_texture_mask.png in Resources */,
 				3CFEAD2029B4F23600440CF5 /* sponza_fabric_spec.png in Resources */,
@@ -975,6 +997,7 @@
 				3CFEAD3929B4F23600440CF5 /* Jungle.jpg in Resources */,
 				3CFEAD0829B4F23600440CF5 /* sponza_thorn_mask.png in Resources */,
 				3CFEAD0529B4F23600440CF5 /* sponza_arch_bump.png in Resources */,
+				3C538FED2A3709A7000CC8C5 /* Ocean_100.obj in Resources */,
 				3CFEAD4029B4F23600440CF5 /* chest_01_Base_Color.png in Resources */,
 				3CFEAD3329B4F23600440CF5 /* Plane.obj in Resources */,
 				3CFEACF029B4F23600440CF5 /* sponza_column_c_spec.png in Resources */,
@@ -992,6 +1015,7 @@
 				3CFEACF129B4F23600440CF5 /* spnza_bricks_a_bump.png in Resources */,
 				3CFEACF929B4F23600440CF5 /* sponza_arch_spec.png in Resources */,
 				3CFEACF429B4F23600440CF5 /* sponza_column_b_bump.png in Resources */,
+				3CA5D66E2A36D77900EF3ECC /* Ocean_20.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

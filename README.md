@@ -47,6 +47,7 @@ Consists of two engines: <br/>
   * Added Dynamic Ray Tracer.
   * Can render Dynamic Scenes as animation.
   * Massive perfomance improvement in Dynamic Scene.
+  * Added support for emissive object.
 <br></br>
 * blue4.6
   * Can control camera from the UI now, allowing more precise control over the camera (helpful for rendering).

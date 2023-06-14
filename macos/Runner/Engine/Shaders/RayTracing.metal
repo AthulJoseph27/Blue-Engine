@@ -579,13 +579,9 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    } else {
                        objectColor = material.diffuse;
                    }
+
+                   color *= objectColor;
                    
-                   if(material.isLit) {
-                       color += material.emissive;
-                       shadowRay.maxDistance = -1.0f;
-                   } else {
-                       color *= objectColor;
-                   }
 
                    shadowRay.origin = intersectionPoint + surfaceNormal * 1e-3f;
                    shadowRay.direction = lightDirection;
@@ -593,7 +589,11 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                    shadowRay.maxDistance = lightDistance - 1e-3f;
                    
                    if(material.isLit) {
-                       shadowRay.color = lightColor + color;
+                       // Lit objects are much dimmer than light
+                       // light cannot have complex geometry due to computational limitations
+                       color += material.emissive / (bounce + 1) ;
+                       shadowRay.maxDistance = RAY_HIT_LIGHT;
+                       shadowRay.color = color;
                    } else {
                        shadowRay.color = lightColor * color;
                    }
@@ -630,6 +630,7 @@ kernel void shadeKernel(uint2 tid [[thread_position_in_grid]],
                        sampleDirection = alignHemisphereWithNormal(sampleDirection, surfaceNormal);
 
                        ray.direction = sampleDirection;
+
                        if(material.isLit) {
                            ray.color = color;
                        } else {

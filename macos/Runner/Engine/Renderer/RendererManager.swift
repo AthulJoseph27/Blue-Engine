@@ -31,17 +31,17 @@ class RendererManager {
     private static var renderMode: RenderMode = .display
     private static var viewPortSettings: [RenderViewPortType : RenderingSettings] = [
         .StaticRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false),
-        .DynamicRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 6, alphaTesting: false),
+        .DynamicRT : RayTracingSettings(quality: .high, samples: 400, maxBounce: 2, alphaTesting: false),
         .PhongShader : VertexShadingSettings()
     ]
     private static var postRenderingCallback: (() -> Void)?
     
     public static func initialize() {
+        CameraManager.setCamera(.Debug)
+        
         sceneType = .CornellBox
         viewPortType = currentRTViewPortType
         SceneManager.initialize(scene: sceneType, rendererType: viewPortToRendererMap[viewPortType]!)
-        
-        CameraManager.setCamera(.Debug)
         
         counterView.stringValue = ""
         counterView.textColor = .white

@@ -11,6 +11,7 @@ enum MeshTypes {
     case Cone
     case Torus
     case Monkey
+    case Ocean
     case Chest
     case Custom
 }
@@ -31,6 +32,7 @@ class MeshLibrary {
         meshes.updateValue(Mesh(modelName: "Cone"), forKey: .Cone)
         meshes.updateValue(Mesh(modelName: "Torus"), forKey: .Torus)
         meshes.updateValue(Mesh(modelName: "Monkey"), forKey: .Monkey)
+        meshes.updateValue(Mesh(modelName: "Ocean_100"), forKey: .Ocean)
         meshes.updateValue(Mesh(modelName: "chest"), forKey: .Chest)
     }
     

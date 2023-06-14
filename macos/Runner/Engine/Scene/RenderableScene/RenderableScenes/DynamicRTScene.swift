@@ -79,8 +79,7 @@ class DynamicRTScene: RTScene {
     func updateScene(time: Float? = nil) {
         updateSceneSolids(objects, time ?? sceneTime)
         updateTransformBuffer()
-//        refitAccelerationStructures()
-//        createAccelerationStructures()
+        refitAccelerationStructures()
         updateInstanceAccelerationStructures()
     }
     
@@ -231,14 +230,15 @@ class DynamicRTScene: RTScene {
         
         let commandBuffer = Engine.device.makeCommandQueue()!.makeCommandBuffer()!
         commandBuffer.label = "Buffer update Command Buffer"
-        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
-        blitEncoder.label = "Buffer update Blit Encoder"
         
         for i in 0..<objects.count {
             let solid = objects[i]
             for j in 0..<solid.mesh.submeshCount {
                 if solid.animated {
+                    let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+                    blitEncoder.label = "Buffer update Blit Encoder"
                     blitEncoder.copy(from: solid.mesh.vertexBuffer, sourceOffset: 0, to: vertexBuffer, destinationOffset: vertexBufferOffset, size: solid.mesh.vertexBuffer.length)
+                    blitEncoder.endEncoding()
                     accelerationStructures[i][j].vertexBuffer = vertexBuffer
                     accelerationStructures[i][j].encodeRefit(commandBuffer: commandBuffer)
                 }
@@ -246,6 +246,9 @@ class DynamicRTScene: RTScene {
             }
             vertexBufferOffset += solid.mesh.vertexBuffer.length
         }
+        
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
     }
     
     private func createAccelerationStructures() {
