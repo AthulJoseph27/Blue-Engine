@@ -54,15 +54,15 @@ Consists of two engines: <br/>
   * Added option to control render quality in view port, making the app usable with larger and complex OBJ files.
 <br></br>
 * blue4.5
-  * The engine can now render animations
-  * Added Alpha Testing
-  * Added Fresnel Effect
+  * The engine can now render animations.
+  * Added Alpha Testing.
+  * Added Fresnel Effect.
 <br></br>
 * blue4.4
   * Added support to import 3D models and sky-boxes.
   * Option to add light to custom scene.
 <br></br>
 * blue4.3
-    * Integrated Flutter for the development of a comprehensive UI
-    * Fixed issue with texture tile rendering
+    * Integrated Flutter for the development of a comprehensive UI.
+    * Fixed issue with texture tile rendering.
     * Added ambient lighting support to Aurora Engine.
